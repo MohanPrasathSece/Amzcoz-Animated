@@ -8,7 +8,6 @@ import { PhoneInput } from "@/components/PhoneInput";
 import { COUNTRY_PHONE_PATTERNS } from "@/lib/phoneCountries";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { Reveal } from "@/components/Reveal";
-import { Globe, GlobeDemo } from "@/components/ui/globe";
 import { toast } from "sonner";
 import { submitContactForm } from "@/lib/contact";
 import { initHeroShader } from "@/lib/heroShader";
@@ -85,7 +84,6 @@ export default function LandingPage() {
           <DashboardShowcase />
           <ServicesSection />
           <StackedCardsProcessSection />
-          <OurClientsSection />
           <BrandsSection />
           <Testimonials />
           <FinalCTA />
@@ -121,7 +119,7 @@ function Nav() {
             ["Home", "#"],
             ["Services", "#services"],
             ["Process", "#process"],
-            ["Clients", "#clients"],
+            ["Brands", "#brands"],
             ["Contact", "#contact"],
           ].map(([label, href]) => (
             <a key={label} href={href} className="text-sm text-muted-foreground transition hover:text-foreground">{label}</a>
@@ -436,8 +434,10 @@ function ServicesSection() {
       const split = new SplitType(heading, { types: "chars,words" });
       const eyebrow = ref.current!.querySelector(".services-eyebrow")!;
       const sub = ref.current!.querySelector(".services-sub")!;
+      const cards = ref.current!.querySelectorAll<HTMLElement>(".service-card");
+      const divider = ref.current!.querySelector(".services-divider")!;
 
-      // Eyebrow & sub slow scroll-controlled reveal
+      // Eyebrow & sub smooth scroll-controlled reveal (both down and up)
       gsap.from([eyebrow, sub], {
         y: 25,
         opacity: 0,
@@ -445,13 +445,13 @@ function ServicesSection() {
         ease: "power1.out",
         scrollTrigger: {
           trigger: eyebrow,
-          start: "top 92%",
+          start: "top 90%",
           end: "top 55%",
-          scrub: 1.5,
+          scrub: 1.2,
         },
       });
 
-      // Heading chars slow scroll-controlled reveal
+      // Heading chars smooth scroll-controlled reveal (both down and up)
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -461,31 +461,29 @@ function ServicesSection() {
         ease: "power2.out",
         scrollTrigger: {
           trigger: heading,
-          start: "top 92%",
+          start: "top 90%",
           end: "top 35%",
-          scrub: 1.5,
+          scrub: 1.2,
         },
       });
 
-      // Service cards slow scroll-controlled entrance
-      const cards = ref.current!.querySelectorAll<HTMLElement>(".service-card");
+      // Service cards smooth scroll-controlled entrance (both down and up)
       gsap.from(cards, {
-        y: 90,
+        y: 80,
         opacity: 0,
-        scale: 0.92,
+        scale: 0.94,
         filter: "blur(12px)",
-        stagger: 0.12,
+        stagger: 0.1,
         ease: "power1.out",
         scrollTrigger: {
           trigger: ref.current!.querySelector(".services-grid"),
-          start: "top 90%",
+          start: "top 88%",
           end: "top 25%",
-          scrub: 1.8,
+          scrub: 1.2,
         },
       });
 
-      // Divider line scaleX scroll-controlled
-      const divider = ref.current!.querySelector(".services-divider")!;
+      // Divider line scaleX scroll-controlled (both down and up)
       gsap.from(divider, {
         scaleX: 0,
         opacity: 0,
@@ -494,10 +492,11 @@ function ServicesSection() {
           trigger: divider,
           start: "top 95%",
           end: "top 70%",
-          scrub: 1.5,
+          scrub: 1.2,
         },
       });
     }, ref);
+
     return () => ctx.revert();
   }, []);
 
@@ -535,14 +534,14 @@ function ServicesSection() {
   ];
 
   return (
-    <section id="services" ref={ref} className="relative z-10 pt-24 pb-32 md:pb-44">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="services" ref={ref} className="relative z-10 pt-24 pb-32 md:pb-40">
+      <div className="mx-auto max-w-7xl px-6 w-full">
         <div className="services-heading mb-14 max-w-3xl">
-          <div className="services-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Our Services</div>
+          <div className="services-eyebrow mb-2 text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Our Services</div>
           <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance">
             Comprehensive Amazon solutions<br />to <span className="gradient-text">accelerate your growth.</span>
           </h2>
-          <p className="services-sub mt-4 text-base md:text-lg text-muted-foreground max-w-2xl">
+          <p className="services-sub mt-4 text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
             From algorithmic listing rank and ad spend efficiency to multi-marketplace expansion, we build scalable infrastructure for modern brands.
           </p>
         </div>
@@ -568,8 +567,8 @@ function ServicesSection() {
           ))}
         </div>
 
-        {/* Generous gap divider before the next section */}
-        <div className="mt-28 md:mt-40 flex items-center justify-center">
+        {/* Divider before next section */}
+        <div className="mt-24 md:mt-32 flex items-center justify-center">
           <div className="services-divider h-px w-full max-w-xl bg-gradient-to-r from-transparent via-primary/30 to-transparent origin-center" />
         </div>
       </div>
@@ -770,204 +769,6 @@ export function StackedCardsProcessSection() {
           {PROCESS_STEPS.map((s, i) => (
             <ProcessStackedCard key={i} i={i} total={PROCESS_STEPS.length} item={s} />
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------ OUR CLIENTS (GLOBAL 3D GLOBE) ------------------------------ */
-function OurClientsSection() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const heading = ref.current!.querySelector<HTMLHeadingElement>("h2")!;
-      const split = new SplitType(heading, { types: "chars,words" });
-      const eyebrow = ref.current!.querySelector(".clients-eyebrow")!;
-      const sub = ref.current!.querySelector(".clients-sub")!;
-
-      // Eyebrow & sub slow scroll-controlled reveal
-      gsap.from([eyebrow, sub], {
-        y: 25,
-        opacity: 0,
-        stagger: 0.1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: eyebrow,
-          start: "top 92%",
-          end: "top 55%",
-          scrub: 1.5,
-        },
-      });
-
-      // Heading chars slow scroll-controlled reveal
-      gsap.from(split.chars, {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -40,
-        filter: "blur(12px)",
-        stagger: 0.02,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 92%",
-          end: "top 35%",
-          scrub: 1.5,
-        },
-      });
-
-      // Left stats cards (staggered slow scrub)
-      const stats = ref.current!.querySelectorAll(".client-stat");
-      gsap.from(stats, {
-        y: 60,
-        opacity: 0,
-        scale: 0.92,
-        filter: "blur(8px)",
-        stagger: 0.1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ref.current!.querySelector(".clients-content"),
-          start: "top 90%",
-          end: "top 35%",
-          scrub: 1.5,
-        },
-      });
-
-      // Ecosystem pills card (slow scrub)
-      const pillsCard = ref.current!.querySelector(".client-pills")!;
-      gsap.from(pillsCard, {
-        y: 50,
-        opacity: 0,
-        scale: 0.95,
-        filter: "blur(8px)",
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: pillsCard,
-          start: "top 90%",
-          end: "top 40%",
-          scrub: 1.5,
-        },
-      });
-
-      // CTA row
-      const ctaRow = ref.current!.querySelector(".client-cta-row")!;
-      gsap.from(ctaRow, {
-        y: 30,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ctaRow,
-          start: "top 92%",
-          end: "top 60%",
-          scrub: 1.5,
-        },
-      });
-
-      // 3D Rotating Globe Wrapper (slow zoom & unblur scrub)
-      const globeWrapper = ref.current!.querySelector(".globe-wrapper")!;
-      gsap.from(globeWrapper, {
-        y: 80,
-        scale: 0.85,
-        opacity: 0,
-        filter: "blur(16px)",
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: globeWrapper,
-          start: "top 90%",
-          end: "top 30%",
-          scrub: 1.8,
-        },
-      });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section id="clients" ref={ref} className="relative z-10 py-24 md:py-32 overflow-hidden">
-      {/* Background ambient accents */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
-
-      <div className="mx-auto max-w-7xl px-6 relative z-10">
-        <div className="clients-heading mb-16 text-center max-w-3xl mx-auto">
-          <div className="clients-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">
-            ◆ Global Clients & Marketplaces
-          </div>
-          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance">
-            Scaling brands across <br />
-            <span className="gradient-text">every major global market.</span>
-          </h2>
-          <p className="clients-sub mt-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-            From North America and Europe to India and the Middle East, our ad operations and catalog managers optimize live storefronts around the clock.
-          </p>
-        </div>
-
-        {/* 2-Column Content + 3D Continuous Rotating Orb */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Metrics & Marketplaces */}
-          <div className="lg:col-span-6 space-y-8 clients-content">
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { value: "15+", label: "Active Brands", sub: "Worldwide portfolio" },
-                { value: "2.4x", label: "Average ROAS", sub: "Ad spend multiplier" },
-                { value: "8+", label: "Global Regions", sub: "US, UK, IN, UAE, DE, JP" },
-                { value: "99.8%", label: "Health Score", sub: "Account compliance" },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="client-stat rounded-2xl surface-glass border border-blue-500/20 p-5 hover:border-blue-500/40 transition-colors"
-                >
-                  <div className="font-display text-3xl font-bold gradient-text">{stat.value}</div>
-                  <div className="text-sm font-semibold text-foreground mt-1">{stat.label}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{stat.sub}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="client-pills rounded-2xl surface-glass border border-blue-500/20 p-6 space-y-4">
-              <div className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                Supported Marketplace Ecosystems
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  "Amazon US",
-                  "Amazon UK",
-                  "Amazon India",
-                  "Amazon UAE",
-                  "Amazon Japan",
-                  "Amazon Germany",
-                  "Flipkart",
-                  "Walmart",
-                  "Myntra",
-                  "Nykaa",
-                  "Noon",
-                  "Shopify DTC",
-                ].map((mkt) => (
-                  <span
-                    key={mkt}
-                    className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs text-foreground/80 font-medium"
-                  >
-                    {mkt}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="client-cta-row flex flex-col sm:flex-row items-center gap-4">
-              <button onClick={scrollToContact} className="hero-btn hero-btn-primary w-full sm:w-auto">
-                Scale Your Brand Globally
-              </button>
-              <span className="text-xs text-muted-foreground text-center sm:text-left">
-                Free marketplace audit & forecast report included.
-              </span>
-            </div>
-          </div>
-
-          {/* Right Column: Magic UI 3D Interactive Rotating Globe */}
-          <div className="lg:col-span-6 flex justify-center globe-wrapper">
-            <GlobeDemo className="w-full max-w-[500px]" />
-          </div>
         </div>
       </div>
     </section>
