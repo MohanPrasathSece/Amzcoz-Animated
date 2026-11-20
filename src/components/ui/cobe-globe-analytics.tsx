@@ -114,17 +114,21 @@ export function GlobeAnalytics({
       width = canvas.offsetWidth || 440
       if (width === 0 || globe) return
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768
+      // On mobile, clamp DPR to 1 and reduce resolution to prevent mobile GPU thermal throttling
+      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2)
+      const renderSize = Math.round(width * (isMobile ? 1.3 : 2))
 
       globe = createGlobe(canvas, {
         devicePixelRatio: dpr,
-        width: width * 2,
-        height: width * 2,
+        width: renderSize,
+        height: renderSize,
         phi: 0,
         theta,
         dark,
         diffuse: 1.4,
-        mapSamples: 16000,
+        // On mobile, 3500 samples gives crisp dots while reducing raymarch calculations by ~80%
+        mapSamples: isMobile ? 3500 : 14000,
         mapBrightness: 8.5,
         baseColor: [0.22, 0.26, 0.38],
         markerColor: [0.0, 0.7, 1.0],
@@ -137,12 +141,18 @@ export function GlobeAnalytics({
       const cosTheta = Math.cos(theta)
       const sinTheta = Math.sin(theta)
 
-      const isMobile = typeof window !== "undefined" && window.innerWidth < 768
-      // Increase globe rotation speed on mobile as requested
-      const effectiveSpeed = isMobile ? speed * 2.5 : speed
+      const effectiveSpeed = isMobile ? speed * 2.2 : speed
       let frameCount = 0
+      let isVisible = true
+      let isRunning = false
 
       function animate() {
+        if (!isVisible) {
+          isRunning = false
+          return
+        }
+        isRunning = true
+
         if (!pointerInteracting.current) {
           phiBaseRef.current += effectiveSpeed
         }
@@ -157,16 +167,16 @@ export function GlobeAnalytics({
         const sinPhi = Math.sin(currentPhi)
 
         frameCount++
-        // Throttle React state dispatch to avoid 60 state updates/sec on mobile main thread
-        if (frameCount % (isMobile ? 3 : 2) === 0) {
+        // Throttle React pin state dispatch (every 4 frames on mobile, 2 on desktop) to eliminate UI thread lag
+        if (frameCount % (isMobile ? 4 : 2) === 0) {
           const newPins: ProjectedPin[] = pinCoords.map((pin) => {
             // Project 3D vector rotated by current phi and theta
             const c = cosPhi * pin.x0 + sinPhi * pin.z0
             const s = sinPhi * sinTheta * pin.x0 + cosTheta * pin.y0 - cosPhi * sinTheta * pin.z0
             const z = -sinPhi * cosTheta * pin.x0 + sinTheta * pin.y0 + cosPhi * cosTheta * pin.z0
 
-            const isVisible = z > 0.05
-            const opacity = isVisible ? Math.min(1, Math.max(0, (z - 0.05) * 4)) : 0
+            const isPinVisible = z > 0.05
+            const opacity = isPinVisible ? Math.min(1, Math.max(0, (z - 0.05) * 4)) : 0
 
             return {
               id: pin.id,
@@ -176,7 +186,7 @@ export function GlobeAnalytics({
               role: pin.role,
               x: (c * 0.4 + 0.5) * 100,
               y: (-s * 0.4 + 0.5) * 100,
-              visible: isVisible,
+              visible: isPinVisible,
               opacity,
             }
           })
@@ -185,6 +195,18 @@ export function GlobeAnalytics({
 
         animationId = requestAnimationFrame(animate)
       }
+
+      // Intersection Observer: Pause globe rendering completely when offscreen
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting
+          if (isVisible && !isRunning) {
+            animate()
+          }
+        },
+        { threshold: 0.05 }
+      )
+      observer.observe(canvas)
 
       animate()
       canvas.style.opacity = "1"
@@ -222,7 +244,8 @@ export function GlobeAnalytics({
           opacity: 0,
           transition: "opacity 0.8s ease",
           borderRadius: "50%",
-          touchAction: "none",
+          // On touch/mobile devices, use pan-y so vertical scrolling never hangs or freezes
+          touchAction: "pan-y",
         }}
       />
 

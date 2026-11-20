@@ -72,7 +72,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-6"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full surface-glass px-3 py-1 sm:px-4 sm:py-1.5 text-[10.5px] sm:text-xs md:text-[13px] uppercase tracking-[0.12em] sm:tracking-[0.25em] text-primary font-semibold mb-6"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               Let's Talk

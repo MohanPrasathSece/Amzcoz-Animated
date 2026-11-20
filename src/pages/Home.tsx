@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { gsap } from "gsap";
@@ -12,8 +12,8 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
 import { GlobeAnalytics } from "@/components/ui/cobe-globe-analytics";
-import { initHeroShader } from "@/lib/heroShader";
 import dashboardImg from "@/assets/floating dashboard.png";
+import landingVideo from "@/assets/Landing page animation desktop only.mp4";
 
 // Marketplace logos from src/assets/we_work_on_logos
 import ajioLogo from "@/assets/we_work_on_logos/ajio.png";
@@ -28,80 +28,92 @@ import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ------------------------------ INTRO ANIMATION ------------------------------ */
-function PageIntro({ onDone }: { onDone: () => void }) {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const tagRef = useRef<HTMLDivElement>(null);
-  const panelTopRef = useRef<HTMLDivElement>(null);
-  const panelBotRef = useRef<HTMLDivElement>(null);
+// In-memory session tracking: video intro plays on first page load or browser refresh (F5),
+// but will not re-trigger when navigating back and forth between internal pages.
+let introHasPlayed = false;
+
+/* ------------------------------ DESKTOP LANDING INTRO VIDEO ------------------------------ */
+function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
+  const [fading, setFading] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleFinish = useCallback(() => {
+    if (fading) return;
+    setFading(true);
+    introHasPlayed = true;
+    setTimeout(() => {
+      setVisible(false);
+      onComplete();
+    }, 600);
+  }, [fading, onComplete]);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: onDone,
-        defaults: { ease: "power3.inOut" },
+    // Only play on desktop/laptop screens (>= 768px) and only if not yet played this visit
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768 || introHasPlayed) {
+        onComplete();
+        setVisible(false);
+        return;
+      }
+    }
+
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {
+        // Autoplay policy fallback: allow manual skip or timeout
       });
+    }
 
-      // Initial state
-      gsap.set(logoRef.current, { y: 30, opacity: 0 });
-      gsap.set(lineRef.current, { scaleX: 0 });
-      gsap.set(tagRef.current, { y: -20, opacity: 0 });
+    // Fallback safety timeout so user is never stuck
+    const safetyTimer = setTimeout(() => {
+      handleFinish();
+    }, 5500);
 
-      // Intro sequence
-      tl.to(logoRef.current, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" })
-        .to(lineRef.current, { scaleX: 1, duration: 0.5 }, "-=0.2")
-        .to(tagRef.current, { y: 0, opacity: 1, duration: 0.4 }, "-=0.2")
-        .to({}, { duration: 0.4 }) // brief pause
-        .to([logoRef.current, lineRef.current, tagRef.current], {
-          opacity: 0,
-          y: (i) => (i === 2 ? 10 : -10),
-          duration: 0.3,
-          ease: "power2.in",
-        })
-        .to(panelTopRef.current, { yPercent: -100, duration: 0.8 }, "-=0.1")
-        .to(panelBotRef.current, { yPercent: 100, duration: 0.8 }, "<")
-        .set(overlayRef.current, { display: "none" });
-    }, overlayRef);
+    return () => clearTimeout(safetyTimer);
+  }, [handleFinish, onComplete]);
 
-    return () => ctx.revert();
-  }, [onDone]);
+  if (!visible) return null;
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-[100] pointer-events-none flex flex-col">
-      {/* Top panel */}
-      <div ref={panelTopRef} className="absolute inset-x-0 top-0 h-1/2 bg-[oklch(0.08_0.015_270)] flex items-end justify-center pb-8">
-        <div className="text-center">
-          <div ref={logoRef} className="font-display text-5xl font-bold tracking-tight text-foreground mb-4">
-            <span className="inline-block h-3 w-3 rounded-full bg-primary shadow-[0_0_30px_var(--color-primary)] mr-3 align-middle" />
-            AMZ<span className="text-primary font-extrabold">COZ</span>
-          </div>
-          <div ref={lineRef} className="h-px w-48 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent origin-center" />
-        </div>
-      </div>
-      {/* Bottom panel */}
-      <div ref={panelBotRef} className="absolute inset-x-0 bottom-0 h-1/2 bg-[oklch(0.08_0.015_270)] flex items-start justify-center pt-8">
-        <div ref={tagRef} className="text-sm uppercase tracking-[0.3em] text-primary">Marketplaces & Quick Commerce</div>
-      </div>
+    <div
+      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-700 pointer-events-auto ${
+        fading ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+    >
+      <video
+        ref={videoRef}
+        src={landingVideo}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        onEnded={handleFinish}
+        className="w-full h-full object-cover"
+      />
+
+      {/* Skip button for instant user control */}
+      <button
+        onClick={handleFinish}
+        type="button"
+        aria-label="Skip landing animation"
+        className="absolute bottom-6 right-6 z-20 px-4 py-2 rounded-full bg-black/60 hover:bg-black/85 text-xs text-white/80 hover:text-white border border-white/20 transition cursor-pointer backdrop-blur-md flex items-center gap-1.5 shadow-2xl active:scale-95"
+      >
+        <span>Skip Intro</span>
+        <span>→</span>
+      </button>
     </div>
   );
 }
 
 export default function LandingPage() {
-  const [introsDone, setIntrosDone] = useState(() => {
+  const [introDone, setIntroDone] = useState(() => {
     if (typeof window !== "undefined") {
-      return !!sessionStorage.getItem("amzcoz_intro_seen");
+      if (window.innerWidth < 768 || introHasPlayed) return true;
+      return false;
     }
     return true;
   });
-
-  const handleIntroComplete = () => {
-    try {
-      sessionStorage.setItem("amzcoz_intro_seen", "true");
-    } catch { }
-    setIntrosDone(true);
-  };
 
   return (
     <>
@@ -157,11 +169,11 @@ export default function LandingPage() {
           },
         ]}
       />
-      {!introsDone && <PageIntro onDone={handleIntroComplete} />}
+      {!introDone && <LandingVideoIntro onComplete={() => setIntroDone(true)} />}
       <SmoothScroll>
         <main className="relative bg-background text-foreground overflow-x-clip">
           <Navbar />
-          <Hero />
+          <Hero ready={introDone} />
           <GlobeAnalyticsSection />
           <StatsStrip />
           <DashboardShowcase />
@@ -179,7 +191,7 @@ export default function LandingPage() {
 }
 
 /* ------------------------------ HERO ------------------------------ */
-function Hero() {
+function Hero({ ready = true }: { ready?: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
@@ -187,12 +199,8 @@ function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      initHeroShader('hero-shader');
-    }, 100);
-  }, []);
+    if (!ready) return;
 
-  useEffect(() => {
     const ctx = gsap.context(() => {
       const split = new SplitType(headlineRef.current!, { types: "chars,words" });
       const subSplit = new SplitType(subRef.current!, { types: "lines,words" });
@@ -224,26 +232,19 @@ function Hero() {
       });
     }, rootRef);
     return () => ctx.revert();
-  }, []);
+  }, [ready]);
 
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
-      {/* Layer 1: WebGL Canvas */}
-      <canvas id="hero-shader" className="hero-shader-canvas" />
+      {/* Ambient background glow & subtle vignette (No video in hero background) */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(15,23,42,0)_70%)] pointer-events-none" />
+      <div className="hero-vignette z-[1] pointer-events-none" />
 
-      {/* Layer 2: Glow Orbs */}
-      <div className="hero-glow-orb-left" />
-      <div className="hero-glow-orb-right" />
-      <div className="hero-glow-orb-bottom" />
-
-      {/* Layer 3: Vignette */}
-      <div className="hero-vignette" />
-
-      {/* Layer 4: Content */}
-      <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 md:gap-7 px-6 min-h-[85vh] md:min-h-screen pt-24 pb-14 md:pt-32 md:pb-16">
-        <div ref={eyebrowRef} className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[13px] uppercase tracking-[0.2em] text-muted-foreground">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-          Marketplaces & Quick Commerce Growth Agency · Pune, India
+      {/* Hero Content */}
+      <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 md:gap-7 px-4 sm:px-6 min-h-[85vh] md:min-h-screen pt-24 pb-14 md:pt-32 md:pb-16">
+        <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full surface-glass px-2.5 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-xs md:text-[13px] uppercase tracking-[0.08em] sm:tracking-[0.18em] text-muted-foreground text-center max-w-[94vw]">
+          <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 animate-pulse rounded-full bg-primary shrink-0" />
+          <span>Marketplaces &amp; Quick Commerce Growth Agency · Pune, India</span>
         </div>
 
         <h1 ref={headlineRef} className="font-display text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[4.2rem] xl:text-[4.6rem] font-black tracking-tight text-center max-w-5xl mx-auto leading-[1.12]">
@@ -368,24 +369,26 @@ function StatsStrip() {
   return (
     <section ref={ref} className="relative z-10 py-14 sm:py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="stat-item group relative">
-              <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur" />
-              <div className="relative rounded-2xl surface-glass p-4 sm:p-6 md:p-8 border border-blue-500/20 overflow-hidden flex flex-col justify-between h-full">
-                <div className="absolute -right-4 -top-4 h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-primary/10 blur-2xl" />
-                <div>
-                  <div className="mb-2 sm:mb-4">
-                    <div className="stat-value text-3xl sm:text-4xl md:text-5xl font-bold gradient-text font-display" data-value={s.value}>{s.value}</div>
+        <Reveal>
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="stat-item group relative">
+                <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur" />
+                <div className="relative rounded-2xl surface-glass p-4 sm:p-6 md:p-8 border border-blue-500/20 overflow-hidden flex flex-col justify-between h-full">
+                  <div className="absolute -right-4 -top-4 h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-primary/10 blur-2xl" />
+                  <div>
+                    <div className="mb-2 sm:mb-4">
+                      <div className="stat-value text-3xl sm:text-4xl md:text-5xl font-bold gradient-text font-display" data-value={s.value}>{s.value}</div>
+                    </div>
+                    <h3 className="text-xs sm:text-base md:text-lg font-semibold text-foreground mb-1 sm:mb-2">{s.label}</h3>
+                    <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground line-clamp-2">{s.sublabel}</p>
                   </div>
-                  <h3 className="text-xs sm:text-base md:text-lg font-semibold text-foreground mb-1 sm:mb-2">{s.label}</h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground line-clamp-2">{s.sublabel}</p>
+                  <div className="mt-3 sm:mt-4 h-0.5 w-6 sm:w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
                 </div>
-                <div className="mt-3 sm:mt-4 h-0.5 w-6 sm:w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -467,50 +470,52 @@ function DashboardShowcase() {
   }, []);
 
   return (
-    <section ref={ref} className="relative z-10 py-32">
+    <section ref={ref} className="relative z-10 py-20 sm:py-28 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20 items-center">
+        <Reveal>
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20 items-center">
 
-          {/* Left: content */}
-          <div ref={leftRef}>
-            <div className="showcase-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Real-Time Insights</div>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6 leading-tight">
-              Live Performance Telemetry & <span className="gradient-text">Analytics</span>
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-8">
-              Every brand we manage gets a unified live dashboard tracking net revenue, dark-store fulfillment, and ad efficiency across Amazon, Blinkit, Zepto, and Flipkart. No black boxes, just clear numbers.
-            </p>
-            <ul className="space-y-4 mb-10">
-              {[
-                "Live revenue, ROAS, and TACoS tracking",
-                "Campaign analytics across Amazon Ads, Blinkit & Zepto",
-                "Dark-store stock velocity and listing health alerts",
-                "Weekly executive strategy reports delivered",
-              ].map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <span className="mt-0.5 h-5 w-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  </span>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <Link to="/contact" className="hero-btn hero-btn-primary">
-              Get Your Free Audit
-            </Link>
+            {/* Left: content */}
+            <div ref={leftRef}>
+              <div className="showcase-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Real-Time Insights</div>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6 leading-tight">
+                Live Performance Telemetry & <span className="gradient-text">Analytics</span>
+              </h2>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-8">
+                Every brand we manage gets a unified live dashboard tracking net revenue, dark-store fulfillment, and ad efficiency across Amazon, Blinkit, Zepto, and Flipkart. No black boxes, just clear numbers.
+              </p>
+              <ul className="space-y-4 mb-10">
+                {[
+                  "Live revenue, ROAS, and TACoS tracking",
+                  "Campaign analytics across Amazon Ads, Blinkit & Zepto",
+                  "Dark-store stock velocity and listing health alerts",
+                  "Weekly executive strategy reports delivered",
+                ].map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <span className="mt-0.5 h-5 w-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    </span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/contact" className="hero-btn hero-btn-primary">
+                Get Your Free Audit
+              </Link>
+            </div>
+
+            {/* Right: dashboard image */}
+            <div ref={rightRef} className="flex items-center justify-center">
+              <img
+                src={dashboardImg}
+                alt="AMZCOZ Analytics Dashboard"
+                className="w-full h-auto object-contain pointer-events-none select-none drop-shadow-2xl"
+                draggable={false}
+              />
+            </div>
+
           </div>
-
-          {/* Right: dashboard image (just the image, no outer container) */}
-          <div ref={rightRef} className="flex items-center justify-center">
-            <img
-              src={dashboardImg}
-              alt="AMZCOZ Analytics Dashboard"
-              className="w-full h-auto object-contain pointer-events-none select-none"
-              draggable={false}
-            />
-          </div>
-
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -624,38 +629,42 @@ function ServicesSection() {
   ];
 
   return (
-    <section id="services" ref={ref} className="relative z-10 pt-20 pb-12 md:pt-24 md:pb-14">
+    <section id="services" ref={ref} className="relative z-10 pt-16 pb-12 md:pt-24 md:pb-14">
       <div className="mx-auto max-w-7xl px-6 w-full">
-        <div className="services-heading mb-14 max-w-3xl">
-          <div className="services-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Capabilities & Scope</div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
-            Our Services & <span className="gradient-text">Capabilities</span>
-          </h2>
-          <p className="services-sub mt-4 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
-            From algorithmic listing rank on Amazon and Flipkart to dark-store inventory velocity on Blinkit and Zepto, we build scalable multi-channel infrastructure for modern brands.
-          </p>
-        </div>
+        <Reveal>
+          <div className="services-heading mb-12 sm:mb-14 max-w-3xl">
+            <div className="services-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Capabilities & Scope</div>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+              Our Services & <span className="gradient-text">Capabilities</span>
+            </h2>
+            <p className="services-sub mt-4 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
+              From algorithmic listing rank on Amazon and Flipkart to dark-store inventory velocity on Blinkit and Zepto, we build scalable multi-channel infrastructure for modern brands.
+            </p>
+          </div>
+        </Reveal>
 
-        <div className="services-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <TiltCard key={s.title} className="service-card flex flex-col justify-between">
-              <div>
-                <div className="font-display text-xl font-semibold text-foreground">{s.title}</div>
-                <p className="mt-2.5 text-sm md:text-[15px] text-muted-foreground leading-relaxed">{s.desc}</p>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
-                {s.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full bg-primary/15 border border-primary/20 px-2.5 py-0.5 text-[13px] text-primary font-medium"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </TiltCard>
-          ))}
-        </div>
+        <Reveal delay={0.1}>
+          <div className="services-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((s) => (
+              <TiltCard key={s.title} className="service-card flex flex-col justify-between">
+                <div>
+                  <div className="font-display text-xl font-semibold text-foreground">{s.title}</div>
+                  <p className="mt-2.5 text-sm md:text-[15px] text-muted-foreground leading-relaxed">{s.desc}</p>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
+                  {s.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-primary/15 border border-primary/20 px-2.5 py-0.5 text-[13px] text-primary font-medium"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </TiltCard>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -678,30 +687,32 @@ function MarketplacePlatformsMarquee() {
   const marqueeItems = [...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS];
 
   return (
-    <div className="relative z-10 my-8 sm:my-10 md:my-14 py-3 sm:py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
-      <div className="relative w-full overflow-hidden">
-        {/* Soft edge gradient fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+    <Reveal>
+      <div className="relative z-10 my-8 sm:my-10 md:my-14 py-3 sm:py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
+        <div className="relative w-full overflow-hidden">
+          {/* Soft edge gradient fade */}
+          <div className="absolute left-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-3 sm:gap-3.5 w-max">
-          {marqueeItems.map((p, idx) => (
-            <div
-              key={idx}
-              className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[95px] sm:min-w-[124px] h-[36px] sm:h-[48px]"
-              title={p.name}
-            >
-              <img
-                src={p.logo}
-                alt={p.name}
-                className="max-h-3 sm:max-h-5 max-w-[65px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
-                loading="lazy"
-              />
-            </div>
-          ))}
+          <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-3 sm:gap-3.5 w-max">
+            {marqueeItems.map((p, idx) => (
+              <div
+                key={idx}
+                className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[95px] sm:min-w-[124px] h-[36px] sm:h-[48px]"
+                title={p.name}
+              >
+                <img
+                  src={p.logo}
+                  alt={p.name}
+                  className="max-h-3 sm:max-h-5 max-w-[65px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </Reveal>
   );
 }
 
@@ -943,20 +954,25 @@ export function StackedCardsProcessSection() {
   return (
     <section id="process" ref={ref} className="relative z-10 pt-12 pb-10 md:pt-16 md:pb-14 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-12 md:mb-16">
-          <div className="process-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
-            ◆ Proven Execution Framework
+        <Reveal>
+          <div className="mb-12 md:mb-16">
+            <div className="process-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
+              ◆ Proven Execution Framework
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+              How We Scale <span className="gradient-text">Your Brand</span>
+            </h2>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
-            How We Scale <span className="gradient-text">Your Brand</span>
-          </h2>
-        </div>
+        </Reveal>
+
         {/* Balanced spacing between cards so the scroll stacks smoothly without excessive trailing empty space */}
-        <div className="space-y-28 md:space-y-36 pb-14 md:pb-20">
-          {PROCESS_STEPS.map((s, i) => (
-            <ProcessStackedCard key={i} i={i} total={PROCESS_STEPS.length} item={s} />
-          ))}
-        </div>
+        <Reveal delay={0.1}>
+          <div className="space-y-28 md:space-y-36 pb-14 md:pb-20">
+            {PROCESS_STEPS.map((s, i) => (
+              <ProcessStackedCard key={i} i={i} total={PROCESS_STEPS.length} item={s} />
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -1046,82 +1062,86 @@ function Testimonials() {
   return (
     <section ref={ref} className="relative z-10 py-20 sm:py-28 md:py-36 overflow-hidden border-t border-white/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 mb-12 sm:mb-16 text-center">
-        <div className="testimonials-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
-          ◆ Verified Client Track Record
-        </div>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight py-2 leading-tight">
-          What Founders <span className="gradient-text">Say About Us</span>
-        </h2>
-
-        {/* Google Reviews Trust Badge */}
-        <div className="mt-4 inline-flex items-center gap-2.5 sm:gap-3 rounded-full surface-glass px-4 sm:px-5 py-2 border border-blue-500/20 shadow-md">
-          <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
-            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
-            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
-            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
-          </svg>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm font-semibold text-foreground">Google</span>
-            <span className="text-[11px] sm:text-xs text-muted-foreground">Rating:</span>
-            <span className="text-xs sm:text-sm font-bold text-amber-400">4.9/5.0</span>
+        <Reveal>
+          <div className="testimonials-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
+            ◆ Verified Client Track Record
           </div>
-          <span className="h-3.5 w-px bg-white/20" />
-          <span className="text-xs sm:text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            100% Verified Founders
-          </span>
-        </div>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight py-2 leading-tight">
+            What Founders <span className="gradient-text">Say About Us</span>
+          </h2>
+
+          {/* Google Reviews Trust Badge */}
+          <div className="mt-4 inline-flex items-center gap-2.5 sm:gap-3 rounded-full surface-glass px-4 sm:px-5 py-2 border border-blue-500/20 shadow-md">
+            <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+            </svg>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-semibold text-foreground">Google</span>
+              <span className="text-[11px] sm:text-xs text-muted-foreground">Rating:</span>
+              <span className="text-xs sm:text-sm font-bold text-amber-400">4.9/5.0</span>
+            </div>
+            <span className="h-3.5 w-px bg-white/20" />
+            <span className="text-xs sm:text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              100% Verified Founders
+            </span>
+          </div>
+        </Reveal>
       </div>
 
       {/* Infinite continuous left-scrolling marquee track - Pure GPU CSS */}
-      <div className="relative w-full overflow-hidden">
-        <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-4 sm:gap-6 w-max">
-          {marqueeReviews.map((t, idx) => (
-            <div
-              key={idx}
-              className="w-[275px] sm:w-[340px] md:w-[420px] shrink-0 rounded-2xl sm:rounded-3xl surface-glass border border-white/10 p-4 sm:p-6 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/5">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
-                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
-                      <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
-                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
-                    </svg>
-                    <span className="text-[11px] sm:text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      Google Verified
-                    </span>
-                  </div>
-                  <div className="flex items-center text-amber-400 text-xs">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-
-                <p className="text-xs sm:text-sm md:text-base leading-relaxed text-foreground/90 font-normal line-clamp-4 sm:line-clamp-none">
-                  "{t.quote}"
-                </p>
-              </div>
-
-              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between">
+      <Reveal delay={0.1}>
+        <div className="relative w-full overflow-hidden">
+          <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-4 sm:gap-6 w-max">
+            {marqueeReviews.map((t, idx) => (
+              <div
+                key={idx}
+                className="w-[275px] sm:w-[340px] md:w-[420px] shrink-0 rounded-2xl sm:rounded-3xl surface-glass border border-white/10 p-4 sm:p-6 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
+              >
                 <div>
-                  <div className="text-xs sm:text-sm font-semibold text-foreground">{t.name}</div>
-                  <div className="text-[11px] sm:text-xs text-muted-foreground">{t.role}</div>
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/5">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                      </svg>
+                      <span className="text-[11px] sm:text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        Google Verified
+                      </span>
+                    </div>
+                    <div className="flex items-center text-amber-400 text-xs">
+                      {"★".repeat(5)}
+                    </div>
+                  </div>
+
+                  <p className="text-xs sm:text-sm md:text-base leading-relaxed text-foreground/90 font-normal line-clamp-4 sm:line-clamp-none">
+                    "{t.quote}"
+                  </p>
                 </div>
-                <div className="text-right">
-                  <span className="rounded-full bg-white/5 border border-white/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[12px] text-primary font-medium">
-                    {t.platform}
-                  </span>
-                  <div className="text-[9px] sm:text-[10px] text-muted-foreground/60 mt-0.5">{t.date}</div>
+
+                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs sm:text-sm font-semibold text-foreground">{t.name}</div>
+                    <div className="text-[11px] sm:text-xs text-muted-foreground">{t.role}</div>
+                  </div>
+                  <div className="text-right">
+                    <span className="rounded-full bg-white/5 border border-white/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[12px] text-primary font-medium">
+                      {t.platform}
+                    </span>
+                    <div className="text-[9px] sm:text-[10px] text-muted-foreground/60 mt-0.5">{t.date}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -595,7 +595,7 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-6"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full surface-glass px-3 py-1 sm:px-4 sm:py-1.5 text-[10.5px] sm:text-xs md:text-[13px] uppercase tracking-[0.12em] sm:tracking-[0.25em] text-primary font-semibold mb-6"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               What We Deliver
@@ -653,13 +653,13 @@ export default function ServicesPage() {
                     {/* Ambient Glow */}
                     <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-80 h-80 rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
 
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
                       <div className="max-w-3xl">
-                        {/* Section Tag */}
-                        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary mb-3.5">
-                          <span className="font-mono font-bold">Section {section.index}</span>
+                        {/* Section Eyebrow Tag */}
+                        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-3">
+                          <span className="font-mono text-primary font-bold">0{section.index}</span>
                           <span className="text-white/30">•</span>
-                          <span>{section.badge}</span>
+                          <span className="text-muted-foreground">{section.badge}</span>
                         </div>
 
                         {/* Title & Icon */}
@@ -679,9 +679,10 @@ export default function ServicesPage() {
                       </div>
 
                       {/* Right Meta Pill */}
-                      <div className="flex lg:flex-col items-center lg:items-end justify-between gap-2.5 shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5">
-                        <span className="rounded-full bg-primary/10 border border-primary/25 px-4 py-1.5 text-xs font-mono font-semibold text-primary">
-                          {sectionServices.length} Specialized Capabilities
+                      <div className="flex lg:flex-col items-center lg:items-end justify-between gap-2 shrink-0 pt-3 lg:pt-0">
+                        <span className="rounded-full surface-glass border border-white/10 px-3 py-1 text-[11px] sm:text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                          <span>{sectionServices.length} Capabilities</span>
                         </span>
                         <span className="text-[11px] text-muted-foreground/80 font-medium hidden lg:block">
                           {section.highlightText}

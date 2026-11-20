@@ -1,4 +1,9 @@
 export function initHeroShader(canvasId = 'hero-shader') {
+  // Completely skip WebGL initialization on mobile to save 100% GPU and battery
+  if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    return;
+  }
+
   const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
   if (!canvas) return;
 

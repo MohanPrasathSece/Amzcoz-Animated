@@ -239,6 +239,21 @@
     pointer-events: none;
   }
 
+  @media (max-width: 767px) {
+    .hero-shader-canvas,
+    .hero-glow-orb-left,
+    .hero-glow-orb-right,
+    .hero-glow-orb-bottom {
+      display: none !important;
+    }
+
+    .hero-section {
+      background: radial-gradient(circle at 50% 15%, oklch(0.28 0.12 258 / 0.45) 0%, transparent 65%),
+                  radial-gradient(circle at 80% 55%, oklch(0.22 0.09 270 / 0.3) 0%, transparent 55%),
+                  oklch(0.1 0.012 270);
+    }
+  }
+
   .hero-glow-orb-left {
     position: absolute;
     width: 500px;

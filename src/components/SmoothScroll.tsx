@@ -18,9 +18,15 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         window.innerWidth < 768);
 
     if (isTouch) {
-      // Keep ScrollTrigger synced with native scroll
+      // On mobile / touch, keep GSAP ScrollTrigger active with passive window scroll
+      const handleNativeScroll = () => {
+        ScrollTrigger.update();
+      };
+      window.addEventListener("scroll", handleNativeScroll, { passive: true });
       ScrollTrigger.refresh();
-      return;
+      return () => {
+        window.removeEventListener("scroll", handleNativeScroll);
+      };
     }
 
     const lenis = new Lenis({
