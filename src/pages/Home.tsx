@@ -14,7 +14,8 @@ import { Reveal } from "@/components/Reveal";
 import { GlobeAnalytics } from "@/components/ui/cobe-globe-analytics";
 import { initHeroShader } from "@/lib/heroShader";
 import dashboardImg from "@/assets/floating dashboard.png";
-import landingVideo from "@/assets/Landing page animation desktop only.mp4";
+import desktopLandingVideo from "@/assets/Landing page animation desktop only.mp4";
+import mobileLandingVideo from "@/assets/landing-page-animation-mobile.mp4";
 
 // Marketplace logos from src/assets/we_work_on_logos
 import ajioLogo from "@/assets/we_work_on_logos/ajio.png";
@@ -29,16 +30,19 @@ import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Persistent intro tracking: plays ONLY the first time a user visits the website.
-// Persisted in localStorage and sessionStorage so it never re-plays on page navigation or refresh.
+// Clear out any old permanent localStorage lock from earlier test runs so the video plays properly
+if (typeof window !== "undefined") {
+  try {
+    localStorage.removeItem("amzcoz_intro_seen");
+  } catch { }
+}
+
+// Session-based intro tracking: plays the first time a user visits the website in their session.
+// Persisted in sessionStorage so internal page navigation (Home <-> Services <-> About) never re-plays it.
 function hasSeenIntro(): boolean {
   if (typeof window === "undefined") return true;
-  if (window.innerWidth < 768) return true; // desktop & laptop only
   try {
-    return (
-      localStorage.getItem("amzcoz_intro_seen") === "true" ||
-      sessionStorage.getItem("amzcoz_intro_seen") === "true"
-    );
+    return sessionStorage.getItem("amzcoz_session_intro_seen") === "true";
   } catch {
     return false;
   }
@@ -46,16 +50,32 @@ function hasSeenIntro(): boolean {
 
 function markIntroSeen() {
   try {
-    localStorage.setItem("amzcoz_intro_seen", "true");
-    sessionStorage.setItem("amzcoz_intro_seen", "true");
+    sessionStorage.setItem("amzcoz_session_intro_seen", "true");
   } catch { }
 }
 
-/* ------------------------------ DESKTOP LANDING INTRO VIDEO ------------------------------ */
+function getActiveVideo(): string {
+  if (typeof window !== "undefined" && window.innerWidth < 768) {
+    return mobileLandingVideo;
+  }
+  return desktopLandingVideo;
+}
+
+/* ------------------------------ LANDING INTRO VIDEO (DESKTOP & MOBILE) ------------------------------ */
 function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
   const [fading, setFading] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [videoSrc, setVideoSrc] = useState(getActiveVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Dynamically adapt if screen orientation or width changes
+  useEffect(() => {
+    const handleResize = () => {
+      setVideoSrc(getActiveVideo());
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleFinish = useCallback(() => {
     if (fading) return;
@@ -76,15 +96,20 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
 
     const video = videoRef.current;
     if (video) {
-      video.play().catch(() => {
-        // Autoplay policy fallback: allow manual skip or timeout
-      });
+      video.muted = true;
+      video.playsInline = true;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay policy fallback
+        });
+      }
     }
 
-    // Fallback safety timeout so user is never stuck
+    // Safety timeout so user is never stuck
     const safetyTimer = setTimeout(() => {
       handleFinish();
-    }, 5500);
+    }, 10000);
 
     return () => clearTimeout(safetyTimer);
   }, [handleFinish, onComplete]);
@@ -98,7 +123,8 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
     >
       <video
         ref={videoRef}
-        src={landingVideo}
+        key={videoSrc}
+        src={videoSrc}
         autoPlay
         muted
         playsInline
@@ -189,7 +215,6 @@ export default function LandingPage() {
           <ServicesSection />
           <MarketplacePlatformsMarquee />
           <StackedCardsProcessSection />
-          <Testimonials />
           <HomeFinalCTA />
           <Footer />
           <ScrollToTop />
@@ -1025,202 +1050,42 @@ export function StackedCardsProcessSection() {
   );
 }
 
-/* ------------------------------ TESTIMONIALS (GOOGLE VERIFIED REVIEW MARQUEE) ------------------------------ */
-function Testimonials() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const heading = ref.current!.querySelector<HTMLHeadingElement>("h2")!;
-      const split = new SplitType(heading, { types: "chars,words" });
-      const eyebrow = ref.current!.querySelector(".testimonials-eyebrow")!;
-
-      gsap.from(eyebrow, {
-        y: 20,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: eyebrow,
-          start: "top 95%",
-          end: "top 60%",
-          scrub: 0.5,
-        },
-      });
-
-      gsap.from(split.chars, {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -40,
-        filter: "blur(12px)",
-        stagger: 0.02,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 92%",
-          end: "top 35%",
-          scrub: 0.5,
-        },
-      });
-    }, ref);
-
-    return () => ctx.revert();
-  }, []);
-
-  const reviews = [
-    {
-      quote: "AMZCOZ transformed our brand presence across Amazon, Flipkart, and Blinkit. Within 60 days, our organic search volume tripled and dark-store fill rates stabilized.",
-      name: "Rajesh Kumar",
-      role: "Founder, Electronics Brand",
-      platform: "Amazon & Blinkit Partner",
-      date: "Reviewed 2 weeks ago",
-    },
-    {
-      quote: "Their performance advertising on Amazon PPC and Zepto Brand Boosters cut our blended ACoS from 34% to 19% while doubling monthly unit volume.",
-      name: "Priya Sharma",
-      role: "VP Marketing, D2C Personal Care",
-      platform: "Multi-Marketplace",
-      date: "Reviewed 3 weeks ago",
-    },
-    {
-      quote: "The team is relentless with daily bid adjustments and stock replenishment. They run our entire catalog across Amazon and Swiggy Instamart seamlessly.",
-      name: "Anand Verma",
-      role: "Co-Founder, Gourmet Food & FMCG",
-      platform: "Quick Commerce & Amazon",
-      date: "Reviewed 1 month ago",
-    },
-    {
-      quote: "Their A+ Content and Brand Store revamp lifted our listing conversion rate by 31%. Absolute professionals who understand retail algorithms.",
-      name: "Karan Singhania",
-      role: "Director, Home & Living Brand",
-      platform: "Amazon Brand Store",
-      date: "Reviewed 1 month ago",
-    },
-    {
-      quote: "Fastest turnaround we've experienced. From listing audit to executing full dark-store inventory pipelines on Zepto, AMZCOZ exceeded all expectations.",
-      name: "Tanvi Mehta",
-      role: "Growth Head, Healthy Snacking Brand",
-      platform: "Blinkit, Zepto & Amazon",
-      date: "Reviewed 2 months ago",
-    },
-  ];
-
-  const marqueeReviews = [...reviews, ...reviews];
-
-  return (
-    <section ref={ref} className="relative z-10 py-20 sm:py-28 md:py-36 overflow-hidden border-t border-white/5">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 mb-12 sm:mb-16 text-center">
-        <Reveal>
-          <div className="testimonials-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
-            ◆ Verified Client Track Record
-          </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight py-2 leading-tight">
-            What Founders <span className="gradient-text">Say About Us</span>
-          </h2>
-
-          {/* Google Reviews Trust Badge */}
-          <div className="mt-4 inline-flex items-center gap-2.5 sm:gap-3 rounded-full surface-glass px-4 sm:px-5 py-2 border border-blue-500/20 shadow-md">
-            <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
-              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
-              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
-              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
-            </svg>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs sm:text-sm font-semibold text-foreground">Google</span>
-              <span className="text-[11px] sm:text-xs text-muted-foreground">Rating:</span>
-              <span className="text-xs sm:text-sm font-bold text-amber-400">4.9/5.0</span>
-            </div>
-            <span className="h-3.5 w-px bg-white/20" />
-            <span className="text-xs sm:text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              100% Verified Founders
-            </span>
-          </div>
-        </Reveal>
-      </div>
-
-      {/* Infinite continuous left-scrolling marquee track - Pure GPU CSS */}
-      <Reveal delay={0.1}>
-        <div className="relative w-full overflow-hidden">
-          <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-4 sm:gap-6 w-max">
-            {marqueeReviews.map((t, idx) => (
-              <div
-                key={idx}
-                className="w-[275px] sm:w-[340px] md:w-[420px] shrink-0 rounded-2xl sm:rounded-3xl surface-glass border border-white/10 p-4 sm:p-6 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/5">
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
-                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
-                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
-                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
-                      </svg>
-                      <span className="text-[11px] sm:text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                        Google Verified
-                      </span>
-                    </div>
-                    <div className="flex items-center text-amber-400 text-xs">
-                      {"★".repeat(5)}
-                    </div>
-                  </div>
-
-                  <p className="text-xs sm:text-sm md:text-base leading-relaxed text-foreground/90 font-normal line-clamp-4 sm:line-clamp-none">
-                    "{t.quote}"
-                  </p>
-                </div>
-
-                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between">
-                  <div>
-                    <div className="text-xs sm:text-sm font-semibold text-foreground">{t.name}</div>
-                    <div className="text-[11px] sm:text-xs text-muted-foreground">{t.role}</div>
-                  </div>
-                  <div className="text-right">
-                    <span className="rounded-full bg-white/5 border border-white/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[12px] text-primary font-medium">
-                      {t.platform}
-                    </span>
-                    <div className="text-[9px] sm:text-[10px] text-muted-foreground/60 mt-0.5">{t.date}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-    </section>
-  );
-}
-
 /* ------------------------------ FINAL CTA (CENTERED) ------------------------------ */
 function HomeFinalCTA() {
   return (
-    <section id="contact" className="py-24 md:py-32 bg-gradient-to-b from-transparent via-primary/5 to-transparent relative z-10 border-t border-white/5 text-center">
-      <div className="mx-auto max-w-4xl px-6">
+    <section id="contact" className="py-24 md:py-36 bg-gradient-to-b from-transparent via-primary/5 to-transparent relative z-10 border-t border-white/5 text-center overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
+
+      <div className="mx-auto max-w-5xl px-6 relative z-10">
         <Reveal>
-          <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
-            ◆ Next Steps
+          <div className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[11px] sm:text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            The Founder's Partnership
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
-            Ready to Grow Your <span className="gradient-text">Brand?</span>
+
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.15]">
+            You Focus Offline,<br />
+            <span className="gradient-text">We Focus Online.</span>
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
-            Speak directly with our senior growth strategists. We will review your catalog, buy-box health, and ad performance within 24 hours.
+
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
+            You manufacture exceptional products and run your offline retail. We engineer your digital growth—handling daily catalog operations, dark-store fulfillment, and high-ROAS advertising across Amazon, Blinkit, Zepto, and Flipkart.
           </p>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/contact"
-              className="hero-btn hero-btn-primary w-full sm:w-auto text-base px-8 py-3.5 font-semibold inline-flex items-center justify-center gap-2"
+              className="hero-btn hero-btn-primary w-full sm:w-auto text-base px-8 py-3.5 font-semibold inline-flex items-center justify-center gap-2 shadow-xl"
             >
-              Let's Talk
+              Book Free Strategy Session
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/services"
               className="hero-btn hero-btn-ghost w-full sm:w-auto text-base px-8 py-3.5 font-semibold"
             >
-              What We Deliver
+              Explore Services
             </Link>
           </div>
         </Reveal>
