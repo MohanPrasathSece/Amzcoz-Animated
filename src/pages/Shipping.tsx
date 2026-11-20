@@ -11,7 +11,7 @@ export default function ShippingPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Shipping & Delivery Policy | AMZCOZ Merchandise"
+        title="Shipping & Delivery Policy | Amzcoz Merchandise"
         description="AMZCOZ Merchandise Shipping and Delivery Policy. Estimated delivery times across India, tracking guidelines, dispatch procedures, and return policies."
         canonical="/shipping"
       />

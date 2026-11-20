@@ -52,7 +52,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Marketplace Management",
     category: "Marketplaces & Q-Commerce",
     badge: "Full-Stack Agency Operations",
-    metaTitle: "Marketplace Account Management Services | AMZCOZ Agency India",
+    metaTitle: "Marketplace Account Management Services | Amzcoz Agency India",
     metaDescription: "End-to-end multi-marketplace management services for Amazon, Flipkart, Myntra, Nykaa, and JioMart. Protect account health, optimize listings, and drive profitable growth.",
     primaryH1: "Enterprise Multi-Marketplace Account Management Services",
     targetKeywords: {
@@ -520,7 +520,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Zepto Growth",
     category: "Marketplaces & Q-Commerce",
     badge: "Zepto Commerce Specialists",
-    metaTitle: "Zepto Seller Services & Advertising Agency India | AMZCOZ",
+    metaTitle: "Zepto Seller Services & Advertising Agency India | Amzcoz",
     metaDescription: "Scale rapidly on Zepto. Professional account management, Zepto ads, dark store replenishment, and catalog indexing for FMCG, beauty, and D2C brands.",
     primaryH1: "Zepto Seller Services & Brand Advertising Agency",
     targetKeywords: {
@@ -598,7 +598,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Instamart Growth",
     category: "Marketplaces & Q-Commerce",
     badge: "Swiggy Commerce Partners",
-    metaTitle: "Swiggy Instamart Growth Services & Account Management | AMZCOZ",
+    metaTitle: "Swiggy Instamart Growth Services & Account Management | Amzcoz",
     metaDescription: "Grow your brand on Swiggy Instamart. Professional vendor management, Instamart in-app ads, dark store allocation, and hyper-local retail optimization.",
     primaryH1: "Swiggy Instamart Brand Growth & Advertising Agency",
     targetKeywords: {
@@ -676,7 +676,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Marketplace Advertising",
     category: "Paid Media",
     badge: "High-ROAS Media Buying",
-    metaTitle: "Marketplace Advertising Agency & Multi-Channel PPC | AMZCOZ",
+    metaTitle: "Marketplace Advertising Agency & Multi-Channel PPC | Amzcoz",
     metaDescription: "Scale e-commerce sales with data-driven marketplace advertising. We manage Amazon PPC, Flipkart Ads, and quick commerce campaigns for maximum blended ROAS.",
     primaryH1: "Marketplace Advertising & Multi-Channel PPC Agency",
     targetKeywords: {
@@ -754,7 +754,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Amazon PPC",
     category: "Paid Media",
     badge: "Amazon Ads Certified Experts",
-    metaTitle: "Amazon PPC Management Agency India | Sponsored Products & Brands | AMZCOZ",
+    metaTitle: "Amazon PPC Management Agency India | Sponsored Products & Brands | Amzcoz",
     metaDescription: "Supercharge sales with our Amazon PPC management agency. Master Sponsored Products, Brands, and Display ads to reduce ACoS, maximize ROAS, and dominate BSR.",
     primaryH1: "Data-Driven Amazon PPC Management & Scale Agency",
     targetKeywords: {
@@ -832,7 +832,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Google Ads & Shopping",
     category: "Paid Media",
     badge: "Google Certified Partner Agency",
-    metaTitle: "Google Ads & Shopping Agency India | E-Commerce Performance Marketing | AMZCOZ",
+    metaTitle: "Google Ads & Shopping Agency India | E-Commerce Performance Marketing | Amzcoz",
     metaDescription: "Scale e-commerce and D2C revenue with Google Ads. We engineer high-converting Performance Max (PMax), Shopping, and Search campaigns that maximize ROAS.",
     primaryH1: "Google Ads & Shopping Management for E-Commerce & D2C",
     targetKeywords: {
@@ -910,7 +910,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Meta & Social Ads",
     category: "Paid Media",
     badge: "Creative-Led Performance Ads",
-    metaTitle: "Meta Ads Agency India | Facebook & Instagram Performance Marketing | AMZCOZ",
+    metaTitle: "Meta Ads Agency India | Facebook & Instagram Performance Marketing | Amzcoz",
     metaDescription: "Scale your D2C brand with high-converting Meta Ads (Facebook & Instagram). We combine creative storytelling, Conversions API (CAPI), and UGC with profit-focused scaling.",
     primaryH1: "Meta Ads & Paid Social Media Performance Agency",
     targetKeywords: {
@@ -988,7 +988,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "A+ & Brand Store Design",
     category: "Creative & Design",
     badge: "Amazon Premium Creative",
-    metaTitle: "Amazon A+ Content Design & Brand Store Agency | AMZCOZ",
+    metaTitle: "Amazon A+ Content Design & Brand Store Agency | Amzcoz",
     metaDescription: "Elevate your brand with premium Amazon A+ Content (EBC) and custom Amazon Brand Store designs. Boost conversion rates, cross-sells, and brand authority.",
     primaryH1: "Amazon A+ Content (EBC) & Brand Store Design Agency",
     targetKeywords: {
@@ -1066,7 +1066,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Review & Sentiment",
     category: "Specialized Growth",
     badge: "Brand Reputation Defense",
-    metaTitle: "Marketplace Review Management & Sentiment Defense Services | AMZCOZ",
+    metaTitle: "Marketplace Review Management & Sentiment Defense Services | Amzcoz",
     metaDescription: "Protect your brand reputation on Amazon and Flipkart. Proactive review monitoring, negative feedback suppression, Vine program management, and sentiment defense.",
     primaryH1: "Marketplace Review Management & Brand Sentiment Defense",
     targetKeywords: {
@@ -1144,7 +1144,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Website Development",
     category: "Web & Tech",
     badge: "Full-Stack Web Engineering",
-    metaTitle: "Custom E-Commerce Website Development Agency | AMZCOZ India",
+    metaTitle: "Custom E-Commerce Website Development Agency | Amzcoz India",
     metaDescription: "Build lightning-fast, high-converting e-commerce websites. We engineer bespoke React, Next.js, and headless commerce platforms with superior Core Web Vitals.",
     primaryH1: "High-Performance E-Commerce & Custom Website Development",
     targetKeywords: {
@@ -1222,7 +1222,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Shopify & WooCommerce",
     category: "Web & Tech",
     badge: "E-Commerce CMS Specialists",
-    metaTitle: "Shopify & WooCommerce Development Agency India | D2C Store Experts | AMZCOZ",
+    metaTitle: "Shopify & WooCommerce Development Agency India | D2C Store Experts | Amzcoz",
     metaDescription: "Build and scale your D2C brand with our Shopify and WooCommerce development agency. Custom Liquid theme builds, speed optimization, and checkout customization.",
     primaryH1: "Shopify & WooCommerce D2C Development Agency",
     targetKeywords: {
@@ -1300,7 +1300,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Influencer Marketing",
     category: "Specialized Growth",
     badge: "Creator Economy Amplification",
-    metaTitle: "Influencer Marketing Agency India, UAE & Kuwait | Creator Commerce | AMZCOZ",
+    metaTitle: "Influencer Marketing Agency India, UAE & Kuwait | Creator Commerce | Amzcoz",
     metaDescription: "Drive real e-commerce revenue with our influencer marketing agency. We manage creator campaigns across India, UAE, and Kuwait with measurable ROAS and UGC content.",
     primaryH1: "Influencer Marketing & Creator Commerce Agency",
     targetKeywords: {
@@ -1378,7 +1378,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "Graphic Design & Merchandising",
     category: "Creative & Design",
     badge: "Conversion-Focused Visuals",
-    metaTitle: "E-Commerce Graphic Design & Product Listing Creatives Agency | AMZCOZ",
+    metaTitle: "E-Commerce Graphic Design & Product Listing Creatives Agency | Amzcoz",
     metaDescription: "High-converting product image design, infographic cards, and packaging creatives for Amazon, Blinkit, and D2C brands. Stop scrollers and lift sales.",
     primaryH1: "E-Commerce Graphic Design & Creative Merchandising Agency",
     targetKeywords: {
@@ -1456,7 +1456,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     shortTitle: "FMCG Marketing",
     category: "Specialized Growth",
     badge: "Consumer Goods Specialists",
-    metaTitle: "FMCG Marketing Agency India | Fast Moving Consumer Goods Growth | AMZCOZ",
+    metaTitle: "FMCG Marketing Agency India | Fast Moving Consumer Goods Growth | Amzcoz",
     metaDescription: "Accelerate FMCG brand growth across marketplaces, quick commerce, and modern trade. We master unit economics, repeat purchase loops, and retail media.",
     primaryH1: "FMCG Growth Marketing & Omnichannel Brand Agency",
     targetKeywords: {

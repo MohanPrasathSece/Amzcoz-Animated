@@ -446,9 +446,8 @@ function StackedProofCard({
                         e.stopPropagation();
                         setActiveProofIdx(pI);
                       }}
-                      className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
-                        pI === activeProofIdx ? "w-6 bg-primary" : "w-1.5 bg-white/20 hover:bg-white/40"
-                      }`}
+                      className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${pI === activeProofIdx ? "w-6 bg-primary" : "w-1.5 bg-white/20 hover:bg-white/40"
+                        }`}
                       title={p.title}
                     />
                   ))}
@@ -491,7 +490,7 @@ export default function PortfolioPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Client Results & Revenue Proof | ₹2.68 Cr+ Generated | AMZCOZ"
+        title="Client Results & Revenue Proof | ₹2.68 Cr+ Generated | Amzcoz"
         description="Explore documented client sales results: ₹1.94 Cr generated, 6.55x ROAS, 12.5x monthly scale, and 98.6% Buy Box retention across Amazon and Quick Commerce channels."
         canonical="/portfolio"
         keywords="amazon case studies, ecommerce case study india, amazon revenue results, quick commerce brand scaling results, blinkit sales growth case study"
@@ -634,24 +633,23 @@ export default function PortfolioPage() {
           </div>
 
           {/* Two independent continuous marquee rows with brand logos */}
-          <div className="flex flex-col gap-4 sm:gap-5 overflow-hidden">
+          <div className="flex flex-col gap-3 sm:gap-4 overflow-hidden">
             {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
               <div
                 key={rowIndex}
-                className={`${
-                  rowIndex === 0 ? "animate-gpu-marquee-left" : "animate-gpu-marquee-right"
-                } animate-gpu-marquee-track flex gap-4 sm:gap-5 whitespace-nowrap`}
+                className={`${rowIndex === 0 ? "animate-gpu-marquee-left" : "animate-gpu-marquee-right"
+                  } animate-gpu-marquee-track flex gap-3 sm:gap-4 whitespace-nowrap`}
               >
                 {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
                     key={`${rowIndex}-${i}`}
                     title={`${brand.name} • ${brand.category}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-4 sm:px-6 py-3 sm:py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-36 sm:w-44 h-20 sm:h-24 bg-surface/30 backdrop-blur-md group"
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-white p-2 border border-white/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 w-28 sm:w-36 h-14 sm:h-16 overflow-hidden group"
                   >
                     <img
                       src={brand.src}
                       alt={brand.name}
-                      className="max-h-10 sm:max-h-12 max-w-[100px] sm:max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded group-hover:scale-105"
+                      className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>

@@ -317,6 +317,8 @@
     border: none;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: var(--font-sans);
+    filter: none !important;
+    -webkit-filter: none !important;
   }
 
   .hero-btn-primary {
@@ -325,6 +327,8 @@
     box-shadow: 
       0 4px 24px oklch(0.65 0.25 258 / 0.65),
       inset 0 1px 1px oklch(1 0 0 / 0.4);
+    filter: none !important;
+    -webkit-filter: none !important;
   }
 
   .hero-btn-primary:hover {
@@ -390,9 +394,16 @@ button, a, select, input[type="submit"], [role="button"] {
 }
 
 .custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
-  background-size: 1.25rem;
+  background-size: 1.15rem;
   padding-right: 2.5rem !important;
+}
+
+.custom-select::-ms-expand {
+  display: none;
 }

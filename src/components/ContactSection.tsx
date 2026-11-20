@@ -251,7 +251,7 @@ export function ContactSection({
                       <select
                         value={serviceType}
                         onChange={(e) => setServiceType(e.target.value)}
-                        className="custom-select w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
+                        className="custom-select appearance-none w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
                       >
                         {SERVICE_OPTIONS.map((opt) => (
                           <option key={opt} value={opt} disabled={opt === "Select a service"}>
@@ -271,7 +271,7 @@ export function ContactSection({
                       <select
                         value={platform}
                         onChange={(e) => setPlatform(e.target.value)}
-                        className="custom-select w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
+                        className="custom-select appearance-none w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
                       >
                         {PLATFORM_OPTIONS.map((opt) => (
                           <option key={opt} value={opt}>
@@ -302,7 +302,7 @@ export function ContactSection({
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="custom-select w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
+                      className="custom-select appearance-none w-full rounded-xl border border-white/15 bg-[oklch(0.14_0.015_270)] px-4 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/60 cursor-pointer"
                     >
                       {CATEGORY_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>

@@ -52,7 +52,7 @@ export default function AboutPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="About AMZCOZ | The Marketplace & Quick Commerce Growth Agency"
+        title="About Amzcoz | The Marketplace & Quick Commerce Growth Agency"
         description="Learn how AMZCOZ helps ambitious brands dominate Amazon, Blinkit, Zepto, Swiggy Instamart, and Flipkart through algorithm optimization, aggressive PPC management, and dark-store replenishment."
         canonical="/about"
         keywords="about amzcoz, ecommerce growth team, marketplace consultants india, blinkit agency partner, zepto growth consultants pune"

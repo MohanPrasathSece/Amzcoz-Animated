@@ -12,6 +12,7 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
 import { GlobeAnalytics } from "@/components/ui/cobe-globe-analytics";
+import { initHeroShader } from "@/lib/heroShader";
 import dashboardImg from "@/assets/floating dashboard.png";
 import landingVideo from "@/assets/Landing page animation desktop only.mp4";
 
@@ -28,9 +29,27 @@ import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// In-memory session tracking: video intro plays on first page load or browser refresh (F5),
-// but will not re-trigger when navigating back and forth between internal pages.
-let introHasPlayed = false;
+// Persistent intro tracking: plays ONLY the first time a user visits the website.
+// Persisted in localStorage and sessionStorage so it never re-plays on page navigation or refresh.
+function hasSeenIntro(): boolean {
+  if (typeof window === "undefined") return true;
+  if (window.innerWidth < 768) return true; // desktop & laptop only
+  try {
+    return (
+      localStorage.getItem("amzcoz_intro_seen") === "true" ||
+      sessionStorage.getItem("amzcoz_intro_seen") === "true"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function markIntroSeen() {
+  try {
+    localStorage.setItem("amzcoz_intro_seen", "true");
+    sessionStorage.setItem("amzcoz_intro_seen", "true");
+  } catch { }
+}
 
 /* ------------------------------ DESKTOP LANDING INTRO VIDEO ------------------------------ */
 function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
@@ -40,8 +59,8 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
 
   const handleFinish = useCallback(() => {
     if (fading) return;
+    markIntroSeen();
     setFading(true);
-    introHasPlayed = true;
     setTimeout(() => {
       setVisible(false);
       onComplete();
@@ -49,13 +68,10 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
   }, [fading, onComplete]);
 
   useEffect(() => {
-    // Only play on desktop/laptop screens (>= 768px) and only if not yet played this visit
-    if (typeof window !== "undefined") {
-      if (window.innerWidth < 768 || introHasPlayed) {
-        onComplete();
-        setVisible(false);
-        return;
-      }
+    if (hasSeenIntro()) {
+      onComplete();
+      setVisible(false);
+      return;
     }
 
     const video = videoRef.current;
@@ -77,9 +93,8 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-700 pointer-events-auto ${
-        fading ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
+      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-700 pointer-events-auto ${fading ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
     >
       <video
         ref={videoRef}
@@ -107,18 +122,12 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
 }
 
 export default function LandingPage() {
-  const [introDone, setIntroDone] = useState(() => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth < 768 || introHasPlayed) return true;
-      return false;
-    }
-    return true;
-  });
+  const [introDone, setIntroDone] = useState(hasSeenIntro);
 
   return (
     <>
       <SEO
-        title="AMZCOZ | Marketplaces & Quick Commerce Growth Agency"
+        title="Amzcoz | Marketplaces & Quick Commerce Growth Agency"
         description="AMZCOZ is India's leading marketplace and quick commerce growth agency. We scale consumer brands on Amazon, Blinkit, Zepto, Swiggy Instamart, and Flipkart with performance PPC, dark-store fulfillment, and A+ brand architecture."
         canonical="/"
         keywords="marketplace growth agency, quick commerce agency, amazon agency india, blinkit agency, zepto brand manager, amazon ppc agency, swiggy instamart growth, ecommerce management pune"
@@ -194,9 +203,15 @@ export default function LandingPage() {
 function Hero({ ready = true }: { ready?: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const eyebrowRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      initHeroShader("hero-shader");
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!ready) return;
@@ -207,11 +222,9 @@ function Hero({ ready = true }: { ready?: boolean }) {
 
       gsap.set(split.chars, { yPercent: 120, opacity: 0, rotateX: -50, filter: "blur(12px)" });
       gsap.set(subSplit.words, { yPercent: 100, opacity: 0 });
-      gsap.set(eyebrowRef.current, { opacity: 0, y: 15 });
 
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-      tl.to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.8 })
-        .to(split.chars, { yPercent: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", duration: 1.2, stagger: { each: 0.02, from: "start" } }, "-=0.5")
+      tl.to(split.chars, { yPercent: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", duration: 1.2, stagger: { each: 0.02, from: "start" } })
         .to(subSplit.words, { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.015 }, "-=0.8");
 
       // Smooth button reveal with clearProps so they are guaranteed visible
@@ -224,11 +237,11 @@ function Hero({ ready = true }: { ready?: boolean }) {
         clearProps: "opacity,transform",
       });
 
-      // Subtle scroll fade only when scrolled past 65% of hero
-      gsap.to([headlineRef.current, eyebrowRef.current, subRef.current], {
-        y: -50,
+      // Subtle scroll fade only when scrolled past 75% of hero
+      gsap.to([headlineRef.current, subRef.current], {
+        y: -40,
         opacity: 0,
-        scrollTrigger: { trigger: rootRef.current, start: "65% top", end: "95% top", scrub: 1 },
+        scrollTrigger: { trigger: rootRef.current, start: "75% top", end: "98% top", scrub: 1 },
       });
     }, rootRef);
     return () => ctx.revert();
@@ -236,16 +249,28 @@ function Hero({ ready = true }: { ready?: boolean }) {
 
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
-      {/* Ambient background glow & subtle vignette (No video in hero background) */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,233,0.18),rgba(15,23,42,0)_70%)] pointer-events-none" />
-      <div className="hero-vignette z-[1] pointer-events-none" />
+      {/* Layer 1: WebGL Canvas Shader (Desktop) */}
+      <canvas id="hero-shader" className="hero-shader-canvas" />
+
+      {/* Layer 2: Glow Orbs */}
+      <div className="hero-glow-orb-left" />
+      <div className="hero-glow-orb-right" />
+      <div className="hero-glow-orb-bottom" />
+
+      {/* Layer 3: Vignette */}
+      <div className="hero-vignette" />
 
       {/* Hero Content */}
       <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 md:gap-7 px-4 sm:px-6 min-h-[85vh] md:min-h-screen pt-24 pb-14 md:pt-32 md:pb-16">
-        <div ref={eyebrowRef} className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full surface-glass px-2.5 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-xs md:text-[13px] uppercase tracking-[0.08em] sm:tracking-[0.18em] text-muted-foreground text-center max-w-[94vw]">
-          <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 animate-pulse rounded-full bg-primary shrink-0" />
-          <span>Marketplaces &amp; Quick Commerce Growth Agency · Pune, India</span>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full surface-glass px-3.5 py-1 sm:px-4 sm:py-1.5 text-[11px] sm:text-xs md:text-[13px] uppercase tracking-[0.14em] text-foreground/90 font-medium whitespace-nowrap shadow-sm border border-white/10"
+        >
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shrink-0" />
+          <span>Marketplace &amp; Quick Commerce Agency</span>
+        </motion.div>
 
         <h1 ref={headlineRef} className="font-display text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[4.2rem] xl:text-[4.6rem] font-black tracking-tight text-center max-w-5xl mx-auto leading-[1.12]">
           <span className="block">Accelerate Your Brand Growth</span>
@@ -296,7 +321,7 @@ function GlobeAnalyticsSection() {
         {/* Globe in center with real-time 3D projected city pins & flags */}
         <Reveal delay={0.1}>
           <div className="flex items-center justify-center w-full max-w-[440px] sm:max-w-[500px] md:max-w-[560px] mx-auto aspect-square">
-            <GlobeAnalytics className="w-full h-full" speed={0.0045} dark={1} />
+            <GlobeAnalytics className="w-full h-full" speed={0.002} dark={1} />
           </div>
         </Reveal>
       </div>
@@ -312,19 +337,19 @@ function StatsStrip() {
     const ctx = gsap.context(() => {
       const items = ref.current!.querySelectorAll<HTMLElement>(".stat-item");
 
-      // Scroll-controlled entry of stat cards (slow scrub)
+      // Smooth entry of stat cards with clearProps
       gsap.from(items, {
-        y: 60,
+        y: 40,
         opacity: 0,
-        scale: 0.94,
-        filter: "blur(10px)",
-        stagger: 0.12,
-        ease: "power1.out",
+        scale: 0.96,
+        stagger: 0.08,
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all",
         scrollTrigger: {
           trigger: ref.current,
-          start: "top 92%",
-          end: "top 50%",
-          scrub: 1.5,
+          start: "top 88%",
+          toggleActions: "play none none none",
         },
       });
 
@@ -360,7 +385,7 @@ function StatsStrip() {
   }, []);
 
   const stats = [
-    { value: "15+", label: "Brands Scaled", sublabel: "Amazon, Blinkit, Zepto & Flipkart" },
+    { value: "25+", label: "Brands Scaled", sublabel: "Amazon, Blinkit, Zepto & Flipkart" },
     { value: "2x", label: "Average ROAS", sublabel: "Consistent month-over-month" },
     { value: "5+", label: "Years Experience", sublabel: "Marketplaces & Q-Commerce" },
     { value: "87%", label: "Repeat Purchase Rate", sublabel: "Across managed catalogs" },
@@ -406,7 +431,7 @@ function DashboardShowcase() {
       const split = new SplitType(heading, { types: "chars,words" });
       const eyebrow = ref.current!.querySelector(".showcase-eyebrow")!;
 
-      // Eyebrow slow scroll-controlled reveal
+      // Eyebrow fast scroll-controlled reveal
       gsap.from(eyebrow, {
         y: 20,
         opacity: 0,
@@ -415,11 +440,11 @@ function DashboardShowcase() {
           trigger: eyebrow,
           start: "top 92%",
           end: "top 60%",
-          scrub: 1.5,
+          scrub: 0.5,
         },
       });
 
-      // Heading chars slow scroll-controlled reveal
+      // Heading chars fast scroll-controlled reveal
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -431,38 +456,56 @@ function DashboardShowcase() {
           trigger: heading,
           start: "top 92%",
           end: "top 35%",
-          scrub: 1.5,
+          scrub: 0.5,
         },
       });
 
-      // Left-side paragraph, bullet list, and button (staggered slow scrub)
-      const leftElements = leftRef.current!.querySelectorAll("p, li, a");
-      gsap.from(leftElements, {
-        y: 45,
+      // Left-side paragraph and bullet list (crisp entry without blur traps)
+      const textElements = leftRef.current!.querySelectorAll("p, li");
+      gsap.from(textElements, {
+        y: 25,
         opacity: 0,
-        filter: "blur(6px)",
-        stagger: 0.1,
-        ease: "power1.out",
+        stagger: 0.08,
+        duration: 0.7,
+        ease: "power2.out",
+        clearProps: "all",
         scrollTrigger: {
           trigger: leftRef.current,
-          start: "top 88%",
-          end: "top 35%",
-          scrub: 1.5,
+          start: "top 85%",
+          toggleActions: "play none none none",
         },
       });
 
-      // Right-side dashboard image (slow zoom & unblur scrub)
+      // The CTA Button - Guaranteed 100% crisp, no blur, clears all inline properties
+      const button = leftRef.current!.querySelector("a");
+      if (button) {
+        gsap.from(button, {
+          y: 20,
+          opacity: 0,
+          duration: 0.7,
+          delay: 0.15,
+          ease: "power2.out",
+          clearProps: "all",
+          scrollTrigger: {
+            trigger: leftRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
+
+      // Right-side dashboard image (crisp scale & fade without heavy blur)
       gsap.from(rightRef.current, {
-        y: 70,
-        scale: 0.88,
+        y: 40,
+        scale: 0.95,
         opacity: 0,
-        filter: "blur(16px)",
-        ease: "power1.out",
+        duration: 0.9,
+        ease: "power2.out",
+        clearProps: "all",
         scrollTrigger: {
           trigger: rightRef.current,
-          start: "top 90%",
-          end: "top 30%",
-          scrub: 1.8,
+          start: "top 85%",
+          toggleActions: "play none none none",
         },
       });
     }, ref);
@@ -499,7 +542,11 @@ function DashboardShowcase() {
                   </li>
                 ))}
               </ul>
-              <Link to="/contact" className="hero-btn hero-btn-primary">
+              <Link
+                to="/contact"
+                className="hero-btn hero-btn-primary relative z-20 shadow-xl"
+                style={{ filter: "none" }}
+              >
                 Get Your Free Audit
               </Link>
             </div>
@@ -533,7 +580,7 @@ function ServicesSection() {
       const sub = ref.current!.querySelector(".services-sub")!;
       const cards = ref.current!.querySelectorAll<HTMLElement>(".service-card");
 
-      // Eyebrow slow scroll-controlled reveal
+      // Eyebrow fast scroll-controlled reveal
       gsap.from(eyebrow, {
         y: 20,
         opacity: 0,
@@ -542,11 +589,11 @@ function ServicesSection() {
           trigger: eyebrow,
           start: "top 95%",
           end: "top 60%",
-          scrub: 1.5,
+          scrub: 0.5,
         },
       });
 
-      // Heading chars slow scroll-controlled reveal
+      // Heading chars fast scroll-controlled reveal
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -558,21 +605,21 @@ function ServicesSection() {
           trigger: heading,
           start: "top 95%",
           end: "top 35%",
-          scrub: 1.5,
+          scrub: 0.5,
         },
       });
 
-      // Subtitle slow scrub
+      // Subtitle smooth reveal
       gsap.from(sub, {
-        y: 30,
+        y: 20,
         opacity: 0,
-        filter: "blur(6px)",
-        ease: "power1.out",
+        duration: 0.8,
+        ease: "power2.out",
+        clearProps: "all",
         scrollTrigger: {
           trigger: sub,
-          start: "top 92%",
-          end: "top 45%",
-          scrub: 1.5,
+          start: "top 90%",
+          toggleActions: "play none none none",
         },
       });
 
@@ -928,11 +975,11 @@ export function StackedCardsProcessSection() {
           trigger: eyebrow,
           start: "top 95%",
           end: "top 60%",
-          scrub: 2,
+          scrub: 0.5,
         },
       });
 
-      // Heading chars slow scroll-controlled reveal
+      // Heading chars fast scroll-controlled reveal
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -944,7 +991,7 @@ export function StackedCardsProcessSection() {
           trigger: heading,
           start: "top 95%",
           end: "top 35%",
-          scrub: 2,
+          scrub: 0.5,
         },
       });
     }, ref);
@@ -996,7 +1043,7 @@ function Testimonials() {
           trigger: eyebrow,
           start: "top 95%",
           end: "top 60%",
-          scrub: 2,
+          scrub: 0.5,
         },
       });
 
@@ -1011,7 +1058,7 @@ function Testimonials() {
           trigger: heading,
           start: "top 92%",
           end: "top 35%",
-          scrub: 1.5,
+          scrub: 0.5,
         },
       });
     }, ref);

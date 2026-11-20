@@ -36,7 +36,7 @@ export default function ContactPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Contact AMZCOZ | Free Marketplace & Quick Commerce Audit"
+        title="Contact Amzcoz | Free Marketplace & Quick Commerce Audit"
         description="Book your free marketplace channel audit with AMZCOZ. Get listing diagnostic, PPC structure evaluation, and quick-commerce dark-store expansion roadmap within 24 hours."
         canonical="/contact"
         keywords="contact amzcoz, hire amazon agency, quick commerce agency consultation, ecommerce audit india, amazon consultant pune"

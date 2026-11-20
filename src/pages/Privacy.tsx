@@ -11,7 +11,7 @@ export default function PrivacyPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Privacy Policy | AMZCOZ"
+        title="Privacy Policy | Amzcoz"
         description="AMZCOZ Privacy Policy. Learn how we handle client data, catalog confidentiality under NDA, cookie policies, and merchandise order information."
         canonical="/privacy"
       />

@@ -11,7 +11,7 @@ export default function TermsPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Terms & Conditions | AMZCOZ"
+        title="Terms & Conditions | Amzcoz"
         description="AMZCOZ Terms and Conditions of service, client scope of work, NDA guidelines, performance media terms, and merchandise sales policies."
         canonical="/terms"
       />

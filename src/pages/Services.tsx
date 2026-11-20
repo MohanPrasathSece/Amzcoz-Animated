@@ -534,7 +534,7 @@ export default function ServicesPage() {
   return (
     <SmoothScroll>
       <SEO
-        title="Marketplace & Quick Commerce Services | AMZCOZ Agency"
+        title="Marketplace & Quick Commerce Services | Amzcoz Agency"
         description="Explore AMZCOZ capabilities: Amazon & Flipkart account management, Quick Commerce acceleration on Blinkit, Zepto & Instamart, Sponsored Ads PPC, A+ Brand Stores, and review defense."
         canonical="/services"
         keywords="amazon seller services, quick commerce agency, blinkit store optimization, zepto brand onboarding, amazon ppc services, flipkart ads management, a+ content design"
@@ -648,64 +648,60 @@ export default function ServicesPage() {
                 className="scroll-mt-28 relative"
               >
                 <div className="mx-auto max-w-7xl px-6">
-                  {/* Category Header Banner */}
-                  <div className="relative rounded-3xl surface-glass border border-white/10 p-7 sm:p-9 md:p-11 mb-8 md:mb-10 overflow-hidden bg-gradient-to-r from-white/[0.04] via-white/[0.015] to-transparent shadow-xl">
-                    {/* Ambient Glow */}
-                    <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-80 h-80 rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
+                  {/* Category Header Banner with Scroll Reveal */}
+                  <Reveal yOffset={25} duration={0.65}>
+                    <div className="relative rounded-3xl surface-glass border border-white/10 p-7 sm:p-9 md:p-11 mb-8 md:mb-10 overflow-hidden bg-gradient-to-r from-white/[0.04] via-white/[0.015] to-transparent shadow-xl">
+                      {/* Ambient Glow */}
+                      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-80 h-80 rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
 
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
-                      <div className="max-w-3xl">
-                        {/* Section Eyebrow Tag */}
-                        <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-3">
-                          <span className="font-mono text-primary font-bold">0{section.index}</span>
-                          <span className="text-white/30">•</span>
-                          <span className="text-muted-foreground">{section.badge}</span>
-                        </div>
-
-                        {/* Title & Icon */}
-                        <div className="flex items-center gap-3.5 sm:gap-4 mb-3">
-                          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
-                            <SectionIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
+                        <div className="max-w-3xl">
+                          {/* Section Eyebrow Tag */}
+                          <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold tracking-wider uppercase mb-3">
+                            <span className="font-mono text-primary font-bold">0{section.index}</span>
+                            <span className="text-white/30">•</span>
+                            <span className="text-muted-foreground">{section.badge}</span>
                           </div>
-                          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
-                            {section.title}
-                          </h2>
+
+                          {/* Title & Icon */}
+                          <div className="flex items-center gap-3.5 sm:gap-4 mb-3">
+                            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                              <SectionIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                            </div>
+                            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+                              {section.title}
+                            </h2>
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed font-normal">
+                            {section.description}
+                          </p>
                         </div>
 
-                        {/* Description */}
-                        <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed font-normal">
-                          {section.description}
-                        </p>
-                      </div>
-
-                      {/* Right Meta Pill */}
-                      <div className="flex lg:flex-col items-center lg:items-end justify-between gap-2 shrink-0 pt-3 lg:pt-0">
-                        <span className="rounded-full surface-glass border border-white/10 px-3 py-1 text-[11px] sm:text-xs font-mono text-muted-foreground flex items-center gap-1.5">
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          <span>{sectionServices.length} Capabilities</span>
-                        </span>
-                        <span className="text-[11px] text-muted-foreground/80 font-medium hidden lg:block">
-                          {section.highlightText}
-                        </span>
+                        {/* Right Meta Pill */}
+                        <div className="flex lg:flex-col items-center lg:items-end justify-between gap-2 shrink-0 pt-3 lg:pt-0">
+                          <span className="rounded-full surface-glass border border-white/10 px-3 py-1 text-[11px] sm:text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span>{sectionServices.length} Capabilities</span>
+                          </span>
+                          <span className="text-[11px] text-muted-foreground/80 font-medium hidden lg:block">
+                            {section.highlightText}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Reveal>
 
-                  {/* Services Grid for This Category */}
+                  {/* Services Grid with Staggered Scroll Reveal */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <AnimatePresence mode="popLayout">
-                      {sectionServices.map((service) => {
-                        const Icon = service.icon;
-                        return (
-                          <motion.div
-                            layout
-                            initial={{ opacity: 0, y: 18, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.98 }}
-                            transition={{ duration: 0.25 }}
-                            key={service.id}
+                    {sectionServices.map((service, sIdx) => {
+                      const Icon = service.icon;
+                      return (
+                        <Reveal key={service.id} delay={sIdx * 0.06} yOffset={28} className="h-full">
+                          <div
                             onClick={() => setSelectedService(service)}
-                            className="group cursor-pointer rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300 shadow-lg hover:-translate-y-1"
+                            className="group cursor-pointer rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300 shadow-lg hover:-translate-y-1 h-full"
                           >
                             <div>
                               {/* Top Metadata */}
@@ -745,15 +741,15 @@ export default function ServicesPage() {
                                   e.stopPropagation();
                                   setSelectedService(service);
                                 }}
-                                className="text-xs sm:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                                className="text-xs sm:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform cursor-pointer"
                               >
                                 View Scope <ArrowRight className="h-3.5 w-3.5" />
                               </button>
                             </div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
+                          </div>
+                        </Reveal>
+                      );
+                    })}
                   </div>
                 </div>
               </section>

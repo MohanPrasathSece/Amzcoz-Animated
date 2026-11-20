@@ -12,7 +12,7 @@ export interface SEOProps {
 }
 
 const DEFAULT_IMAGE = "https://amzcoz.com/og-image.jpg";
-const SITE_NAME = "AMZCOZ";
+const SITE_NAME = "Amzcoz";
 const DOMAIN = "https://amzcoz.com";
 
 export function SEO({
@@ -26,8 +26,8 @@ export function SEO({
   structuredData,
 }: SEOProps) {
   useEffect(() => {
-    // 1. Page Title
-    const fullTitle = title.includes("AMZCOZ") ? title : `${title} | ${SITE_NAME}`;
+    // 1. Page Title - Uses "Amzcoz" with only first letter capitalized
+    const fullTitle = title.toLowerCase().includes("amzcoz") ? title : `${title} | ${SITE_NAME}`;
     document.title = fullTitle;
 
     // Helper to update or create meta tags
