@@ -106,6 +106,10 @@ const UNIQUE_BRANDS = Array.from(
   new Map(BRANDS_LIST.map((item) => [item.name.toLowerCase(), item])).values()
 );
 
+const halfLogos = Math.ceil(UNIQUE_BRANDS.length / 2);
+const ROW1_LOGOS = UNIQUE_BRANDS.slice(0, halfLogos);
+const ROW2_LOGOS = UNIQUE_BRANDS.slice(halfLogos);
+
 /* ------------------- CLIENT REVENUE PROOF DATA ------------------- */
 const PROOF_CASE_STUDIES = [
   {
@@ -483,6 +487,7 @@ export default function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState<string>("All Creative Work");
   const [lightbox, setLightbox] = useState<{ src: string; title: string; caption: string } | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -499,7 +504,21 @@ export default function PortfolioPage() {
           ease: "power3.out",
         });
       }
-    }, heroRef);
+
+      // Marquee continuous animation for brand partners
+      if (marqueeRef.current) {
+        const rows = marqueeRef.current.querySelectorAll<HTMLElement>(".portfolio-marquee-row");
+        rows.forEach((row, i) => {
+          const dir = i % 2 === 0 ? -1 : 1;
+          gsap.to(row, {
+            x: `${dir * 45}%`,
+            duration: 38 + i * 8,
+            ease: "none",
+            repeat: -1,
+          });
+        });
+      }
+    }, [heroRef, marqueeRef]);
 
     return () => ctx.revert();
   }, []);
@@ -633,49 +652,41 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* ------------------- BRANDS WE WORK WITH (GRID) ------------------- */}
-        <section id="brands-section" className="py-24 md:py-32 relative z-10">
-          <div className="mx-auto max-w-7xl px-6">
+        {/* ------------------- BRANDS WE WORK WITH (SCROLLING MARQUEE) ------------------- */}
+        <section id="brands-section" ref={marqueeRef} className="relative z-10 overflow-hidden py-20 md:py-28 border-y border-white/5 bg-white/[0.01]">
+          <div className="mx-auto max-w-7xl px-6 text-center mb-12">
             <Reveal>
-              <div className="text-center max-w-3xl mx-auto mb-16">
-                <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
-                  ◆ Marketplace Portfolio
-                </div>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
-                  Brands We <span className="gradient-text">Work With</span>
-                </h2>
-                <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                  AKAI · Filgap · GoFresh · Korleone · Lal Gulab · Magic Paints · Saukhyam · Wit Blox · Tresa · VegOChef · Zora · Nioax · Moarmouz and more.
-                </p>
+              <div className="mb-2 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
+                ◆ Verified Brand Partners
               </div>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+                Brands We <span className="gradient-text">Work With</span>
+              </h2>
+              <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+                Trusted by 20+ consumer, FMCG, electronics, and lifestyle brands across Amazon and Quick Commerce.
+              </p>
             </Reveal>
+          </div>
 
-            {/* Brand Cards Grid */}
-            <Reveal delay={0.1}>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-                {UNIQUE_BRANDS.map((brand, i) => (
+          {/* Two independent continuous marquee rows with brand logos */}
+          <div className="flex flex-col gap-5 overflow-hidden">
+            {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
+              <div key={rowIndex} className="portfolio-marquee-row flex gap-5 whitespace-nowrap">
+                {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
-                    key={i}
-                    className="group relative rounded-2xl surface-glass border border-white/10 p-5 flex flex-col items-center justify-center text-center hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300"
+                    key={`${rowIndex}-${i}`}
+                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md"
                   >
-                    <div className="h-20 w-full flex items-center justify-center p-2 mb-3">
-                      <img
-                        src={brand.src}
-                        alt={brand.name}
-                        className="max-h-16 max-w-full object-contain filter brightness-100 contrast-100 group-hover:scale-105 transition-transform"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="font-display text-sm md:text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {brand.name}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      {brand.category}
-                    </div>
+                    <img
+                      src={brand.src}
+                      alt={brand.name}
+                      className="max-h-12 max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded"
+                      loading="lazy"
+                    />
                   </div>
                 ))}
               </div>
-            </Reveal>
+            ))}
           </div>
         </section>
 

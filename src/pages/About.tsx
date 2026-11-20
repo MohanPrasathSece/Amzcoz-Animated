@@ -25,20 +25,8 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Load all verified brand logos for the scrolling marquee
-const BRAND_LOGOS = Object.values(
-  import.meta.glob<{ default: string }>("@/assets/brands/*.{png,jpg,jpeg,webp,svg}", {
-    eager: true,
-  })
-).map((module) => module.default);
-
-const halfLogos = Math.ceil(BRAND_LOGOS.length / 2);
-const ROW1_LOGOS = BRAND_LOGOS.slice(0, halfLogos);
-const ROW2_LOGOS = BRAND_LOGOS.slice(halfLogos);
-
 export default function AboutPage() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -56,21 +44,7 @@ export default function AboutPage() {
           ease: "power3.out",
         });
       }
-
-      // Marquee continuous animation for brand partners
-      if (marqueeRef.current) {
-        const rows = marqueeRef.current.querySelectorAll<HTMLElement>(".about-marquee-row");
-        rows.forEach((row, i) => {
-          const dir = i % 2 === 0 ? -1 : 1;
-          gsap.to(row, {
-            x: `${dir * 45}%`,
-            duration: 38 + i * 8,
-            ease: "none",
-            repeat: -1,
-          });
-        });
-      }
-    }, [heroRef, marqueeRef]);
+    }, [heroRef]);
 
     return () => ctx.revert();
   }, []);
@@ -284,42 +258,6 @@ export default function AboutPage() {
                 </div>
               </div>
             </Reveal>
-          </div>
-        </section>
-
-        {/* ------------------- BRANDS WE WORK WITH (NEXT TO TRADITIONAL DIFF SECTION) ------------------- */}
-        <section ref={marqueeRef} className="relative z-10 overflow-hidden py-16 md:py-20 border-b border-white/5 bg-white/[0.01]">
-          <div className="mx-auto max-w-7xl px-6 text-center mb-10">
-            <div className="mb-2 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
-              ◆ Verified Brand Partners
-            </div>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-              Brands We <span className="gradient-text">Work With</span>
-            </h2>
-            <p className="mt-2 text-xs md:text-sm text-muted-foreground max-w-xl mx-auto">
-              Trusted by 20+ consumer, FMCG, electronics, and lifestyle brands across India.
-            </p>
-          </div>
-
-          {/* Two independent continuous marquee rows with brand logos */}
-          <div className="flex flex-col gap-5 overflow-hidden">
-            {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
-              <div key={rowIndex} className="about-marquee-row flex gap-5 whitespace-nowrap">
-                {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((logo, i) => (
-                  <div
-                    key={`${rowIndex}-${i}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md"
-                  >
-                    <img
-                      src={logo}
-                      alt="Brand Partner"
-                      className="max-h-12 max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
           </div>
         </section>
 
