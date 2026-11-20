@@ -1,0 +1,880 @@
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { SEO } from "@/components/SEO";
+import { Reveal } from "@/components/Reveal";
+import dashboardMockup from "@/assets/floating dashboard.png";
+import {
+  TrendingUp,
+  BarChart3,
+  Repeat,
+  Store,
+  Layers,
+  Sparkles,
+  ArrowRight,
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  CheckCircle,
+  FileText,
+  ShieldCheck,
+  ZoomIn,
+  X,
+  Lock,
+  ShoppingBag,
+  Coins,
+} from "lucide-react";
+
+// Client Revenue Proof Screenshots
+import brand1_1 from "@/assets/data_proof_our_work/brand1-1.jpg";
+import brand1_2 from "@/assets/data_proof_our_work/brand1_2.jpg";
+import brand2_1 from "@/assets/data_proof_our_work/brand2_1.jpg";
+import brand2_2 from "@/assets/data_proof_our_work/brand2_2.jpg";
+import brand3_1 from "@/assets/data_proof_our_work/brand3_1.jpg";
+import brand3_2 from "@/assets/data_proof_our_work/brand3_2.jpg";
+import newReport from "@/assets/data_proof_our_work/new report.png";
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Dynamically load all brand logo files from src/assets/brands
+const BRAND_FILES = import.meta.glob<{ default: string }>(
+  "@/assets/brands/*.{png,jpg,jpeg,webp,svg}",
+  { eager: true }
+);
+
+interface BrandCard {
+  name: string;
+  category: string;
+  src: string;
+}
+
+// Map filenames to clean brand names and categories
+function formatBrandName(path: string): { name: string; category: string } {
+  const clean = path
+    .split("/")
+    .pop()!
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[_-]/g, " ");
+
+  const lower = clean.toLowerCase();
+  if (lower.includes("akai")) return { name: "AKAI", category: "Consumer Electronics" };
+  if (lower.includes("filgap")) return { name: "Filgap", category: "Industrial & Auto" };
+  if (lower.includes("gofresh")) return { name: "GoFresh", category: "Health & Nutrition" };
+  if (lower.includes("korleone")) return { name: "Korleone", category: "Apparel & Fashion" };
+  if (lower.includes("lal gulab")) return { name: "Lal Gulab", category: "Gourmet & FMCG" };
+  if (lower.includes("magic paints")) return { name: "Magic Paints", category: "Home & Decor" };
+  if (lower.includes("saukhyam")) return { name: "Saukhyam", category: "Sustainable Wellness" };
+  if (lower.includes("wit blox")) return { name: "Wit Blox", category: "EdTech & Robotics" };
+  if (lower.includes("tresa")) return { name: "Tresa", category: "EV & Hardware" };
+  if (lower.includes("veg")) return { name: "VegOChef", category: "Plant-Based FMCG" };
+  if (lower.includes("zora")) return { name: "ZORA", category: "Luxury Lifestyle" };
+  if (lower.includes("nioax")) return { name: "Nioax Coffee", category: "Artisan Coffee" };
+  if (lower.includes("moarmouz")) return { name: "Moarmouz", category: "Smart Accessories" };
+  if (lower.includes("brown auric")) return { name: "Brown Auric", category: "Ayurvedic Health" };
+  if (lower.includes("angel")) return { name: "Angel's & Co", category: "Personal Care" };
+  if (lower.includes("waggy")) return { name: "Waggy Zone", category: "Premium Pet Care" };
+  if (lower.includes("woof")) return { name: "Woof Ministry", category: "Pet Food & Wellness" };
+  if (lower.includes("down the cove")) return { name: "Down The Cove", category: "Organic Beverages" };
+  if (lower.includes("innovative")) return { name: "Innovative Edge", category: "Fitness Gear" };
+  if (lower.includes("real nutri")) return { name: "Real Nutri Co", category: "Nutraceuticals" };
+
+  return {
+    name: clean.charAt(0).toUpperCase() + clean.slice(1),
+    category: "Marketplace Partner",
+  };
+}
+
+const BRANDS_LIST: BrandCard[] = Object.entries(BRAND_FILES).map(([path, mod]) => {
+  const { name, category } = formatBrandName(path);
+  return {
+    name,
+    category,
+    src: mod.default,
+  };
+});
+
+// Remove accidental duplicates if same brand has multiple image extensions
+const UNIQUE_BRANDS = Array.from(
+  new Map(BRANDS_LIST.map((item) => [item.name.toLowerCase(), item])).values()
+);
+
+/* ------------------- CLIENT REVENUE PROOF DATA ------------------- */
+const PROOF_CASE_STUDIES = [
+  {
+    id: "case-3",
+    tag: "Client Case 01 · Apparel & Daily Essentials",
+    badge: "₹1.94 Crores Generated · 6.55x ROAS",
+    badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
+    headline: "Scaled to ₹1.94 Crores Revenue at 6.55x Blended ROAS",
+    subheadline: "High-volume Amazon Sponsored Ads & DSP, dark-store synchronization, and 100% account health across 34,500+ orders.",
+    stats: [
+      { label: "Total Documented Revenue", value: "₹1,94,02,529" },
+      { label: "Peak Month Run Rate", value: "₹31,63,807/mo" },
+      { label: "Blended Ad ROAS", value: "6.55x ROAS" },
+      { label: "Total Units Delivered", value: "34,517 Units" },
+    ],
+    highlights: [
+      "Scaled catalog from ₹1.7L/mo to ₹31.63L/mo in under 6 months",
+      "Maintained razor-sharp 15.28% ACoS across all campaign types",
+      "Zero account policy infractions and 0 A-to-z guarantee claims across 34,000+ orders",
+    ],
+    proofs: [
+      {
+        src: brand3_1,
+        title: "Amazon Seller Central Business Overview",
+        caption: "Documented revenue milestone of ₹1,94,02,529.04 across 34,517 fulfilled orders.",
+      },
+      {
+        src: brand3_2,
+        title: "Campaign Manager Ad Performance",
+        caption: "6.55x blended ROAS and 15.28% ACoS generating ₹33,82,368 in advertising revenue.",
+      },
+    ],
+  },
+  {
+    id: "case-1",
+    tag: "Client Case 02 · FMCG & Wellness",
+    badge: "12.5x Monthly Growth",
+    badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
+    headline: "Scaled from ₹43K/mo to ₹41.5 Lakhs/mo",
+    subheadline: "Complete marketplace rebuild, catalog variation architecture, and high-converting ad funnels.",
+    stats: [
+      { label: "Total Revenue Generated", value: "₹63.9+ Lakhs" },
+      { label: "Peak Monthly Run Rate", value: "₹41,54,790" },
+      { label: "Total Page Views", value: "407,591" },
+      { label: "Units Ordered", value: "2,270+ Items" },
+    ],
+    highlights: [
+      "Catalog restructured from single SKUs to optimized variation families",
+      "Organic search placement ranked in top 3 positions for primary keywords",
+      "Ad efficiency scaled while maintaining low double-digit ACoS",
+    ],
+    proofs: [
+      {
+        src: brand1_1,
+        title: "Amazon Business Report · Growth Phase 1",
+        caption: "Revenue scaled from ₹43,197/mo to ₹5,39,631/mo (12.5x growth in 10 months).",
+      },
+      {
+        src: brand1_2,
+        title: "Amazon Business Report · Growth Phase 2",
+        caption: "Peak scaling phase reaching ₹41,54,790.00/month with 407,591 page views.",
+      },
+    ],
+  },
+  {
+    id: "case-2",
+    tag: "Client Case 03 · Consumer Electronics & Accessories",
+    badge: "98.6% Buy Box Win Rate",
+    badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/25",
+    headline: "4.3x Conversion Lift & ₹10.5 Lakhs Scale",
+    subheadline: "Automated price surveillance, competitor conquesting, and conversion rate optimization.",
+    stats: [
+      { label: "Total Revenue Managed", value: "₹10,50,663" },
+      { label: "Conversion Rate (Sessions)", value: "1.86% ➔ 8.12%" },
+      { label: "Buy Box Retention", value: "98.6% Average" },
+      { label: "Ad Sales Generated", value: "₹5,48,929" },
+    ],
+    highlights: [
+      "Unit Session Percentage surged from 1.86% to 8.12% via A+ visual storytelling",
+      "Maintained 98.6% to 99% Buy Box share against 10+ third-party reseller listings",
+      "Cost-per-click kept at an ultra-efficient ₹12.74 with 786 direct ad orders",
+    ],
+    proofs: [
+      {
+        src: brand2_1,
+        title: "Seller Central Annual Business Report",
+        caption: "Steady revenue growth reaching ₹10,50,663.73 with 98.6% Buy Box win rate.",
+      },
+      {
+        src: brand2_2,
+        title: "Amazon Advertising Console Report",
+        caption: "₹5,48,929.91 generated from targeted ad spend with ₹12.74 controlled CPC.",
+      },
+    ],
+  },
+  {
+    id: "case-4",
+    tag: "Client Case 04 · FMCG Multi-Channel Expansion",
+    badge: "118,000+ Shopper Sessions",
+    badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/25",
+    headline: "3,668 Units Dispatched with High Basket Value",
+    subheadline: "Fast-moving consumable catalog scaling with multi-pack basket building and rapid fulfillment.",
+    stats: [
+      { label: "6-Month Growth Phase", value: "₹4,04,386" },
+      { label: "Units Fulfilled", value: "3,668 Units" },
+      { label: "Total Shopper Sessions", value: "118,000+" },
+      { label: "Average Item Price", value: "₹108.42" },
+    ],
+    highlights: [
+      "Basket building strategy increased units per transaction",
+      "Consistent double-digit month-over-month growth across SKU lines",
+    ],
+    proofs: [
+      {
+        src: newReport,
+        title: "Recent SKU Growth & Session Audit",
+        caption: "Consistent sales velocity across 3,668 orders and 118,000+ prospective buyer sessions.",
+      },
+    ],
+  },
+];
+
+/* ------------------- STACKED PROOF CARD COMPONENT ------------------- */
+interface StackedProofCardProps {
+  cs: (typeof PROOF_CASE_STUDIES)[number];
+  index: number;
+  total: number;
+  onOpenLightbox: (proof: (typeof PROOF_CASE_STUDIES)[number]["proofs"][number]) => void;
+  onNextCard?: () => void;
+}
+
+function StackedProofCard({
+  cs,
+  index,
+  total,
+  onOpenLightbox,
+  onNextCard,
+}: StackedProofCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "start start"],
+  });
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const scale = useTransform(scrollYProgress, [0, 1], [isMobile ? 1 : 0.95, 1]);
+  const rot = useTransform(scrollYProgress, [0, 1], [isMobile ? 0 : -1, 0]);
+
+  // Proof carousel state: allows flipping between images when case study has > 1 proof
+  const [activeProofIdx, setActiveProofIdx] = useState(0);
+  const currentProof = cs.proofs[activeProofIdx] || cs.proofs[0];
+  const hasMultiple = cs.proofs.length > 1;
+
+  const nextProof = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveProofIdx((prev) => (prev + 1) % cs.proofs.length);
+  };
+
+  const prevProof = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveProofIdx((prev) => (prev - 1 + cs.proofs.length) % cs.proofs.length);
+  };
+
+  return (
+    <div
+      id={`proof-case-${index}`}
+      ref={cardRef}
+      style={{
+        position: "sticky",
+        top: isMobile ? `${72 + index * 14}px` : `${92 + index * 24}px`,
+        zIndex: index + 10,
+      }}
+      className="pb-8 md:pb-14"
+    >
+      <div
+        className="rounded-3xl border border-white/20 p-6 sm:p-8 md:p-10 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95)] bg-[#0d101b] overflow-hidden relative group"
+      >
+        {/* Subtle Ambient Radial Glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/[0.08] blur-[80px] pointer-events-none" />
+
+        {/* Top Header Bar: Tag & Badge */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-white/10 relative z-10">
+          <div className="flex items-center gap-2.5">
+            <Lock className="h-4 w-4 text-primary shrink-0" />
+            <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+              {cs.tag}
+            </span>
+            <span className="text-white/20 text-xs hidden sm:inline">•</span>
+            <span className="font-mono text-[11px] text-primary/80 hidden sm:inline">
+              Case 0{index + 1} of 0{total}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className={`rounded-full px-3 py-1 text-[13px] font-semibold border ${cs.badgeColor}`}>
+              {cs.badge}
+            </span>
+          </div>
+        </div>
+
+        {/* Main 2-Column Grid: Left Details & Right BIG Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 pt-6 items-stretch relative z-10">
+          {/* Left Details (6 cols) */}
+          <div className="lg:col-span-6 flex flex-col justify-between space-y-5">
+            <div>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">
+                {cs.headline}
+              </h3>
+              <p className="mt-2.5 text-sm text-slate-300 leading-relaxed">
+                {cs.subheadline}
+              </p>
+
+              {/* 4 Stat Tiles */}
+              <div className="grid grid-cols-2 gap-3 pt-4">
+                {cs.stats.map((st) => (
+                  <div key={st.label} className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
+                    <div className="text-[11px] font-mono text-muted-foreground uppercase tracking-wide">
+                      {st.label}
+                    </div>
+                    <div className="font-display text-base sm:text-lg font-bold text-white mt-1">
+                      {st.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Key Optimizations */}
+              <div className="space-y-2 pt-4">
+                <div className="text-xs uppercase tracking-wider text-primary font-semibold">
+                  Key Optimizations Executed
+                </div>
+                <ul className="space-y-1.5">
+                  {cs.highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-300">
+                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Bottom Action: Arrow to go to next card */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+              {index < total - 1 ? (
+                <button
+                  type="button"
+                  onClick={onNextCard}
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:text-white bg-primary/10 hover:bg-primary/25 border border-primary/25 px-4 py-2 rounded-xl transition-all duration-200 group/btn cursor-pointer"
+                >
+                  <span>Next Case Study</span>
+                  <ArrowDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-y-0.5" />
+                </button>
+              ) : (
+                <a
+                  href="#brands-section"
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:text-white bg-primary/10 hover:bg-primary/25 border border-primary/25 px-4 py-2 rounded-xl transition-all duration-200"
+                >
+                  <span>View All Marketplace Brands</span>
+                  <ArrowDown className="h-3.5 w-3.5" />
+                </a>
+              )}
+
+              <span className="text-[11px] font-mono text-muted-foreground">
+                Verified Seller Central Report
+              </span>
+            </div>
+          </div>
+
+          {/* Right Column: ONE BIG IMAGE (6 cols) */}
+          <div className="lg:col-span-6 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              {/* Image Header with switch indicator */}
+              <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <span className="uppercase tracking-wider">Verified Dashboard Report</span>
+                  {hasMultiple && (
+                    <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-white font-mono">
+                      {activeProofIdx + 1} / {cs.proofs.length}
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onOpenLightbox(currentProof)}
+                  className="text-[11px] text-primary flex items-center gap-1 hover:underline cursor-pointer"
+                >
+                  <ZoomIn className="h-3.5 w-3.5" /> Enlarge Fullscreen
+                </button>
+              </div>
+
+              {/* Big Image Container with Carousel Controls */}
+              <div
+                onClick={() => onOpenLightbox(currentProof)}
+                className="group/img relative rounded-2xl overflow-hidden border border-white/20 bg-[#07090f] cursor-pointer hover:border-primary transition-all duration-200 shadow-xl"
+              >
+                {/* Big Image covering half the card with crisp white background framing */}
+                <div className="aspect-[16/11] sm:aspect-[16/10] w-full overflow-hidden flex items-center justify-center p-3 sm:p-4 bg-white/95 rounded-t-xl">
+                  <img
+                    src={currentProof.src}
+                    alt={currentProof.title}
+                    className="w-full h-full object-contain rounded filter-none transition-transform duration-200 group-hover/img:scale-[1.01]"
+                    loading="eager"
+                  />
+                </div>
+
+                {/* Next/Prev Carousel Arrows (if multiple proofs) */}
+                {hasMultiple && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label="Previous proof"
+                      onClick={prevProof}
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/75 hover:bg-primary text-white border border-white/20 flex items-center justify-center transition-all duration-200 z-20 shadow-lg cursor-pointer"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Next proof"
+                      onClick={nextProof}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/75 hover:bg-primary text-white border border-white/20 flex items-center justify-center transition-all duration-200 z-20 shadow-lg cursor-pointer"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </>
+                )}
+
+                {/* Bottom Image Caption Bar */}
+                <div className="p-3.5 bg-[#121624] border-t border-white/10 flex items-center justify-between gap-3">
+                  <div className="truncate">
+                    <div className="text-xs font-semibold text-white truncate">
+                      {currentProof.title}
+                    </div>
+                    <div className="text-[11px] text-slate-300 truncate">
+                      {currentProof.caption}
+                    </div>
+                  </div>
+
+                  <div className="h-7 w-7 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary shrink-0 group-hover/img:bg-primary group-hover/img:text-white transition-colors">
+                    <ZoomIn className="h-3.5 w-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Dots indicator below image if multiple */}
+              {hasMultiple && (
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  {cs.proofs.map((p, pI) => (
+                    <button
+                      key={pI}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveProofIdx(pI);
+                      }}
+                      className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
+                        pI === activeProofIdx ? "w-6 bg-primary" : "w-1.5 bg-white/20 hover:bg-white/40"
+                      }`}
+                      title={p.title}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function PortfolioPage() {
+  const [activeFilter, setActiveFilter] = useState<string>("All Creative Work");
+  const [lightbox, setLightbox] = useState<{ src: string; title: string; caption: string } | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const heading = heroRef.current?.querySelector("h1");
+      if (heading) {
+        const split = new SplitType(heading, { types: "chars,words" });
+        gsap.from(split.chars, {
+          yPercent: 100,
+          opacity: 0,
+          rotateX: -40,
+          filter: "blur(10px)",
+          stagger: 0.02,
+          duration: 1.2,
+          ease: "power3.out",
+        });
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <SmoothScroll>
+      <SEO
+        title="Client Results & Revenue Proof | ₹2.68 Cr+ Generated | AMZCOZ"
+        description="Explore documented client sales results: ₹1.94 Cr generated, 6.55x ROAS, 12.5x monthly scale, and 98.6% Buy Box retention across Amazon and Quick Commerce channels."
+        canonical="/portfolio"
+        keywords="amazon case studies, ecommerce case study india, amazon revenue results, quick commerce brand scaling results, blinkit sales growth case study"
+        structuredData={{
+          "@type": "CollectionPage",
+          "@id": "https://amzcoz.com/portfolio#webpage",
+          "url": "https://amzcoz.com/portfolio",
+          "name": "AMZCOZ Client Revenue & Growth Proof",
+          "description": "Verified client growth metrics and Amazon Seller Central dashboard proofs managed by AMZCOZ.",
+          "isPartOf": {
+            "@id": "https://amzcoz.com/#website",
+          },
+        }}
+      />
+      <main className="relative min-h-screen bg-background text-foreground overflow-x-clip">
+        <Navbar />
+
+        {/* ------------------- HERO ------------------- */}
+        <section
+          ref={heroRef}
+          className="relative pt-36 pb-16 md:pt-44 md:pb-24 border-b border-white/5 overflow-hidden"
+        >
+          {/* Ambient glow */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
+
+          <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-6"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Our Work
+            </motion.div>
+
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight max-w-4xl mx-auto leading-tight">
+              Featured Work & <span className="gradient-text">Proven Results</span>
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-6 text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            >
+              Real verified sales figures, revenue scaling, and advertising performance dashboards from our client portfolio across Amazon and Quick Commerce.
+            </motion.p>
+          </div>
+        </section>
+
+        {/* ------------------- TOP SUMMARY METRICS STRIP ------------------- */}
+        <section className="py-10 border-b border-white/5 bg-white/[0.015] relative z-10">
+          <div className="mx-auto max-w-7xl px-6">
+            <Reveal>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+                    ₹2.68 Cr+
+                  </div>
+                  <div className="mt-1 text-xs sm:text-sm text-primary font-medium">Verified Revenue Managed</div>
+                </div>
+                <div>
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+                    6.55x
+                  </div>
+                  <div className="mt-1 text-xs sm:text-sm text-primary font-medium">Peak Ad ROAS (15.2% ACoS)</div>
+                </div>
+                <div>
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+                    12.5x
+                  </div>
+                  <div className="mt-1 text-xs sm:text-sm text-primary font-medium">Average Monthly Growth</div>
+                </div>
+                <div>
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+                    98.6%
+                  </div>
+                  <div className="mt-1 text-xs sm:text-sm text-primary font-medium">Buy-Box Retention Rate</div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ------------------- PRIORITIZED CLIENT REVENUE PROOF ------------------- */}
+        <section className="py-20 md:py-28 relative z-10 border-b border-white/5">
+          <div className="mx-auto max-w-7xl px-6">
+            {/* Header */}
+            <Reveal>
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3.5 py-1 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-3">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Verified Client Case Studies</span>
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+                  Documented Growth & <span className="gradient-text">Revenue Proof</span>
+                </h2>
+                <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed">
+                  Direct exports from Amazon Seller Central and Advertising Console. Client brand names remain confidential under mutual NDA, but all performance data and revenue figures are 100% authentic.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Case Studies Cards Stack */}
+            <div className="relative pt-6">
+              {PROOF_CASE_STUDIES.map((cs, i) => (
+                <StackedProofCard
+                  key={cs.id}
+                  cs={cs}
+                  index={i}
+                  total={PROOF_CASE_STUDIES.length}
+                  onOpenLightbox={setLightbox}
+                  onNextCard={() => {
+                    const nextEl = document.getElementById(`proof-case-${i + 1}`);
+                    if (nextEl) {
+                      nextEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------- BRANDS WE WORK WITH (GRID) ------------------- */}
+        <section id="brands-section" className="py-24 md:py-32 relative z-10">
+          <div className="mx-auto max-w-7xl px-6">
+            <Reveal>
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+                  ◆ Marketplace Portfolio
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+                  Brands We <span className="gradient-text">Work With</span>
+                </h2>
+                <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  AKAI · Filgap · GoFresh · Korleone · Lal Gulab · Magic Paints · Saukhyam · Wit Blox · Tresa · VegOChef · Zora · Nioax · Moarmouz and more.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Brand Cards Grid */}
+            <Reveal delay={0.1}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                {UNIQUE_BRANDS.map((brand, i) => (
+                  <div
+                    key={i}
+                    className="group relative rounded-2xl surface-glass border border-white/10 p-5 flex flex-col items-center justify-center text-center hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300"
+                  >
+                    <div className="h-20 w-full flex items-center justify-center p-2 mb-3">
+                      <img
+                        src={brand.src}
+                        alt={brand.name}
+                        className="max-h-16 max-w-full object-contain filter brightness-100 contrast-100 group-hover:scale-105 transition-transform"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="font-display text-sm md:text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {brand.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      {brand.category}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ------------------- OUR CREATIVE WORK (4 PILLARS) ------------------- */}
+        <section className="py-24 md:py-32 bg-white/[0.015] border-y border-white/5 relative z-10">
+          <div className="mx-auto max-w-7xl px-6">
+            <Reveal>
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+                  ◆ Execution Capabilities
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+                  Our Creative <span className="gradient-text">Work</span>
+                </h2>
+                <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  High-converting visual assets and data architecture that transform product listings into irresistible shopping destinations.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Pillar 1: Product Infographics & A+ Content */}
+                <div className="rounded-3xl surface-glass border border-white/10 p-8 md:p-10 hover:border-primary/40 transition-colors">
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary mb-6">
+                    <Sparkles className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">
+                    Product Infographics & A+ Content
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
+                    Visual storytelling designed to showcase products and communicate their value. We break down complex specifications into instantly digestible iconography, comparison tables, and benefit-driven lifestyle scenes.
+                  </p>
+                  <div className="space-y-2.5 pt-4 border-t border-white/5 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Conversion-optimized feature callouts & trust badges</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Mobile-first layout formatting for Amazon app shoppers</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pillar 2: Brand Store Design */}
+                <div className="rounded-3xl surface-glass border border-white/10 p-8 md:p-10 hover:border-accent/40 transition-colors">
+                  <div className="h-12 w-12 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-center text-accent mb-6">
+                    <Store className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">
+                    Brand Store Design
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
+                    Distinctive storefront experiences built around brand identity. We craft immersive multi-page Amazon Brand Stores with category navigation, video banners, curated sub-collections, and cross-sell modules.
+                  </p>
+                  <div className="space-y-2.5 pt-4 border-t border-white/5 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-accent" />
+                      <span>Higher Units Per Order (UPO) & cross-category discovery</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-accent" />
+                      <span>Dedicated landing destination for Sponsored Brands campaigns</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pillar 3: Advertising Creatives */}
+                <div className="rounded-3xl surface-glass border border-white/10 p-8 md:p-10 hover:border-primary/40 transition-colors">
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary mb-6">
+                    <Layers className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">
+                    Advertising Creatives
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
+                    Campaign visuals designed to capture attention and drive engagement. From high-CTR Sponsored Brand video clips to Meta Reels and Google Display retargeting banners that stop scrolling thumbs.
+                  </p>
+                  <div className="space-y-2.5 pt-4 border-t border-white/5 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Sponsored Display & DSP responsive banner variations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>High-velocity A/B testing on headlines and primary image badges</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pillar 4: Performance Reports */}
+                <div className="rounded-3xl surface-glass border border-white/10 p-8 md:p-10 hover:border-accent/40 transition-colors">
+                  <div className="h-12 w-12 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-center text-accent mb-6">
+                    <FileText className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">
+                    Performance Reports
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
+                    Marketplace dashboards showcasing sales, traffic and advertising insights. Clear live metrics so founders and marketing heads see exactly where every rupee of advertising spend went and what net profit it returned.
+                  </p>
+                  <div className="space-y-2.5 pt-4 border-t border-white/5 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-accent" />
+                      <span>Weekly ROAS, TACoS and blended contribution margin tracking</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-accent" />
+                      <span>Transparent keyword harvesting logs and negative search term audits</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ------------------- BOTTOM CTA ------------------- */}
+        <section className="py-24 md:py-32 bg-gradient-to-b from-transparent via-primary/5 to-transparent relative z-10 border-t border-white/5 text-center">
+          <div className="mx-auto max-w-4xl px-6">
+            <Reveal>
+              <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+                ◆ Start Your Growth Phase
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+                Ready to Achieve <span className="gradient-text">Similar Results?</span>
+              </h2>
+              <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
+                Book a 15-minute diagnostic audit. We will review your product catalog, search ranking, and ad efficiency across Amazon, Blinkit, and Flipkart at zero cost.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  to="/contact"
+                  className="hero-btn hero-btn-primary w-full sm:w-auto text-base px-8 py-3.5 font-semibold inline-flex items-center justify-center gap-2"
+                >
+                  Let's Talk
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/services"
+                  className="hero-btn hero-btn-ghost w-full sm:w-auto text-base px-8 py-3.5 font-semibold"
+                >
+                  What We Deliver
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ------------------- LIGHTBOX MODAL FOR VERIFIED PROOF IMAGES ------------------- */}
+        <AnimatePresence>
+          {lightbox && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6"
+              data-lenis-prevent="true"
+              onClick={() => setLightbox(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-5xl w-full rounded-3xl bg-[oklch(0.12_0.014_270)] border border-white/20 p-4 sm:p-6 shadow-2xl overflow-hidden"
+              >
+                <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                  <div>
+                    <h4 className="font-display font-bold text-foreground text-sm sm:text-base">
+                      {lightbox.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {lightbox.caption}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setLightbox(null)}
+                    className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-foreground transition-colors shrink-0"
+                    aria-label="Close Preview"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="max-h-[80vh] overflow-auto rounded-xl bg-white/95 p-3 sm:p-6 flex items-center justify-center">
+                  <img
+                    src={lightbox.src}
+                    alt={lightbox.title}
+                    className="max-h-[75vh] w-auto h-auto object-contain rounded filter-none"
+                  />
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        <Footer />
+        <ScrollToTop />
+      </main>
+    </SmoothScroll>
+  );
+}

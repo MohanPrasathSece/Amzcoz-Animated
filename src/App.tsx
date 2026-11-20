@@ -1,11 +1,20 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
+import { ScrollReset } from "./components/ScrollReset";
 import LandingPage from "./pages/Home";
+import AboutPage from "./pages/About";
+import ServicesPage from "./pages/Services";
+import PortfolioPage from "./pages/Portfolio";
+import ContactPage from "./pages/Contact";
+import PrivacyPage from "./pages/Privacy";
+import TermsPage from "./pages/Terms";
+import ShippingPage from "./pages/Shipping";
 import NotFoundPage from "./pages/NotFound";
 
 export default function App() {
   return (
     <>
+      <ScrollReset />
       <Toaster
         position="top-right"
         toastOptions={{
@@ -18,6 +27,13 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/portfolio" element={<PortfolioPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/shipping" element={<ShippingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

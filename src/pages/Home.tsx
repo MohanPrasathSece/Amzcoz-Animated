@@ -1,23 +1,32 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, ArrowDown } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { PhoneInput } from "@/components/PhoneInput";
-import { COUNTRY_PHONE_PATTERNS } from "@/lib/phoneCountries";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
-import { toast } from "sonner";
-import { submitContactForm } from "@/lib/contact";
+import { GlobeAnalytics } from "@/components/ui/cobe-globe-analytics";
 import { initHeroShader } from "@/lib/heroShader";
 import dashboardImg from "@/assets/floating dashboard.png";
 
-gsap.registerPlugin(ScrollTrigger);
+// Marketplace logos from src/assets/we_work_on_logos
+import ajioLogo from "@/assets/we_work_on_logos/ajio.png";
+import amazonLogo from "@/assets/we_work_on_logos/amazon.png";
+import blinkitLogo from "@/assets/we_work_on_logos/blinkit.png";
+import flipkartLogo from "@/assets/we_work_on_logos/flipkart.png";
+import instamartLogo from "@/assets/we_work_on_logos/instamart.png";
+import jiomartLogo from "@/assets/we_work_on_logos/jiomart.png";
+import meeshoLogo from "@/assets/we_work_on_logos/meesho.png";
+import myntraLogo from "@/assets/we_work_on_logos/mytra.png";
+import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
-function scrollToContact() {
-  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-}
+gsap.registerPlugin(ScrollTrigger);
 
 /* ------------------------------ INTRO ANIMATION ------------------------------ */
 function PageIntro({ onDone }: { onDone: () => void }) {
@@ -29,107 +38,129 @@ function PageIntro({ onDone }: { onDone: () => void }) {
   const panelBotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const tl = gsap.timeline({ onComplete: onDone });
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: onDone,
+        defaults: { ease: "power3.inOut" },
+      });
 
-    // Start state
-    gsap.set(logoRef.current, { opacity: 0, y: 30 });
-    gsap.set(lineRef.current, { scaleX: 0 });
-    gsap.set(tagRef.current, { opacity: 0, y: 10 });
-    gsap.set([panelTopRef.current, panelBotRef.current], { yPercent: 0 });
+      // Initial state
+      gsap.set(logoRef.current, { y: 30, opacity: 0 });
+      gsap.set(lineRef.current, { scaleX: 0 });
+      gsap.set(tagRef.current, { y: -20, opacity: 0 });
 
-    // Logo enters
-    tl.to(logoRef.current, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out" }, 0.3)
-      .to(lineRef.current, { scaleX: 1, duration: 0.6, ease: "expo.out" }, 0.7)
-      .to(tagRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, 1.0)
-      // Hold
-      .to({}, { duration: 0.5 })
-      // Panels split apart to reveal page
-      .to(panelTopRef.current, { yPercent: -100, duration: 0.9, ease: "expo.inOut" }, 1.8)
-      .to(panelBotRef.current, { yPercent: 100, duration: 0.9, ease: "expo.inOut" }, 1.8);
+      // Intro sequence
+      tl.to(logoRef.current, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" })
+        .to(lineRef.current, { scaleX: 1, duration: 0.5 }, "-=0.2")
+        .to(tagRef.current, { y: 0, opacity: 1, duration: 0.4 }, "-=0.2")
+        .to({}, { duration: 0.4 }) // brief pause
+        .to([logoRef.current, lineRef.current, tagRef.current], {
+          opacity: 0,
+          y: (i) => (i === 2 ? 10 : -10),
+          duration: 0.3,
+          ease: "power2.in",
+        })
+        .to(panelTopRef.current, { yPercent: -100, duration: 0.8 }, "-=0.1")
+        .to(panelBotRef.current, { yPercent: 100, duration: 0.8 }, "<")
+        .set(overlayRef.current, { display: "none" });
+    }, overlayRef);
 
-    return () => { tl.kill(); };
-  }, []);
+    return () => ctx.revert();
+  }, [onDone]);
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-[200] pointer-events-none">
+    <div ref={overlayRef} className="fixed inset-0 z-[100] pointer-events-none flex flex-col">
       {/* Top panel */}
       <div ref={panelTopRef} className="absolute inset-x-0 top-0 h-1/2 bg-[oklch(0.08_0.015_270)] flex items-end justify-center pb-8">
         <div className="text-center">
           <div ref={logoRef} className="font-display text-5xl font-bold tracking-tight text-foreground mb-4">
             <span className="inline-block h-3 w-3 rounded-full bg-primary shadow-[0_0_30px_var(--color-primary)] mr-3 align-middle" />
-            AMZCOZ
+            AMZ<span className="text-primary font-extrabold">COZ</span>
           </div>
           <div ref={lineRef} className="h-px w-48 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent origin-center" />
         </div>
       </div>
       {/* Bottom panel */}
       <div ref={panelBotRef} className="absolute inset-x-0 bottom-0 h-1/2 bg-[oklch(0.08_0.015_270)] flex items-start justify-center pt-8">
-        <div ref={tagRef} className="text-sm uppercase tracking-[0.3em] text-primary">Amazon Growth Experts</div>
+        <div ref={tagRef} className="text-sm uppercase tracking-[0.3em] text-primary">Marketplaces & Quick Commerce</div>
       </div>
     </div>
   );
 }
 
 export default function LandingPage() {
-  const [introsDone, setIntrosDone] = useState(false);
+  const [introsDone, setIntrosDone] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !!sessionStorage.getItem("amzcoz_intro_seen");
+    }
+    return true;
+  });
+
+  const handleIntroComplete = () => {
+    try {
+      sessionStorage.setItem("amzcoz_intro_seen", "true");
+    } catch { }
+    setIntrosDone(true);
+  };
 
   return (
     <>
-      {!introsDone && <PageIntro onDone={() => setIntrosDone(true)} />}
+      <SEO
+        title="AMZCOZ | Marketplaces & Quick Commerce Growth Agency"
+        description="AMZCOZ is India's leading marketplace and quick commerce growth agency. We scale consumer brands on Amazon, Blinkit, Zepto, Swiggy Instamart, and Flipkart with performance PPC, dark-store fulfillment, and A+ brand architecture."
+        canonical="/"
+        keywords="marketplace growth agency, quick commerce agency, amazon agency india, blinkit agency, zepto brand manager, amazon ppc agency, swiggy instamart growth, ecommerce management pune"
+        structuredData={[
+          {
+            "@type": "WebSite",
+            "@id": "https://amzcoz.com/#website",
+            "url": "https://amzcoz.com/",
+            "name": "AMZCOZ",
+            "description": "Marketplaces & Quick Commerce Growth Agency",
+          },
+          {
+            "@type": ["ProfessionalService", "MarketingAgency"],
+            "@id": "https://amzcoz.com/#organization",
+            "name": "AMZCOZ",
+            "url": "https://amzcoz.com",
+            "logo": "https://amzcoz.com/logo.png",
+            "image": "https://amzcoz.com/og-image.jpg",
+            "telephone": "+918007208742",
+            "email": "adnan@amzcoz.com",
+            "priceRange": "$$",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Pune",
+              "addressRegion": "Maharashtra",
+              "addressCountry": "IN",
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "reviewCount": "47",
+              "bestRating": "5",
+            },
+          },
+        ]}
+      />
+      {!introsDone && <PageIntro onDone={handleIntroComplete} />}
       <SmoothScroll>
         <main className="relative bg-background text-foreground overflow-x-clip">
-          <Nav />
+          <Navbar />
           <Hero />
+          <GlobeAnalyticsSection />
           <StatsStrip />
           <DashboardShowcase />
           <ServicesSection />
+          <MarketplacePlatformsMarquee />
           <StackedCardsProcessSection />
-          <BrandsSection />
           <Testimonials />
-          <FinalCTA />
-          <ContactFormSection />
+          <HomeFinalCTA />
           <Footer />
           <ScrollToTop />
         </main>
       </SmoothScroll>
     </>
-  );
-}
-
-/* ------------------------------ NAV ------------------------------ */
-function Nav() {
-  return (
-    <motion.header
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50"
-    >
-      <div className="mx-auto mt-3 flex max-w-7xl items-center justify-between rounded-full surface-glass px-5 py-2">
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          className="flex items-center gap-2 font-display text-lg font-bold tracking-tight"
-        >
-          <span className="inline-block h-2 w-2 rounded-full bg-primary shadow-[0_0_16px_var(--color-primary)]" />
-          AMZCOZ
-        </a>
-        <nav className="hidden gap-8 md:flex">
-          {[
-            ["Home", "#"],
-            ["Services", "#services"],
-            ["Process", "#process"],
-            ["Brands", "#brands"],
-            ["Contact", "#contact"],
-          ].map(([label, href]) => (
-            <a key={label} href={href} className="text-sm text-muted-foreground transition hover:text-foreground">{label}</a>
-          ))}
-        </nav>
-        <button onClick={scrollToContact} className="hero-btn hero-btn-primary text-xs px-4 py-1.5">
-          Free Audit
-        </button>
-      </div>
-    </motion.header>
   );
 }
 
@@ -152,20 +183,30 @@ function Hero() {
       const split = new SplitType(headlineRef.current!, { types: "chars,words" });
       const subSplit = new SplitType(subRef.current!, { types: "lines,words" });
 
-      gsap.set(split.chars, { yPercent: 130, opacity: 0, rotateX: -60, filter: "blur(14px)" });
+      gsap.set(split.chars, { yPercent: 120, opacity: 0, rotateX: -50, filter: "blur(12px)" });
       gsap.set(subSplit.words, { yPercent: 100, opacity: 0 });
-      gsap.set(eyebrowRef.current, { opacity: 0, y: 20 });
-      gsap.set(ctaRef.current, { opacity: 0, y: 30 });
+      gsap.set(eyebrowRef.current, { opacity: 0, y: 15 });
 
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-      tl.to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.9 })
-        .to(split.chars, { yPercent: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", duration: 1.4, stagger: { each: 0.025, from: "start" } }, "-=0.5")
-        .to(subSplit.words, { yPercent: 0, opacity: 1, duration: 0.9, stagger: 0.02 }, "-=0.9")
-        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.7");
+      tl.to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.8 })
+        .to(split.chars, { yPercent: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", duration: 1.2, stagger: { each: 0.02, from: "start" } }, "-=0.5")
+        .to(subSplit.words, { yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.015 }, "-=0.8");
 
-      gsap.to([headlineRef.current, eyebrowRef.current, subRef.current, ctaRef.current], {
-        y: -100, opacity: 0,
-        scrollTrigger: { trigger: rootRef.current, start: "top top", end: "60% top", scrub: 1 },
+      // Smooth button reveal with clearProps so they are guaranteed visible
+      gsap.from(ctaRef.current, {
+        opacity: 0,
+        y: 18,
+        duration: 0.9,
+        delay: 0.3,
+        ease: "power2.out",
+        clearProps: "opacity,transform",
+      });
+
+      // Subtle scroll fade only when scrolled past 65% of hero
+      gsap.to([headlineRef.current, eyebrowRef.current, subRef.current], {
+        y: -50,
+        opacity: 0,
+        scrollTrigger: { trigger: rootRef.current, start: "65% top", end: "95% top", scrub: 1 },
       });
     }, rootRef);
     return () => ctx.revert();
@@ -185,29 +226,64 @@ function Hero() {
       <div className="hero-vignette" />
 
       {/* Layer 4: Content */}
-      <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-12 px-6 min-h-screen">
-        <div ref={eyebrowRef} className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 md:gap-7 px-6 min-h-[85vh] md:min-h-screen pt-24 pb-14 md:pt-32 md:pb-16">
+        <div ref={eyebrowRef} className="inline-flex items-center gap-2 rounded-full surface-glass px-4 py-1.5 text-[13px] uppercase tracking-[0.2em] text-muted-foreground">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-          Amazon Growth Experts · Pune, India
+          Marketplaces & Quick Commerce Growth Agency · Pune, India
         </div>
 
-        <h1 ref={headlineRef} className="font-display text-[clamp(3rem,7vw,6.5rem)] font-bold leading-[1.15] tracking-tight text-center max-w-4xl">
-          Scale Your Brand on<br />
-          <span className="gradient-text">Amazon & Beyond</span>
+        <h1 ref={headlineRef} className="font-display text-3xl sm:text-4xl md:text-[3.5rem] lg:text-[4.2rem] xl:text-[4.6rem] font-black tracking-tight text-center max-w-5xl mx-auto leading-[1.12]">
+          <span className="block">Accelerate Your Brand Growth</span>
+          <span className="block">Across Marketplaces &amp;</span>
+          <span className="block gradient-text">Quick Commerce</span>
         </h1>
 
-        <p ref={subRef} className="max-w-2xl text-lg leading-relaxed text-muted-foreground text-center">
-          AMZCOZ delivers expert account management, data-driven advertising, and full-stack e-commerce growth across Amazon, Flipkart, Myntra, and more.
+        <p ref={subRef} className="max-w-2xl text-sm md:text-base leading-relaxed text-muted-foreground text-center">
+          AMZCOZ delivers expert account management, performance advertising, and dark-store distribution across Amazon, Blinkit, Zepto, Swiggy Instamart, and Flipkart.
         </p>
 
-        <div ref={ctaRef} className="flex flex-wrap items-center justify-center gap-4 pt-8">
-          <button onClick={scrollToContact} className="hero-btn hero-btn-primary">
+        <div ref={ctaRef} className="relative z-30 flex flex-wrap items-center justify-center gap-3.5 md:gap-4 pt-2 md:pt-3">
+          <Link to="/contact" className="hero-btn hero-btn-primary text-sm md:text-base px-6 py-3 font-semibold shadow-lg">
             Book Free Strategy Session
-          </button>
-          <a href="#services" className="hero-btn hero-btn-ghost">
+          </Link>
+          <a href="#services" className="hero-btn hero-btn-ghost text-sm md:text-base px-6 py-3 font-semibold">
             Explore Services
           </a>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------ 2ND SECTION: 3D GLOBE TELEMETRY ------------------------------ */
+function GlobeAnalyticsSection() {
+  return (
+    <section className="relative z-10 py-16 md:py-24 border-y border-white/5 overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary/10 blur-[140px] rounded-full pointer-events-none" />
+
+      <div className="mx-auto max-w-5xl px-6 relative z-10 text-center">
+        <Reveal>
+          <div className="max-w-3xl mx-auto mb-10 md:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full surface-glass px-3.5 py-1 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-3">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Scale Without Boundaries
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+              Built for Brands <span className="gradient-text">With Global Ambitions</span>
+            </h2>
+            <p className="mt-3.5 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              From dominating quick-commerce dark stores in Tier-1 Indian metros to scaling your catalog across Amazon US, UK, and Middle East marketplaces, we build multi-channel category leaders.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Globe in center with real-time 3D projected city pins & flags */}
+        <Reveal delay={0.1}>
+          <div className="flex items-center justify-center w-full max-w-[440px] sm:max-w-[500px] md:max-w-[560px] mx-auto aspect-square">
+            <GlobeAnalytics className="w-full h-full" speed={0.0045} dark={1} />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -269,10 +345,10 @@ function StatsStrip() {
   }, []);
 
   const stats = [
-    { value: "15+", label: "Brands Managed", sublabel: "Growing across all categories" },
+    { value: "15+", label: "Brands Scaled", sublabel: "Amazon, Blinkit, Zepto & Flipkart" },
     { value: "2x", label: "Average ROAS", sublabel: "Consistent month-over-month" },
-    { value: "5+", label: "Years Experience", sublabel: "Deep expertise in e-commerce" },
-    { value: "87%", label: "Client Satisfaction", sublabel: "Retention rate across portfolio" },
+    { value: "5+", label: "Years Experience", sublabel: "Marketplaces & Q-Commerce" },
+    { value: "87%", label: "Repeat Purchase Rate", sublabel: "Across managed catalogs" },
   ];
 
   return (
@@ -341,7 +417,7 @@ function DashboardShowcase() {
       });
 
       // Left-side paragraph, bullet list, and button (staggered slow scrub)
-      const leftElements = leftRef.current!.querySelectorAll("p, li, button");
+      const leftElements = leftRef.current!.querySelectorAll("p, li, a");
       gsap.from(leftElements, {
         y: 45,
         opacity: 0,
@@ -381,19 +457,19 @@ function DashboardShowcase() {
 
           {/* Left: content */}
           <div ref={leftRef}>
-            <div className="showcase-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Real-Time Insights</div>
-            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance mb-6">
-              Data that drives<br /><span className="gradient-text">real decisions.</span>
+            <div className="showcase-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Real-Time Insights</div>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6 leading-tight">
+              Live Performance Telemetry & <span className="gradient-text">Analytics</span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Every brand we manage gets a live dashboard with full visibility into revenue, ad spend, ROAS, and conversion trends. No black boxes, just clear numbers.
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-8">
+              Every brand we manage gets a unified live dashboard tracking net revenue, dark-store fulfillment, and ad efficiency across Amazon, Blinkit, Zepto, and Flipkart. No black boxes, just clear numbers.
             </p>
             <ul className="space-y-4 mb-10">
               {[
-                "Live revenue and ROAS tracking",
-                "Campaign performance breakdowns",
-                "Inventory and listing health alerts",
-                "Weekly PDF reports delivered",
+                "Live revenue, ROAS, and TACoS tracking",
+                "Campaign analytics across Amazon Ads, Blinkit & Zepto",
+                "Dark-store stock velocity and listing health alerts",
+                "Weekly executive strategy reports delivered",
               ].map((point) => (
                 <li key={point} className="flex items-start gap-3 text-sm text-muted-foreground">
                   <span className="mt-0.5 h-5 w-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
@@ -403,9 +479,9 @@ function DashboardShowcase() {
                 </li>
               ))}
             </ul>
-            <button onClick={scrollToContact} className="hero-btn hero-btn-primary">
+            <Link to="/contact" className="hero-btn hero-btn-primary">
               Get Your Free Audit
-            </button>
+            </Link>
           </div>
 
           {/* Right: dashboard image (just the image, no outer container) */}
@@ -435,23 +511,21 @@ function ServicesSection() {
       const eyebrow = ref.current!.querySelector(".services-eyebrow")!;
       const sub = ref.current!.querySelector(".services-sub")!;
       const cards = ref.current!.querySelectorAll<HTMLElement>(".service-card");
-      const divider = ref.current!.querySelector(".services-divider")!;
 
-      // Eyebrow & sub smooth scroll-controlled reveal (both down and up)
-      gsap.from([eyebrow, sub], {
-        y: 25,
+      // Eyebrow slow scroll-controlled reveal
+      gsap.from(eyebrow, {
+        y: 20,
         opacity: 0,
-        stagger: 0.1,
         ease: "power1.out",
         scrollTrigger: {
           trigger: eyebrow,
-          start: "top 90%",
-          end: "top 55%",
-          scrub: 1.2,
+          start: "top 95%",
+          end: "top 60%",
+          scrub: 1.5,
         },
       });
 
-      // Heading chars smooth scroll-controlled reveal (both down and up)
+      // Heading chars slow scroll-controlled reveal
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -461,37 +535,38 @@ function ServicesSection() {
         ease: "power2.out",
         scrollTrigger: {
           trigger: heading,
-          start: "top 90%",
+          start: "top 95%",
           end: "top 35%",
-          scrub: 1.2,
+          scrub: 1.5,
         },
       });
 
-      // Service cards smooth scroll-controlled entrance (both down and up)
+      // Subtitle slow scrub
+      gsap.from(sub, {
+        y: 30,
+        opacity: 0,
+        filter: "blur(6px)",
+        ease: "power1.out",
+        scrollTrigger: {
+          trigger: sub,
+          start: "top 92%",
+          end: "top 45%",
+          scrub: 1.5,
+        },
+      });
+
+      // Service Cards staggered slow scrub
       gsap.from(cards, {
-        y: 80,
+        y: 60,
         opacity: 0,
         scale: 0.94,
-        filter: "blur(12px)",
+        filter: "blur(10px)",
         stagger: 0.1,
         ease: "power1.out",
         scrollTrigger: {
           trigger: ref.current!.querySelector(".services-grid"),
           start: "top 88%",
           end: "top 25%",
-          scrub: 1.2,
-        },
-      });
-
-      // Divider line scaleX scroll-controlled (both down and up)
-      gsap.from(divider, {
-        scaleX: 0,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: divider,
-          start: "top 95%",
-          end: "top 70%",
           scrub: 1.2,
         },
       });
@@ -502,47 +577,47 @@ function ServicesSection() {
 
   const services = [
     {
-      title: "E-commerce Account Management",
-      desc: "Complete end-to-end management across Amazon, Flipkart, Myntra, Ajio, Jio Mart & Meesho.",
-      tags: ["Multi-Platform", "Listing Optimization", "Inventory Control"],
+      title: "Marketplace Management",
+      desc: "Complete end-to-end catalog and operations across Amazon, Flipkart, Myntra, Ajio, JioMart & Meesho.",
+      tags: ["Multi-Marketplace", "Listing Optimization", "Inventory Control"],
     },
     {
-      title: "E-commerce Advertising",
-      desc: "Expert advertising and DSP campaign management with high-yield budget and ROAS optimization.",
-      tags: ["Multi-Platform Ads", "Budget Optimization", "ROAS Improvement"],
+      title: "Quick Commerce Growth",
+      desc: "Dark-store mapping, rapid replenishment, and city-level search rank on Blinkit, Zepto & Swiggy Instamart.",
+      tags: ["Blinkit & Zepto", "10-Min Commerce", "Dark Store Inventory"],
     },
     {
-      title: "Brand Enhancement",
+      title: "Performance & DSP Advertising",
+      desc: "High-yield campaigns on Amazon Sponsored Ads, Blinkit Brand Booster, and Meta/Google conversion funnels.",
+      tags: ["Amazon PPC", "Blinkit Ads", "ROAS Optimization"],
+    },
+    {
+      title: "A+ Content & Brand Store Design",
       desc: "Premium A+ Content, Brand Store setup, custom infographics, and high-converting visual storytelling.",
-      tags: ["A+ Content", "Brand Store", "Premium Templates"],
+      tags: ["A+ Content", "Brand Store", "Conversion Boost"],
     },
     {
-      title: "Website Development",
-      desc: "Corporate and marketing websites crafted for brand storytelling, speed, and lead generation.",
-      tags: ["Corporate Sites", "Custom UI/UX", "CMS Integrations"],
+      title: "Review & Sentiment Defense",
+      desc: "Systematic rating monitoring, sentiment analysis, and rapid feedback resolution to protect Buy Box.",
+      tags: ["Review Monitoring", "Reputation Defense", "Sentiment Analysis"],
     },
     {
-      title: "E-commerce Website",
-      desc: "High-conversion DTC storefronts on Shopify and WooCommerce with secure checkout architectures.",
-      tags: ["Shopify/WooCommerce", "Catalog Setup", "Conversion Optimization"],
-    },
-    {
-      title: "Social Media Marketing",
-      desc: "Paid Meta & Google campaigns, influencer collabs, and community building to drive targeted brand awareness.",
-      tags: ["Content Strategy", "Meta Ads", "Community"],
+      title: "D2C & Tech Development",
+      desc: "High-conversion DTC storefronts on Shopify and custom web apps with checkout optimization.",
+      tags: ["Shopify DTC", "Custom UI/UX", "Conversion Architecture"],
     },
   ];
 
   return (
-    <section id="services" ref={ref} className="relative z-10 pt-24 pb-32 md:pb-40">
+    <section id="services" ref={ref} className="relative z-10 pt-20 pb-12 md:pt-24 md:pb-14">
       <div className="mx-auto max-w-7xl px-6 w-full">
         <div className="services-heading mb-14 max-w-3xl">
-          <div className="services-eyebrow mb-2 text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Our Services</div>
-          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance">
-            Comprehensive Amazon solutions<br />to <span className="gradient-text">accelerate your growth.</span>
+          <div className="services-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">◆ Capabilities & Scope</div>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+            Our Services & <span className="gradient-text">Capabilities</span>
           </h2>
-          <p className="services-sub mt-4 text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            From algorithmic listing rank and ad spend efficiency to multi-marketplace expansion, we build scalable infrastructure for modern brands.
+          <p className="services-sub mt-4 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
+            From algorithmic listing rank on Amazon and Flipkart to dark-store inventory velocity on Blinkit and Zepto, we build scalable multi-channel infrastructure for modern brands.
           </p>
         </div>
 
@@ -551,13 +626,13 @@ function ServicesSection() {
             <TiltCard key={s.title} className="service-card flex flex-col justify-between">
               <div>
                 <div className="font-display text-xl font-semibold text-foreground">{s.title}</div>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                <p className="mt-2.5 text-sm md:text-[15px] text-muted-foreground leading-relaxed">{s.desc}</p>
               </div>
               <div className="mt-6 flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
                 {s.tags.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full bg-primary/15 border border-primary/20 px-2.5 py-0.5 text-xs text-primary font-medium"
+                    className="rounded-full bg-primary/15 border border-primary/20 px-2.5 py-0.5 text-[13px] text-primary font-medium"
                   >
                     {t}
                   </span>
@@ -566,13 +641,67 @@ function ServicesSection() {
             </TiltCard>
           ))}
         </div>
-
-        {/* Divider before next section */}
-        <div className="mt-24 md:mt-32 flex items-center justify-center">
-          <div className="services-divider h-px w-full max-w-xl bg-gradient-to-r from-transparent via-primary/30 to-transparent origin-center" />
-        </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------ MARKETPLACE PLATFORMS MARQUEE ------------------------------ */
+const MARKETPLACE_PLATFORMS = [
+  { name: "Amazon", logo: amazonLogo },
+  { name: "Flipkart", logo: flipkartLogo },
+  { name: "Blinkit", logo: blinkitLogo },
+  { name: "Zepto", logo: zeptoLogo },
+  { name: "Swiggy Instamart", logo: instamartLogo },
+  { name: "Myntra", logo: myntraLogo },
+  { name: "AJIO", logo: ajioLogo },
+  { name: "JioMart", logo: jiomartLogo },
+  { name: "Meesho", logo: meeshoLogo },
+];
+
+function MarketplacePlatformsMarquee() {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = marqueeRef.current?.querySelector<HTMLElement>(".marketplace-marquee-track");
+    if (track) {
+      const anim = gsap.to(track, {
+        xPercent: -50,
+        duration: 34,
+        ease: "none",
+        repeat: -1,
+      });
+      return () => anim.kill();
+    }
+  }, []);
+
+  const marqueeItems = [...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS];
+
+  return (
+    <div ref={marqueeRef} className="relative z-10 my-10 md:my-14 py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
+      <div className="relative w-full overflow-hidden">
+        {/* Soft edge gradient fade */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+
+        <div className="marketplace-marquee-track flex gap-3 sm:gap-3.5 w-max">
+          {marqueeItems.map((p, idx) => (
+            <div
+              key={idx}
+              className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 min-w-[110px] sm:min-w-[124px] h-[42px] sm:h-[48px]"
+              title={p.name}
+            >
+              <img
+                src={p.logo}
+                alt={p.name}
+                className="max-h-4 sm:max-h-5 max-w-[80px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform duration-300 hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -610,27 +739,43 @@ function TiltCard({ children, className = "" }: { children: React.ReactNode; cla
 const PROCESS_STEPS = [
   {
     n: "01",
-    title: "Deep Audit",
-    text: "We audit your entire Amazon presence: listing health, advertising architecture, margins, pricing, review velocity, and competitor whitespace to identify untapped revenue channels.",
-    tags: ["Listing Health", "Competitor Intel", "PPC Structure", "Margin Analysis"],
+    title: "Deep Channel Audit",
+    text: "We audit your entire presence across Amazon, Blinkit, Zepto, and Flipkart: listing health, dark-store stock coverage, ad architecture, margins, and competitor whitespace.",
+    tags: ["Marketplace Audit", "Q-Commerce Intel", "PPC Structure", "Margin Analysis"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
+    statusBadge: "360° Channel Diagnostic",
+    caption: "Full Listing & Ad Diagnostic",
+    metric: "98.4% Health Score",
   },
   {
     n: "02",
-    title: "Custom Strategy",
-    text: "No cookie-cutter playbooks. We construct a bespoke multi-channel growth roadmap with aggressive target ACoS, granular keyword matrices, and category-dominant positioning.",
-    tags: ["Growth Roadmap", "Category Targeting", "Budget Allocation", "Keyword Matrix"],
+    title: "Channel Architecture",
+    text: "No cookie-cutter playbooks. We construct a bespoke multi-channel growth roadmap with aggressive target ACoS, quick-commerce dark-store replenishment models, and category-dominant positioning.",
+    tags: ["Growth Roadmap", "Dark Store Mapping", "Budget Allocation", "Keyword Matrix"],
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop",
+    statusBadge: "Dark-Store Sync",
+    caption: "140+ Tier-1 Hubs Mapped",
+    metric: "< 18 Mins SLA",
   },
   {
     n: "03",
     title: "Campaign Activation",
-    text: "We execute precision performance campaigns across Sponsored Products, Sponsored Brands, and Amazon DSP with algorithmic bid adjustments and negative keyword pruning.",
-    tags: ["Sponsored Products", "Amazon DSP", "Daily Bid Tuning", "Negative Keywords"],
+    text: "We execute precision performance campaigns across Amazon Sponsored Ads & DSP, Blinkit Brand Booster, Zepto Ads, and Google/Meta with daily bid optimization.",
+    tags: ["Amazon Ads", "Blinkit Brand Booster", "Zepto Ads", "Daily Bid Tuning"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
+    statusBadge: "Active Bid Engines",
+    caption: "Amazon DSP & Q-Commerce Ads",
+    metric: "15.2% Target ACoS",
   },
   {
     n: "04",
-    title: "Scale & Report",
-    text: "We continuously scale high-performing campaigns, eliminate wasteful spend, and sync real-time sales telemetry directly to your live dashboard with full weekly transparency.",
-    tags: ["Live Dashboard", "Weekly PDF Reports", "ROAS Scaling", "Dedicated Lead"],
+    title: "Scale & Expansion",
+    text: "We continuously scale winning SKUs, eliminate ad waste, expand catalog distribution across quick commerce and marketplaces, and sync real-time sales telemetry.",
+    tags: ["Live Telemetry", "Weekly Reports", "Multi-Marketplace", "Dedicated Lead"],
+    image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1200&auto=format&fit=crop",
+    statusBadge: "Enterprise Telemetry",
+    caption: "Continuous Revenue Scaling",
+    metric: "12.5x Growth Multiplier",
   },
 ];
 
@@ -644,69 +789,112 @@ function ProcessStackedCard({
   item: (typeof PROCESS_STEPS)[number];
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "start start"],
-  });
-
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const scale = useTransform(scrollYProgress, [0, 1], [isMobile ? 1 : 0.94, 1]);
-  const rot = useTransform(scrollYProgress, [0, 1], [isMobile ? 0 : -2, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.35, 1], [0.45, 0.85, 1]);
-  const innerY = useTransform(scrollYProgress, [0, 1], [30, 0]);
 
   return (
     <div
+      id={`process-card-${i}`}
       ref={ref}
       style={{
-        top: isMobile ? `${80 + i * 18}px` : `${105 + i * 26}px`,
+        top: isMobile ? `${72 + i * 12}px` : `${92 + i * 16}px`,
         position: "sticky",
+        zIndex: i + 10,
       }}
     >
-      <motion.div
-        style={{ scale, rotate: rot, willChange: "transform" }}
-        className="relative rounded-[2rem] p-6 md:p-14 border border-blue-500/25 surface-glass overflow-hidden shadow-[0_30px_70px_-20px_oklch(0_0_0/0.8),0_0_40px_-20px_oklch(0.65_0.25_258/0.3)] bg-gradient-to-br from-[oklch(0.15_0.016_270)] via-[oklch(0.13_0.014_270)] to-[oklch(0.11_0.012_270)]"
+      <div
+        className="relative rounded-[2rem] p-6 md:p-10 border border-blue-500/35 overflow-hidden shadow-[0_30px_70px_-20px_rgba(0,0,0,0.95)] bg-[#0c0f1a]"
       >
         {/* Subtle Ambient Radial Glow */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary/[0.08] blur-[80px] pointer-events-none will-change-[filter]" />
+        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary/[0.08] blur-[80px] pointer-events-none" />
 
-        <motion.div
-          style={{ opacity, y: innerY }}
-          className="relative grid md:grid-cols-12 gap-6 md:gap-10 items-center"
-        >
-          <div className="md:col-span-3">
-            <div className="font-display text-5xl md:text-8xl lg:text-9xl text-primary leading-[1.0] font-light tracking-tight">
-              {item.n}
-            </div>
-            <div className="mt-2 text-xs font-mono tracking-widest text-primary/70 uppercase">
-              Phase {item.n}
-            </div>
-          </div>
-          <div className="md:col-span-9">
-            <h3 className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground leading-tight tracking-tight mb-2">
-              {item.title}
-            </h3>
-            <p className="mt-2 md:mt-4 text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed">
-              {item.text}
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {item.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-primary/15 border border-primary/25 px-3 py-1 text-xs text-primary font-medium"
-                >
-                  {tag}
+        <div className="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+          {/* Left Details & Controls (6 columns) */}
+          <div className="md:col-span-6 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="font-display text-4xl sm:text-5xl font-light text-primary leading-none">
+                  {item.n}
                 </span>
-              ))}
+                <span className="text-xs font-mono tracking-widest text-primary/70 uppercase">
+                  Phase {item.n}
+                </span>
+              </div>
+
+              <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight mt-3 mb-2">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-slate-300 text-sm md:text-[15px] leading-relaxed">
+                {item.text}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {item.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-primary/15 border border-primary/25 px-2.5 py-0.5 text-xs text-primary font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom: Arrow button to next card & counter */}
+            <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between">
+              {i < total - 1 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextEl = document.getElementById(`process-card-${i + 1}`);
+                    if (nextEl) {
+                      nextEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:text-white bg-primary/10 hover:bg-primary/25 border border-primary/25 px-4 py-2 rounded-xl transition-all duration-200 group/btn cursor-pointer"
+                >
+                  <span>Next Phase</span>
+                  <ArrowDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-y-0.5" />
+                </button>
+              ) : (
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:text-white bg-primary/10 hover:bg-primary/25 border border-primary/25 px-4 py-2 rounded-xl transition-all duration-200 group/btn"
+                >
+                  <span>Start Your Audit</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
+                </Link>
+              )}
+
+              <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground/70">
+                0{i + 1} / 0{total}
+              </span>
             </div>
           </div>
-        </motion.div>
 
-        <div className="absolute bottom-6 right-8 font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground/70">
-          0{i + 1} / 0{total}
+          {/* Right: Big Image covering half the card (6 columns) */}
+          <div className="md:col-span-6">
+            <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-[#07090f] shadow-2xl group/cardimg">
+              <div className="aspect-[16/11] w-full overflow-hidden relative">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover/cardimg:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0f1a] via-transparent to-transparent opacity-80" />
+                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-[11px] font-mono text-white">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {item.statusBadge}
+                </div>
+              </div>
+              <div className="p-3.5 bg-[#121624] border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-300">
+                <span className="truncate pr-2">{item.caption}</span>
+                <span className="text-primary font-semibold shrink-0">{item.metric}</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -753,19 +941,18 @@ export function StackedCardsProcessSection() {
   }, []);
 
   return (
-    <section id="process" ref={ref} className="relative z-10 pt-16 pb-44 md:py-28 md:pb-60 px-6">
+    <section id="process" ref={ref} className="relative z-10 pt-12 pb-10 md:pt-16 md:pb-14 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-14 md:mb-20">
-          <div className="process-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">
-            ◆ The Process
+        <div className="mb-12 md:mb-16">
+          <div className="process-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
+            ◆ Proven Execution Framework
           </div>
-          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance">
-            Four steps to a <br />
-            <span className="gradient-text">predictable growth engine.</span>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+            How We Scale <span className="gradient-text">Your Brand</span>
           </h2>
         </div>
-        {/* Generous space between cards so the scroll lock stacks slowly and deliberately */}
-        <div className="space-y-48 md:space-y-64 pb-36">
+        {/* Balanced spacing between cards so the scroll stacks smoothly without excessive trailing empty space */}
+        <div className="space-y-28 md:space-y-36 pb-14 md:pb-20">
           {PROCESS_STEPS.map((s, i) => (
             <ProcessStackedCard key={i} i={i} total={PROCESS_STEPS.length} item={s} />
           ))}
@@ -775,113 +962,7 @@ export function StackedCardsProcessSection() {
   );
 }
 
-/* ------------------------------ BRANDS ------------------------------ */
-const BRAND_LOGOS = Object.values(
-  import.meta.glob<{ default: string }>("@/assets/brands/*.{png,jpg,jpeg,webp,svg}", {
-    eager: true,
-  })
-).map((module) => module.default);
-
-const halfLogos = Math.ceil(BRAND_LOGOS.length / 2);
-const ROW1_LOGOS = BRAND_LOGOS.slice(0, halfLogos);
-const ROW2_LOGOS = BRAND_LOGOS.slice(halfLogos);
-
-function BrandsSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const heading = ref.current!.querySelector<HTMLHeadingElement>("h2")!;
-      const split = new SplitType(heading, { types: "chars,words" });
-      const eyebrow = ref.current!.querySelector(".brands-eyebrow")!;
-
-      // Eyebrow slow scroll-controlled reveal
-      gsap.from(eyebrow, {
-        y: 20,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: eyebrow,
-          start: "top 95%",
-          end: "top 60%",
-          scrub: 2,
-        },
-      });
-
-      // Heading chars slow scroll-controlled reveal
-      gsap.from(split.chars, {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -40,
-        filter: "blur(12px)",
-        stagger: 0.02,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 95%",
-          end: "top 35%",
-          scrub: 2,
-        },
-      });
-
-      // Marquee continuous animation
-      const rows = ref.current!.querySelectorAll<HTMLElement>(".marquee-row");
-      rows.forEach((row, i) => {
-        const dir = i % 2 === 0 ? -1 : 1;
-        gsap.to(row, { x: `${dir * 45}%`, duration: 40 + i * 8, ease: "none", repeat: -1 });
-      });
-
-      // Marquee rows scroll-controlled entrance (slow scrub)
-      gsap.from(rows, {
-        opacity: 0,
-        y: 60,
-        scale: 0.95,
-        filter: "blur(10px)",
-        stagger: 0.15,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 90%",
-          end: "top 40%",
-          scrub: 2,
-        },
-      });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section id="brands" ref={ref} className="relative z-10 overflow-hidden py-24">
-      <div className="mx-auto max-w-7xl px-6 text-center mb-14 brands-heading">
-        <div className="brands-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Brands We Work With</div>
-        <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance py-3">
-          Trusted by <span className="gradient-text">growing brands.</span>
-        </h2>
-      </div>
-      {/* Two independent continuous marquee rows with brand logos */}
-      <div className="flex flex-col gap-6 overflow-hidden">
-        {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
-          <div key={rowIndex} className="marquee-row flex gap-6 whitespace-nowrap">
-            {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((logo, i) => (
-              <div
-                key={`${rowIndex}-${i}`}
-                className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-blue-500/15 hover:border-blue-500/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md"
-              >
-                <img
-                  src={logo}
-                  alt="Client Brand Partner"
-                  className="max-h-14 max-w-[130px] w-auto h-auto object-contain filter grayscale hover:grayscale-0 brightness-95 hover:brightness-100 transition-all duration-300 rounded"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------ TESTIMONIALS ------------------------------ */
+/* ------------------------------ TESTIMONIALS (GOOGLE VERIFIED REVIEW MARQUEE) ------------------------------ */
 function Testimonials() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -891,20 +972,18 @@ function Testimonials() {
       const split = new SplitType(heading, { types: "chars,words" });
       const eyebrow = ref.current!.querySelector(".testimonials-eyebrow")!;
 
-      // Eyebrow slow scroll-controlled reveal
       gsap.from(eyebrow, {
         y: 20,
         opacity: 0,
         ease: "power1.out",
         scrollTrigger: {
           trigger: eyebrow,
-          start: "top 92%",
+          start: "top 95%",
           end: "top 60%",
-          scrub: 1.5,
+          scrub: 2,
         },
       });
 
-      // Heading chars slow scroll-controlled reveal
       gsap.from(split.chars, {
         yPercent: 110,
         opacity: 0,
@@ -920,57 +999,137 @@ function Testimonials() {
         },
       });
 
-      // Testimonial cards (staggered slow scrub)
-      const cards = ref.current!.querySelectorAll(".testimonial-card");
-      gsap.from(cards, {
-        y: 80,
-        opacity: 0,
-        scale: 0.92,
-        filter: "blur(10px)",
-        stagger: 0.15,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ref.current!.querySelector(".testimonials-grid"),
-          start: "top 90%",
-          end: "top 30%",
-          scrub: 1.8,
-        },
-      });
+      // Leftward scrolling infinite marquee
+      const marquee = ref.current!.querySelector<HTMLElement>(".reviews-marquee-track");
+      if (marquee) {
+        gsap.to(marquee, {
+          xPercent: -50,
+          duration: 38,
+          ease: "none",
+          repeat: -1,
+        });
+      }
     }, ref);
+
     return () => ctx.revert();
   }, []);
 
-  const testimonials = [
-    { quote: "AMZCOZ transformed our e-commerce presence across Amazon and Flipkart. Within 60 days, 3x growth in organic sales.", name: "Rajesh Kumar", role: "Electronics Brand" },
-    { quote: "Their expertise in e-commerce advertising is unmatched. Our campaigns are profitable and brand visibility skyrocketed.", name: "Priya Sharma", role: "Fashion & Apparel" },
-    { quote: "Professional and transparent. AMZCOZ handles everything from listings to ads, allowing us to focus on product development.", name: "Michael Chen", role: "Home & Kitchen" },
+  const reviews = [
+    {
+      quote: "AMZCOZ transformed our brand presence across Amazon, Flipkart, and Blinkit. Within 60 days, our organic search volume tripled and dark-store fill rates stabilized.",
+      name: "Rajesh Kumar",
+      role: "Founder, Electronics Brand",
+      platform: "Amazon & Blinkit Partner",
+      date: "Reviewed 2 weeks ago",
+    },
+    {
+      quote: "Their performance advertising on Amazon DSP and Zepto Brand Boosters cut our blended ACoS from 34% to 19% while doubling monthly unit volume.",
+      name: "Priya Sharma",
+      role: "VP Marketing, D2C Personal Care",
+      platform: "Multi-Marketplace",
+      date: "Reviewed 3 weeks ago",
+    },
+    {
+      quote: "The team is relentless with daily bid adjustments and stock replenishment. They run our entire catalog across Amazon and Swiggy Instamart seamlessly.",
+      name: "Anand Verma",
+      role: "Co-Founder, Gourmet Food & FMCG",
+      platform: "Quick Commerce & Amazon",
+      date: "Reviewed 1 month ago",
+    },
+    {
+      quote: "Their A+ Content and Brand Store revamp lifted our listing conversion rate by 31%. Absolute professionals who understand retail algorithms.",
+      name: "Karan Singhania",
+      role: "Director, Home & Living Brand",
+      platform: "Amazon Brand Store",
+      date: "Reviewed 1 month ago",
+    },
+    {
+      quote: "Fastest turnaround we've experienced. From listing audit to executing full dark-store inventory pipelines on Zepto, AMZCOZ exceeded all expectations.",
+      name: "Tanvi Mehta",
+      role: "Growth Head, Healthy Snacking Brand",
+      platform: "Blinkit, Zepto & Amazon",
+      date: "Reviewed 2 months ago",
+    },
   ];
 
+  const marqueeReviews = [...reviews, ...reviews];
+
   return (
-    <section ref={ref} className="relative z-10 py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="testimonials-heading mb-16 text-center">
-          <div className="testimonials-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ What Our Clients Say</div>
-          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance py-3">
-            Real results from <span className="gradient-text">real businesses.</span>
-          </h2>
+    <section ref={ref} className="relative z-10 py-28 md:py-36 overflow-hidden border-t border-white/5">
+      <div className="mx-auto max-w-7xl px-6 mb-16 text-center">
+        <div className="testimonials-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
+          ◆ Verified Client Track Record
         </div>
-        <div className="testimonials-grid grid gap-6 md:grid-cols-3">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.name}
-              whileHover={{ y: -6 }}
-              className="testimonial-card rounded-3xl surface-glass p-8 border border-blue-500/20"
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight py-2 leading-tight">
+          What Founders <span className="gradient-text">Say About Us</span>
+        </h2>
+
+        {/* Google Reviews Trust Badge */}
+        <div className="mt-4 inline-flex items-center gap-3 rounded-full surface-glass px-5 py-2 border border-blue-500/20 shadow-md">
+          <svg className="h-5 w-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+          </svg>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-semibold text-foreground">Google</span>
+            <span className="text-xs text-muted-foreground">Rating:</span>
+            <span className="text-sm font-bold text-amber-400">4.9/5.0</span>
+          </div>
+          <span className="h-3.5 w-px bg-white/20" />
+          <span className="text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            100% Verified Founders
+          </span>
+        </div>
+      </div>
+
+      {/* Infinite continuous left-scrolling marquee track */}
+      <div className="relative w-full overflow-hidden">
+        <div className="reviews-marquee-track flex gap-6 w-max">
+          {marqueeReviews.map((t, idx) => (
+            <div
+              key={idx}
+              className="w-[380px] md:w-[440px] shrink-0 rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
             >
-              <p className="text-base leading-relaxed text-muted-foreground">"{t.quote}"</p>
-              <div className="mt-8 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-lg font-bold">M</div>
+              <div>
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+                  <div className="flex items-center gap-2">
+                    <svg className="h-4 w-4" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
+                      <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                    </svg>
+                    <span className="text-[13px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      Google Verified
+                    </span>
+                  </div>
+                  <div className="flex items-center text-amber-400 text-xs">
+                    {"★".repeat(5)}
+                  </div>
+                </div>
+
+                <p className="text-sm md:text-base leading-relaxed text-foreground/90 font-normal">
+                  "{t.quote}"
+                </p>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-semibold">{t.name}</div>
+                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
                   <div className="text-xs text-muted-foreground">{t.role}</div>
                 </div>
+                <div className="text-right">
+                  <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[13px] text-primary font-medium">
+                    {t.platform}
+                  </span>
+                  <div className="text-[10px] text-muted-foreground/60 mt-1">{t.date}</div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -978,304 +1137,38 @@ function Testimonials() {
   );
 }
 
-/* ------------------------------ FINAL CTA ------------------------------ */
-function FinalCTA() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const headline = ref.current!.querySelector<HTMLHeadingElement>("h2")!;
-      const split = new SplitType(headline, { types: "chars,words" });
-      const glow = ref.current!.querySelector(".cta-glow")!;
-      const eyebrow = ref.current!.querySelector(".cta-eyebrow")!;
-
-      // Radial glow unblur & scale
-      gsap.from(glow, {
-        scale: 0.5,
-        opacity: 0.1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 90%",
-          end: "top 30%",
-          scrub: 2,
-        },
-      });
-
-      // Eyebrow slow scroll-controlled reveal
-      gsap.from(eyebrow, {
-        y: 20,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: eyebrow,
-          start: "top 92%",
-          end: "top 60%",
-          scrub: 1.5,
-        },
-      });
-
-      // Heading chars slow scroll-controlled reveal
-      gsap.from(split.chars, {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -40,
-        filter: "blur(14px)",
-        stagger: 0.02,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: headline,
-          start: "top 92%",
-          end: "top 35%",
-          scrub: 1.5,
-        },
-      });
-
-      // Subtitle, bullet items, and CTA button
-      const ctaItems = ref.current!.querySelectorAll(".cta-item");
-      gsap.from(ctaItems, {
-        y: 40,
-        opacity: 0,
-        filter: "blur(6px)",
-        stagger: 0.1,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 85%",
-          end: "top 35%",
-          scrub: 1.5,
-        },
-      });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
+/* ------------------------------ FINAL CTA (CENTERED) ------------------------------ */
+function HomeFinalCTA() {
   return (
-    <section ref={ref} className="relative z-10 overflow-hidden py-40">
-      <div className="cta-glow pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-[160px]" style={{ background: "var(--gradient-primary)" }} />
-      <div className="relative mx-auto max-w-6xl px-6 text-center">
-        <div className="cta-eyebrow cta-item mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Free Strategy Session</div>
-        <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance py-4">
-          Ready to accelerate<br />
-          <span className="gradient-text">your Amazon growth?</span>
-        </h2>
-        <p className="cta-item mx-auto mt-6 max-w-xl text-lg text-white/80">
-          Book a free strategy session and discover how we can help you achieve your goals.
-        </p>
-        <ul className="cta-item mt-8 flex flex-col items-center gap-2 text-sm text-muted-foreground">
-          <li className="flex items-center gap-2"><span className="text-primary font-bold">✓</span> 15-minute audit</li>
-          <li className="flex items-center gap-2"><span className="text-primary font-bold">✓</span> Channel-wise growth plan</li>
-          <li className="flex items-center gap-2"><span className="text-primary font-bold">✓</span> Actionable next steps</li>
-        </ul>
-        <div className="cta-item mt-12">
-          <button onClick={scrollToContact} className="hero-btn hero-btn-primary">
-            Book Strategy Session
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------ CONTACT FORM ------------------------------ */
-function ContactFormSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState("IN");
-  const [phoneError, setPhoneError] = useState("");
-  const [message, setMessage] = useState("");
-  const [sending, setSending] = useState(false);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const heading = ref.current!.querySelector<HTMLHeadingElement>("h2")!;
-      const split = new SplitType(heading, { types: "chars,words" });
-      const eyebrow = ref.current!.querySelector(".contact-eyebrow")!;
-
-      // Eyebrow slow scroll-controlled reveal
-      gsap.from(eyebrow, {
-        y: 20,
-        opacity: 0,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: eyebrow,
-          start: "top 92%",
-          end: "top 60%",
-          scrub: 1.5,
-        },
-      });
-
-      // Heading chars slow scroll-controlled reveal
-      gsap.from(split.chars, {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -40,
-        filter: "blur(12px)",
-        stagger: 0.02,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heading,
-          start: "top 92%",
-          end: "top 35%",
-          scrub: 1.5,
-        },
-      });
-
-      // Contact Form Card (slow scrub)
-      const card = ref.current!.querySelector(".contact-card")!;
-      gsap.from(card, {
-        y: 70,
-        opacity: 0,
-        scale: 0.94,
-        filter: "blur(12px)",
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 90%",
-          end: "top 35%",
-          scrub: 1.8,
-        },
-      });
-
-      // Form inputs & button (staggered slow scrub)
-      const formFields = card.querySelectorAll("label, button");
-      gsap.from(formFields, {
-        y: 25,
-        opacity: 0,
-        stagger: 0.08,
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 85%",
-          end: "top 40%",
-          scrub: 1.5,
-        },
-      });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSending(true);
-    setPhoneError("");
-    try {
-      const cleanNum = phone.replace(/\s+/g, "");
-      const country = COUNTRY_PHONE_PATTERNS[countryCode];
-      if (!cleanNum) { setPhoneError("Please enter a phone number"); setSending(false); return; }
-      if (country && !country.pattern.test(cleanNum)) { setPhoneError(`Invalid format`); setSending(false); return; }
-      const res = await submitContactForm({ name, email, phone, countryCode, message, sourceId: "amzcoz_contact" });
-      if (res.success) {
-        toast.success("Thanks for reaching out!");
-        setName(""); setEmail(""); setPhone(""); setMessage("");
-      } else {
-        toast.error(res.error || "Failed to send message.");
-      }
-    } catch (err: any) {
-      toast.error("An error occurred.");
-    } finally {
-      setSending(false);
-    }
-  }
-
-  return (
-    <section id="contact" ref={ref} className="relative z-10 py-32 border-t border-white/5">
+    <section id="contact" className="py-24 md:py-32 bg-gradient-to-b from-transparent via-primary/5 to-transparent relative z-10 border-t border-white/5 text-center">
       <div className="mx-auto max-w-4xl px-6">
-        <div className="text-center mb-16">
-          <div className="contact-eyebrow mb-3 text-sm uppercase tracking-[0.3em] text-primary font-semibold">◆ Contact Us</div>
-          <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.6rem)] font-bold leading-[1.15] tracking-tight text-balance py-3">
-            Let's grow your brand on <span className="gradient-text">Amazon.</span>
+        <Reveal>
+          <div className="text-[13px] uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+            ◆ Next Steps
+          </div>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+            Ready to Grow Your <span className="gradient-text">Brand?</span>
           </h2>
-        </div>
-
-        <div className="contact-card surface-glass bg-white/[0.05] rounded-3xl p-8 md:p-10 shadow-[0_0_40px_rgba(255,255,255,0.05)] border border-white/20">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <label className="block">
-                <span className="mb-2 block text-xs uppercase tracking-[0.15em] text-muted-foreground">Name</span>
-                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className="w-full rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-base text-foreground outline-none transition focus:border-primary/60 focus:bg-white/[0.12]" />
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-xs uppercase tracking-[0.15em] text-muted-foreground">Email</span>
-                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" className="w-full rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-base text-foreground outline-none transition focus:border-primary/60 focus:bg-white/[0.12]" />
-              </label>
-            </div>
-
-            <PhoneInput phone={phone} countryCode={countryCode} onPhoneChange={(v) => { setPhone(v); setPhoneError(""); }} onCountryChange={setCountryCode} required error={phoneError} />
-
-            <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.15em] text-muted-foreground">Message (Optional)</span>
-              <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us about your brand..." rows={4} className="w-full rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-base text-foreground outline-none transition focus:border-primary/60 focus:bg-white/[0.12] resize-none" />
-            </label>
-
-            <div className="flex justify-end pt-4">
-              <button type="submit" disabled={sending} className="hero-btn hero-btn-primary">
-                {sending ? "Sending..." : "Send Message"}
-              </button>
-            </div>
-          </form>
-        </div>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10">
+            Speak directly with our senior growth strategists. We will review your catalog, buy-box health, and ad performance within 24 hours.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/contact"
+              className="hero-btn hero-btn-primary w-full sm:w-auto text-base px-8 py-3.5 font-semibold inline-flex items-center justify-center gap-2"
+            >
+              Let's Talk
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/services"
+              className="hero-btn hero-btn-ghost w-full sm:w-auto text-base px-8 py-3.5 font-semibold"
+            >
+              What We Deliver
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
-
-/* ------------------------------ FOOTER ------------------------------ */
-function Footer() {
-  return (
-    <footer className="relative z-10 border-t border-white/5 py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-12 md:grid-cols-[1.6fr_1fr_1fr_1.4fr]">
-          <div>
-            <div className="flex items-center gap-2 font-display text-xl font-bold">
-              <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_20px_var(--color-primary)]" />
-              AMZCOZ
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              Expert Amazon account management, advertising, and e-commerce growth services.
-            </p>
-          </div>
-          <div>
-            <div className="mb-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">Quick Links</div>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              {["Home", "Services", "About Us", "Contact"].map((l) => (
-                <li key={l}><a href="#" className="transition hover:text-foreground">{l}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <div className="mb-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">Services</div>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
-              {["Amazon Management", "Amazon Advertising", "Brand Store", "Review Management", "Website Development", "Social Media"].map((s) => (
-                <li key={s}><a href="#services" className="transition hover:text-foreground">{s}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <div className="mb-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">Contact</div>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><a href="tel:+918007208742" className="transition hover:text-foreground">+91 80072 08742</a></li>
-              <li><a href="mailto:adnan@amzcoz.com" className="transition hover:text-foreground">adnan@amzcoz.com</a></li>
-              <li>Pune, Maharashtra</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-xs text-muted-foreground md:flex-row">
-          <div>© 2026 AMZCOZ. All rights reserved.</div>
-          <div className="flex flex-wrap gap-4">
-            {["Privacy Policy", "Terms & Conditions", "Shipping"].map((l, i) => (
-              <span key={l} className="flex items-center gap-4">
-                <a href="#" className="transition hover:text-foreground">{l}</a>
-                {i < 2 && <span className="text-white/20">•</span>}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-
