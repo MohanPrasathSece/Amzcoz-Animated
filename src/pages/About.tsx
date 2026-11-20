@@ -78,7 +78,13 @@ export default function AboutPage() {
         >
           {/* Constellation Cyber Mesh Hero Effect & Ambient Lighting */}
           <HeroCyberMesh />
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
+
+          {/* Desktop Ambient Lighting */}
+          <div className="hidden md:block absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
+
+          {/* Mobile Ambient Hero Lighting & Soft Blue Nebula Aura */}
+          <div className="md:hidden absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-gradient-to-tr from-primary/30 via-blue-500/20 to-cyan-400/15 blur-[65px] rounded-full pointer-events-none" />
+          <div className="md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 w-[240px] h-[120px] bg-blue-600/15 blur-[45px] rounded-full pointer-events-none" />
 
           <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">
             <motion.div

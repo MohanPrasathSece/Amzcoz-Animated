@@ -793,23 +793,23 @@ export default function PortfolioPage() {
           </div>
 
           {/* Two independent continuous marquee rows with brand logos */}
-          <div className="flex flex-col gap-4 sm:gap-6 overflow-hidden py-2">
+          <div className="flex flex-col gap-3 sm:gap-4 overflow-hidden py-1">
             {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
               <div
                 key={rowIndex}
                 className={`${rowIndex === 0 ? "animate-gpu-marquee-left" : "animate-gpu-marquee-right"
-                  } animate-gpu-marquee-track flex gap-4 sm:gap-6 whitespace-nowrap`}
+                  } animate-gpu-marquee-track flex gap-3 sm:gap-4 whitespace-nowrap`}
               >
                 {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
                     key={`${rowIndex}-${i}`}
                     title={`${brand.name} • ${brand.category}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 sm:px-7 sm:py-4 border border-white/20 shadow-md hover:shadow-xl hover:border-primary/50 transition-all duration-300 w-44 sm:w-64 h-22 sm:h-32 overflow-hidden group"
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-white px-4 py-2 sm:px-5 sm:py-2.5 border border-white/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 w-36 sm:w-48 h-16 sm:h-22 overflow-hidden group"
                   >
                     <img
                       src={brand.src}
                       alt={brand.name}
-                      className="w-full h-full object-contain max-h-[85%] transition-all duration-300 group-hover:scale-110"
+                      className="w-full h-full object-contain max-h-[75%] transition-all duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>

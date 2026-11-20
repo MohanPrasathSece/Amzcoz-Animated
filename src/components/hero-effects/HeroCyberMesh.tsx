@@ -41,34 +41,35 @@ export function HeroCyberMesh({ className = "" }: { className?: string }) {
     window.addEventListener("resize", resize);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
 
-    // Generate constellation nodes
-    const nodeCount = 48;
+    // Generate constellation nodes (cleaner on mobile screens)
+    const nodeCount = isMobile ? 18 : 48;
     const nodes: Node[] = [];
     for (let i = 0; i < nodeCount; i++) {
       nodes.push({
         x: Math.random() * canvas.clientWidth,
         y: Math.random() * canvas.clientHeight,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        radius: Math.random() * 1.6 + 1.2,
+        vx: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35),
+        vy: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35),
+        radius: isMobile ? Math.random() * 1.3 + 1.0 : Math.random() * 1.6 + 1.2,
       });
     }
 
-    // Generate rich ambient and sparkling stars
-    const starCount = 150;
+    // Generate rich ambient stars (reduced for mobile to prevent overcrowding)
+    const starCount = isMobile ? 38 : 150;
     const stars: Star[] = [];
     for (let i = 0; i < starCount; i++) {
-      const isSparkle = i % 7 === 0; // ~22 diamond 4-point sparkle stars
+      const isSparkle = isMobile ? i % 9 === 0 : i % 7 === 0;
       stars.push({
         x: Math.random() * canvas.clientWidth,
         y: Math.random() * canvas.clientHeight,
-        radius: isSparkle ? Math.random() * 1.5 + 1.2 : Math.random() * 1.3 + 0.6,
-        baseAlpha: Math.random() * 0.5 + 0.45,
+        radius: isSparkle ? Math.random() * 1.4 + 1.0 : Math.random() * 1.2 + 0.5,
+        baseAlpha: Math.random() * 0.45 + 0.45,
         twinkleSpeed: Math.random() * 0.03 + 0.015,
         phase: Math.random() * Math.PI * 2,
         isSparkle,
-        spikeLength: isSparkle ? Math.random() * 4 + 4 : 0,
+        spikeLength: isSparkle ? (isMobile ? Math.random() * 3 + 3 : Math.random() * 4 + 4) : 0,
       });
     }
 
@@ -135,7 +136,7 @@ export function HeroCyberMesh({ className = "" }: { className?: string }) {
       });
 
       // 2. Draw constellation connection lines
-      const maxDist = 135;
+      const maxDist = isMobile ? 85 : 135;
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
@@ -188,6 +189,10 @@ export function HeroCyberMesh({ className = "" }: { className?: string }) {
 
   return (
     <div className={`absolute inset-0 pointer-events-none overflow-hidden select-none z-0 ${className}`} aria-hidden="true">
+      {/* Mobile-optimized glowing ambient cyber aura */}
+      <div className="md:hidden absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_50%_35%,rgba(14,165,233,0.18),rgba(2,6,23,0)_75%)]" />
+      <div className="md:hidden absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-gradient-to-tr from-primary/25 via-blue-500/18 to-cyan-400/12 blur-[65px] rounded-full" />
+
       <canvas ref={canvasRef} className="w-full h-full opacity-85 mix-blend-screen" />
       <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background" />
       <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-background/40" />
