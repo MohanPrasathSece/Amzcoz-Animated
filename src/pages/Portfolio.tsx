@@ -74,7 +74,7 @@ function formatBrandName(path: string): { name: string; category: string } {
   if (lower.includes("saukhyam")) return { name: "Saukhyam", category: "Sustainable Wellness" };
   if (lower.includes("wit blox")) return { name: "Wit Blox", category: "EdTech & Robotics" };
   if (lower.includes("tresa")) return { name: "Tresa", category: "EV & Hardware" };
-  if (lower.includes("veg")) return { name: "VegOChef", category: "Plant-Based FMCG" };
+  if (lower.includes("veg")) return { name: "Veg-O-Vegan", category: "Plant-Based FMCG" };
   if (lower.includes("zora")) return { name: "ZORA", category: "Luxury Lifestyle" };
   if (lower.includes("nioax")) return { name: "Nioax Coffee", category: "Artisan Coffee" };
   if (lower.includes("moarmouz")) return { name: "Moarmouz", category: "Smart Accessories" };
@@ -85,6 +85,14 @@ function formatBrandName(path: string): { name: string; category: string } {
   if (lower.includes("down the cove")) return { name: "Down The Cove", category: "Organic Beverages" };
   if (lower.includes("innovative")) return { name: "Innovative Edge", category: "Fitness Gear" };
   if (lower.includes("real nutri")) return { name: "Real Nutri Co", category: "Nutraceuticals" };
+  if (lower.includes("drip diaries")) return { name: "Drip Diaries", category: "Streetwear & Apparel" };
+  if (lower.includes("fairly fresh")) return { name: "Fairly Fresh", category: "Fresh FMCG & Groceries" };
+  if (lower.includes("sweet talks")) return { name: "Sweet Talks", category: "Confectionery & Sweets" };
+  if (lower.includes("shaykha")) return { name: "The Shaykha", category: "Modest Fashion & Luxury" };
+  if (lower.includes("breathen")) return { name: "Breathen", category: "Wellness & Sleep Tech" };
+  if (lower.includes("havmi")) return { name: "Havmi", category: "Superfoods & Millet Nutrition" };
+  if (lower.includes("hobbyist")) return { name: "Hobbyist Nirvana", category: "Collectibles & Hobby Gear" };
+  if (lower.includes("maw and paw")) return { name: "Maw & Paw", category: "Pet Food & Care" };
 
   return {
     name: clean.charAt(0).toUpperCase() + clean.slice(1),
@@ -92,7 +100,16 @@ function formatBrandName(path: string): { name: string; category: string } {
   };
 }
 
-const BRANDS_LIST: BrandCard[] = Object.entries(BRAND_FILES).map(([path, mod]) => {
+// Sort so that transparent .png comes before .jpg/.jpeg when deduping by name
+const sortedBrandEntries = Object.entries(BRAND_FILES).sort(([pathA], [pathB]) => {
+  const aIsPng = pathA.toLowerCase().endsWith(".png");
+  const bIsPng = pathB.toLowerCase().endsWith(".png");
+  if (aIsPng && !bIsPng) return -1;
+  if (!aIsPng && bIsPng) return 1;
+  return 0;
+});
+
+const BRANDS_LIST: BrandCard[] = sortedBrandEntries.map(([path, mod]) => {
   const { name, category } = formatBrandName(path);
   return {
     name,
@@ -663,7 +680,7 @@ export default function PortfolioPage() {
                 Brands We <span className="gradient-text">Work With</span>
               </h2>
               <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
-                Trusted by 20+ consumer, FMCG, electronics, and lifestyle brands across Amazon and Quick Commerce.
+                Trusted by 25+ consumer, FMCG, electronics, and lifestyle brands across Amazon and Quick Commerce.
               </p>
             </Reveal>
           </div>
@@ -675,12 +692,13 @@ export default function PortfolioPage() {
                 {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
                     key={`${rowIndex}-${i}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md"
+                    title={`${brand.name} • ${brand.category}`}
+                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md group"
                   >
                     <img
                       src={brand.src}
                       alt={brand.name}
-                      className="max-h-12 max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded"
+                      className="max-h-12 max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>
