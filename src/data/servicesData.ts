@@ -1526,6 +1526,84 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     platformsSupported: ["Blinkit", "Zepto", "Swiggy Instamart", "Amazon", "Flipkart", "Shopify"],
     relatedServiceSlugs: ["quick-commerce-growth", "blinkit-growth-services", "marketplace-account-management", "graphic-design-merchandising"],
   },
+
+  // 20. Logo, Branding, Theme, Catalogue & Package Designing
+  {
+    slug: "logo-branding-theme-package-design",
+    title: "Logo, Branding, Theme, Catalogue & Package Designing",
+    shortTitle: "Branding, Catalogue & Packaging",
+    category: "Creative & Design",
+    badge: "Brand Identity & Packaging",
+    metaTitle: "Logo Design, E-Commerce Themes & Packaging Agency India | Amzcoz",
+    metaDescription: "Distinctive brand logos, custom e-commerce themes, wholesale catalogues, and retail packaging design tailored for marketplace & quick commerce scale.",
+    primaryH1: "Logo, Branding, Theme, Catalogue and Package Designing Agency",
+    targetKeywords: {
+      primary: ["logo and branding agency india", "ecommerce packaging design", "product catalogue design agency"],
+      secondary: ["custom ecommerce theme design", "retail packaging design agency pune", "brand identity design services"],
+      longTail: ["how to design packaging for quick commerce blinkit zepto", "custom brand guide and logo design for d2c", "ecommerce product catalogue design services"],
+    },
+    executiveSummary:
+      "Your brand identity and physical packaging are your silent salespeople. AMZCOZ delivers comprehensive visual architecture: memorable logos, cohesive brand guidelines, custom storefront themes, B2B/B2C digital catalogues, and print-ready product packaging engineered to dominate physical and digital shelves.",
+    heroHighlights: [
+      "Custom vector logo marks, typography pairings, and brand color psychology",
+      "Full brand identity books and design tokens ready for omnichannel application",
+      "Retail box, pouch, label, and unboxing packaging with full regulatory compliance",
+      "Interactive digital product catalogues and SKU lookbooks for buyers and distributors",
+    ],
+    deliverables: [
+      {
+        title: "Logo Design & Identity System",
+        desc: "Crafting iconic primary logos, secondary marks, favicons, typography rules, and color palettes provided in all vector and web formats.",
+      },
+      {
+        title: "Brand Identity Guidelines & Style Guide",
+        desc: "Compiling a complete brand book establishing logo clearance, color codes (CMYK, RGB, Pantone, HEX), tone of voice, and visual do's and don'ts.",
+      },
+      {
+        title: "E-Commerce Theme & Storefront Styling",
+        desc: "Designing cohesive UI themes, banner systems, and visual styling for Shopify, WooCommerce, and custom web stores.",
+      },
+      {
+        title: "Digital & Print Product Catalogues",
+        desc: "Developing high-impact multi-page product catalogues and wholesale lookbooks featuring high-res imagery, specifications, and barcode layouts.",
+      },
+      {
+        title: "Retail Packaging & Box Design",
+        desc: "Designing cartons, outer boxes, stand-up pouches, shrink sleeves, and label artworks formatted to factory die-lines.",
+      },
+      {
+        title: "Quick Commerce & Marketplace Compliance",
+        desc: "Ensuring all packaging layouts comply with FSSAI, legal metrology, MRP, batch code, and barcode scanning standards on Blinkit, Zepto, and Amazon.",
+      },
+    ],
+    benefits: [
+      { metric: "100%", label: "Vector & Print Ready", desc: "Delivered in CMYK, Pantone, AI, PDF, EPS, and SVG formats with exact factory die-lines." },
+      { metric: "+38%", label: "Shelf Standout Lift", desc: "High-contrast visual hierarchy engineered for instant buyer recognition." },
+      { metric: "Zero", label: "Regulatory Delays", desc: "Full adherence to marketplace packaging and legal metrology requirements." },
+    ],
+    processSteps: [
+      { step: 1, title: "Brand Discovery & Competitor Shelf Audit", desc: "Deep dive into your product USP, target demographics, and competitor shelf visual noise." },
+      { step: 2, title: "Concept Generation & Die-Line Mapping", desc: "Presenting multiple creative logo directions, packaging die-line mockups, and theme moodboards." },
+      { step: 3, title: "Refinement & Packaging Prototyping", desc: "Fine-tuning typography, color separations, barcode placements, and 3D unboxing previews." },
+      { step: 4, title: "Production Files & Brand Asset Handover", desc: "Delivering organized master folders with print-ready press PDFs and digital asset toolkits." },
+    ],
+    faqs: [
+      {
+        question: "Do you provide print-ready die-lines for packaging manufacturers?",
+        answer: "Yes, we produce vector artwork mapped directly to your printer's die-lines, with exact bleed margins, CMYK color separations, spot UV, and embossing layers.",
+      },
+      {
+        question: "Can you design catalogues for wholesale buyers and distributors?",
+        answer: "Yes, we design both interactive digital PDF catalogues with clickable links and high-resolution print-ready catalogues for trade expos and B2B distributor meetings.",
+      },
+      {
+        question: "Do you follow quick-commerce packaging guidelines for Blinkit and Zepto?",
+        answer: "Absolutely. We ensure barcode placements, batch codes, net weight declarations, and expiry date windows meet quick commerce inwarding specifications without rejection.",
+      },
+    ],
+    platformsSupported: ["Shopify", "Amazon", "Blinkit", "Zepto", "Retail Stores", "Flipkart"],
+    relatedServiceSlugs: ["graphic-design-merchandising", "aplus-content-brand-store", "website-development", "fmcg-marketing"],
+  },
 ];
 
 export function getServiceBySlug(slug: string): ServiceDetailItem | undefined {

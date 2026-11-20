@@ -10,6 +10,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
+import { HeroCyberMesh } from "@/components/hero-effects/HeroCyberMesh";
 import {
   Zap,
   TrendingUp,
@@ -75,7 +76,8 @@ export default function AboutPage() {
           ref={heroRef}
           className="relative pt-36 pb-20 md:pt-44 md:pb-28 border-b border-white/5 overflow-hidden"
         >
-          {/* Ambient Lighting */}
+          {/* Constellation Cyber Mesh Hero Effect & Ambient Lighting */}
+          <HeroCyberMesh />
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
 
           <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">

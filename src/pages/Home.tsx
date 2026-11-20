@@ -173,7 +173,6 @@ export default function LandingPage() {
             "logo": "https://amzcoz.com/logo.png",
             "image": "https://amzcoz.com/og-image.jpg",
             "telephone": "+918007208742",
-            "email": "adnan@amzcoz.com",
             "priceRange": "$$",
             "address": {
               "@type": "PostalAddress",

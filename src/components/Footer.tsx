@@ -69,13 +69,6 @@ export function Footer() {
             </div>
             <div className="hidden sm:block h-8 w-px bg-white/10" />
             <div className="flex flex-col">
-              <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">Inquiries</span>
-              <a href="mailto:adnan@amzcoz.com" className="text-foreground hover:text-primary transition font-medium">
-                adnan@amzcoz.com
-              </a>
-            </div>
-            <div className="hidden sm:block h-8 w-px bg-white/10" />
-            <div className="flex flex-col">
               <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">Direct Line</span>
               <a href="tel:+918007208742" className="text-foreground hover:text-primary transition font-mono">
                 +91 80072 08742

@@ -45,8 +45,8 @@
 :root {
   --radius: 1rem;
 
-  /* Deep cinematic void */
-  --background: oklch(0.10 0.012 270);
+  /* Deep cinematic void with subtle midnight blue tone */
+  --background: oklch(0.12 0.016 260);
   --foreground: oklch(0.98 0.005 100);
 
   --surface: oklch(0.14 0.014 270);
@@ -106,7 +106,14 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background-color: var(--color-background);
+    background-color: #070914;
+    background-image:
+      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(24, 64, 214, 0.16), transparent 70%),
+      radial-gradient(ellipse 70% 50% at 85% 35%, rgba(14, 116, 220, 0.09), transparent 60%),
+      radial-gradient(ellipse 65% 45% at 15% 65%, rgba(37, 99, 235, 0.09), transparent 60%),
+      radial-gradient(ellipse 85% 55% at 50% 100%, rgba(30, 58, 138, 0.14), transparent 70%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;

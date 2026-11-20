@@ -4,6 +4,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
+import { HeroGlassFold } from "@/components/HeroGlassFold";
 import { Truck, Package, Clock, ShieldCheck, RefreshCw, AlertCircle, Mail, Phone, MapPin, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -20,6 +21,7 @@ export default function ShippingPage() {
 
         {/* Hero Section */}
         <section className="relative pt-36 pb-16 md:pt-44 md:pb-20 border-b border-white/5 overflow-hidden">
+          <HeroGlassFold opacity="opacity-20 sm:opacity-25" />
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
 
           <div className="mx-auto max-w-4xl px-6 relative z-10 text-center">
@@ -201,7 +203,7 @@ export default function ShippingPage() {
                     If the external parcel arrives visibly tampered, crushed, or opened, please <strong className="text-foreground">refuse delivery</strong> from the courier or clearly endorse "Damaged on Arrival" on the delivery sheet.
                   </p>
                   <p>
-                    If damage is discovered after unboxing, notify us within <strong className="text-foreground">48 hours</strong> of delivery at <a href="mailto:adnan@amzcoz.com" className="text-primary underline font-medium">adnan@amzcoz.com</a> along with photos/video of the outer carton, shipping label, and damaged item. We will arrange an immediate doorstep reverse pickup and dispatch a brand-new replacement at zero additional charge.
+                    If damage is discovered after unboxing, notify us within <strong className="text-foreground">48 hours</strong> of delivery at <a href="tel:+918007208742" className="text-primary underline font-medium">+91 80072 08742</a> along with photos/video of the outer carton, shipping label, and damaged item. We will arrange an immediate doorstep reverse pickup and dispatch a brand-new replacement at zero additional charge.
                   </p>
                 </div>
               </div>
@@ -228,10 +230,6 @@ export default function ShippingPage() {
                 </h2>
                 <div className="p-6 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3 text-sm">
                   <div className="font-semibold text-foreground">AMZCOZ Merchandise & Dispatch Cell</div>
-                  <div className="flex items-center gap-2.5 text-muted-foreground">
-                    <Mail className="h-4 w-4 text-primary" />
-                    <a href="mailto:adnan@amzcoz.com" className="hover:text-primary transition font-medium">adnan@amzcoz.com</a>
-                  </div>
                   <div className="flex items-center gap-2.5 text-muted-foreground">
                     <Phone className="h-4 w-4 text-primary" />
                     <a href="tel:+918007208742" className="hover:text-primary transition font-mono">+91 80072 08742</a>

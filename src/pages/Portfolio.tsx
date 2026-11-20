@@ -10,12 +10,14 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
+import { HeroAuroraWaves } from "@/components/hero-effects/HeroAuroraWaves";
 import dashboardMockup from "@/assets/floating dashboard.png";
 import {
   TrendingUp,
   BarChart3,
   Repeat,
   Store,
+  Palette,
   Layers,
   Sparkles,
   ArrowRight,
@@ -31,9 +33,11 @@ import {
   Lock,
   ShoppingBag,
   Coins,
+  Laptop,
+  Code2,
 } from "lucide-react";
 
-// Client Revenue Proof Screenshots
+// Client Revenue Proof Screenshots (Marketplaces)
 import brand1_1 from "@/assets/data_proof_our_work/brand1-1.jpg";
 import brand1_2 from "@/assets/data_proof_our_work/brand1_2.jpg";
 import brand2_1 from "@/assets/data_proof_our_work/brand2_1.jpg";
@@ -41,6 +45,173 @@ import brand2_2 from "@/assets/data_proof_our_work/brand2_2.jpg";
 import brand3_1 from "@/assets/data_proof_our_work/brand3_1.jpg";
 import brand3_2 from "@/assets/data_proof_our_work/brand3_2.jpg";
 import newReport from "@/assets/data_proof_our_work/new report.png";
+
+// Real Production Showcase: D2C Website Architecture (Drip Diaries)
+import dripDashboard from "@/assets/showcase_works/drip_dashboard.jpg";
+import dripCmsPages from "@/assets/showcase_works/drip_cms_pages.jpg";
+import dripPayments from "@/assets/showcase_works/drip_payments.jpg";
+import dripAppearance from "@/assets/showcase_works/drip_appearance.jpg";
+import dripHomepageBlocks from "@/assets/showcase_works/drip_homepage_blocks.jpg";
+import dripReports from "@/assets/showcase_works/drip_reports.jpg";
+
+// Real Production Showcase: Luxury Brand Identity & Packaging (The Shaykha)
+import shaykhaShowcase from "@/assets/showcase_works/shaykha_showcase.png";
+import shaykha3dLifestyle from "@/assets/showcase_works/shaykha_3d_lifestyle.png";
+import shaykhaPalette from "@/assets/showcase_works/shaykha_palette.png";
+import shaykhaHangtag from "@/assets/showcase_works/shaykha_hangtag.png";
+import shaykhaApparel from "@/assets/showcase_works/shaykha_apparel.png";
+
+/* ------------------- REAL PRODUCTION SHOWCASE DATA ------------------- */
+export interface ShowcaseDeliverable {
+  id: string;
+  category: "web" | "branding";
+  badge: string;
+  badgeColor: string;
+  client: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  features: string[];
+  image: string;
+}
+
+export const SHOWCASE_DELIVERABLES: ShowcaseDeliverable[] = [
+  // Web Architecture (Drip Diaries)
+  {
+    id: "web-dashboard",
+    category: "web",
+    badge: "Developed by AMZCOZ",
+    badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/25",
+    client: "Drip Diaries · Custom E-Commerce",
+    title: "Full E-Commerce Admin Dashboard",
+    subtitle: "Custom Multi-Channel Operations Command Center",
+    desc: "Complete custom merchant command center engineered for Drip Diaries. Provides real-time revenue analytics, order fulfillment processing, inventory sync, and direct customer dispatch.",
+    features: ["Live Sales Analytics", "Order Fulfillment Queue", "Real-Time Inventory Sync", "Multi-Warehouse Tracking"],
+    image: dripDashboard,
+  },
+  {
+    id: "web-cms",
+    category: "web",
+    badge: "WYSIWYG Live Editor",
+    badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
+    client: "Drip Diaries · Custom CMS",
+    title: "Editable Content & Core CMS Engine",
+    subtitle: "In-Browser Rich Text Page Builder with Split Preview",
+    desc: "Empowers the client's marketing team to edit and publish About Us, Contact Us, Privacy Policy, Shipping Policy, Terms and Conditions, and Refund Policy with zero code and instant live split preview.",
+    features: ["6 Core Business Pages", "Live Split-Screen Preview", "Zero-Code Publishing", "Rich Text Formatting"],
+    image: dripCmsPages,
+  },
+  {
+    id: "web-payments",
+    category: "web",
+    badge: "Fintech & Payment Stack",
+    badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
+    client: "Drip Diaries · Payment Architecture",
+    title: "Multi-Gateway Payment Integration",
+    subtitle: "COD · PhonePe · Razorpay · UPI QR",
+    desc: "Engineered multi-channel payment gateway supporting Cash on Delivery (COD) with automated OTP verification, PhonePe Payment Gateway, Razorpay Cards/Netbanking, and dynamic UPI QR instant checkout.",
+    features: ["COD with OTP Verification", "PhonePe Gateway", "Razorpay Full Stack", "Instant UPI QR Flow"],
+    image: dripPayments,
+  },
+  {
+    id: "web-appearance",
+    category: "web",
+    badge: "Theme Customizer",
+    badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/25",
+    client: "Drip Diaries · Storefront Styling",
+    title: "Storefront Theme & Color Customizer",
+    subtitle: "Granular Brand Styling & Palette Controls",
+    desc: "Administrative theme customization system allowing the merchant to fine-tune primary brand palettes, button hover micro-interactions, typography hierarchy, announcement bar tickers, and header layout.",
+    features: ["Full Hex Color Control", "Typography Scale", "Announcement Bar Ticker", "Sticky Header Controls"],
+    image: dripAppearance,
+  },
+  {
+    id: "web-homepage",
+    category: "web",
+    badge: "Modular Layout Builder",
+    badgeColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/25",
+    client: "Drip Diaries · Modular Layouts",
+    title: "Drag-and-Drop Homepage Architecture",
+    subtitle: "Dynamic Section Arrangement",
+    desc: "Visual modular section manager allowing instant reordering of hero sliders, curated seasonal collections, bestseller carousels, flash-sale countdown banners, and customer review grids.",
+    features: ["Modular Block Reordering", "Bestseller Carousels", "Curated Collections", "Flash Sale Banners"],
+    image: dripHomepageBlocks,
+  },
+  {
+    id: "web-reports",
+    category: "web",
+    badge: "Financial Intelligence",
+    badgeColor: "text-rose-400 bg-rose-500/10 border-rose-500/25",
+    client: "Drip Diaries · Accounting Engine",
+    title: "Merchant Business & GSTR Tax Reports",
+    subtitle: "Auditable Accounting & Tax Data",
+    desc: "Automated business reporting engine providing instant gross revenue figures, GSTR-1 and GSTR-3B tax liability breakdowns, average order value (AOV) metrics, and one-click accounting CSV exports.",
+    features: ["GSTR-1 & 3B Tax Compliance", "AOV & Order Trends", "SKU Velocity Metrics", "One-Click Audit CSVs"],
+    image: dripReports,
+  },
+
+  // Luxury Brand Identity & Packaging (The Shaykha)
+  {
+    id: "brand-seal",
+    category: "branding",
+    badge: "Crafted by AMZCOZ",
+    badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
+    client: "The Shaykha · Brand Identity",
+    title: "The Shaykha · Brand Identity Seal",
+    subtitle: "Luxury Arabic Calligraphy & Heritage Sadu Seal",
+    desc: "Comprehensive luxury identity system combining geometric heritage Sadu embroidery with custom hand-lettered Arabic calligraphy and refined English serif logotype.",
+    features: ["Bespoke Arabic Calligraphy", "Heritage Sadu Geometry", "English Serif Logotype", "Full Brand Guidelines"],
+    image: shaykhaShowcase,
+  },
+  {
+    id: "brand-3d",
+    category: "branding",
+    badge: "Photorealistic 3D Render",
+    badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/25",
+    client: "The Shaykha · 3D Product Visualization",
+    title: "3D Cosmetic Packshot & Handheld Scale",
+    subtitle: "Photorealistic Bottle Render & Henna Ritual Styling",
+    desc: "Sub-millimeter 3D bottle modeling with realistic glass light refraction, gold foil hot-stamped cap texture, presented alongside handheld human scale and henna ritual styling.",
+    features: ["Sub-Millimeter 3D CAD", "Optical Glass Refraction", "Gold Hot-Stamp Texture", "Handheld Scale Ritual"],
+    image: shaykha3dLifestyle,
+  },
+  {
+    id: "brand-palette",
+    category: "branding",
+    badge: "Color System",
+    badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
+    client: "The Shaykha · Brand Color System",
+    title: "The Shaykha 6 Sadu Colors System",
+    subtitle: "Heritage Desert & Loom Hex Codes",
+    desc: "Meticulously calibrated color suite for print packaging and digital screens: Royal Maroon (#5B1B29), Desert Gold (#C9A96E), Sadu Blue (#1D3354), Sadu Green (#2D5A43), Sadu Red (#8B2635), and Off-White.",
+    features: ["6 Signature Hex Codes", "Calibrated for Foil & Print", "Digital Screen Harmony", "Sadu Heritage Palette"],
+    image: shaykhaPalette,
+  },
+  {
+    id: "brand-hangtag",
+    category: "branding",
+    badge: "Print & Packaging Production",
+    badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
+    client: "The Shaykha · Physical Packaging",
+    title: "350 GSM Kraft Hang Tag & Garment Packaging",
+    subtitle: "Tactile Board with Full Sadu Border & Gold Keyline",
+    desc: "Production-ready luxury hang tag engineered on 350 GSM natural unbleached kraft cardstock, featuring full Sadu border embroidery print, centered maroon insignia, gold keyline, and dynamic QR code.",
+    features: ["350 GSM Kraft Cardstock", "Embroidered Border Print", "Debossed Gold Keyline", "Dynamic QR Code"],
+    image: shaykhaHangtag,
+  },
+  {
+    id: "brand-apparel",
+    category: "branding",
+    badge: "Apparel Merchandising",
+    badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/25",
+    client: "The Shaykha · Apparel Merchandising",
+    title: "Abaya Apparel Branding & Thread Embroidery",
+    subtitle: "High-End Garment Embellishment & Presentation",
+    desc: "Direct corner thread embroidery of The Shaykha insignia onto luxury abayas, finished with woven inner neck labels and branded tissue unboxing wraps.",
+    features: ["Corner Thread Embroidery", "Woven Brand Neck Tags", "Unboxing Presentation", "Luxury Fabric Direction"],
+    image: shaykhaApparel,
+  },
+];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,6 +264,7 @@ function formatBrandName(path: string): { name: string; category: string } {
   if (lower.includes("havmi")) return { name: "Havmi", category: "Superfoods & Millet Nutrition" };
   if (lower.includes("hobbyist")) return { name: "Hobbyist Nirvana", category: "Collectibles & Hobby Gear" };
   if (lower.includes("maw and paw")) return { name: "Maw & Paw", category: "Pet Food & Care" };
+  if (lower.includes("omprabhat") || lower.includes("om prabhat")) return { name: "Om Prabhat", category: "Gourmet & Traditional FMCG" };
 
   return {
     name: clean.charAt(0).toUpperCase() + clean.slice(1),
@@ -369,6 +541,41 @@ function StackedProofCard({
                   ))}
                 </ul>
               </div>
+
+              {/* Page Breakdown & Custom Store Architecture (when available) */}
+              {"pageBreakdown" in cs && Array.isArray((cs as any).pageBreakdown) && (
+                <div className="pt-3.5 space-y-2 border-t border-white/10">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase tracking-wider text-cyan-400 font-semibold flex items-center gap-1.5">
+                      <Layers className="h-3.5 w-3.5 text-cyan-400" />
+                      <span>Custom Built Pages & Admin Modules</span>
+                    </span>
+                    <span className="text-[11px] text-cyan-300/80 font-mono">
+                      {(cs as any).pageBreakdown.length} Core Modules
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
+                    {(cs as any).pageBreakdown.map((item: any, pIdx: number) => (
+                      <div
+                        key={pIdx}
+                        className="rounded-xl p-2.5 bg-white/[0.04] border border-white/10 hover:border-cyan-500/40 transition-colors text-left"
+                      >
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <span className="text-xs font-bold text-white leading-tight">
+                            {item.page}
+                          </span>
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shrink-0">
+                            {item.badge}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Bottom Action: Arrow to go to next card */}
@@ -463,6 +670,7 @@ function StackedProofCard({
 
 export default function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState<string>("All Creative Work");
+  const [showcaseFilter, setShowcaseFilter] = useState<"all" | "web" | "branding">("all");
   const [lightbox, setLightbox] = useState<{ src: string; title: string; caption: string } | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -486,6 +694,11 @@ export default function PortfolioPage() {
 
     return () => ctx.revert();
   }, []);
+
+  const filteredShowcase =
+    showcaseFilter === "all"
+      ? SHOWCASE_DELIVERABLES
+      : SHOWCASE_DELIVERABLES.filter((d) => d.category === showcaseFilter);
 
   return (
     <SmoothScroll>
@@ -513,7 +726,8 @@ export default function PortfolioPage() {
           ref={heroRef}
           className="relative pt-36 pb-16 md:pt-44 md:pb-24 border-b border-white/5 overflow-hidden"
         >
-          {/* Ambient glow */}
+          {/* Animated WebGL Aurora Waves Effect (Unique to Portfolio) */}
+          <HeroAuroraWaves />
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
 
           <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">
@@ -633,29 +847,167 @@ export default function PortfolioPage() {
           </div>
 
           {/* Two independent continuous marquee rows with brand logos */}
-          <div className="flex flex-col gap-3 sm:gap-4 overflow-hidden">
+          <div className="flex flex-col gap-4 sm:gap-6 overflow-hidden py-2">
             {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
               <div
                 key={rowIndex}
                 className={`${rowIndex === 0 ? "animate-gpu-marquee-left" : "animate-gpu-marquee-right"
-                  } animate-gpu-marquee-track flex gap-3 sm:gap-4 whitespace-nowrap`}
+                  } animate-gpu-marquee-track flex gap-4 sm:gap-6 whitespace-nowrap`}
               >
                 {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
                     key={`${rowIndex}-${i}`}
                     title={`${brand.name} • ${brand.category}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-white p-2 border border-white/20 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 w-28 sm:w-36 h-14 sm:h-16 overflow-hidden group"
+                    className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 sm:px-7 sm:py-4 border border-white/20 shadow-md hover:shadow-xl hover:border-primary/50 transition-all duration-300 w-44 sm:w-64 h-22 sm:h-32 overflow-hidden group"
                   >
                     <img
                       src={brand.src}
                       alt={brand.name}
-                      className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105"
+                      className="w-full h-full object-contain max-h-[85%] transition-all duration-300 group-hover:scale-110"
                       loading="lazy"
                     />
                   </div>
                 ))}
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* ------------------- DEDICATED DELIVERABLES SHOWCASE (WEBSITE & BRANDING WORK) ------------------- */}
+        <section id="showcase-section" className="py-24 md:py-32 relative z-10 border-b border-white/5 bg-[#090b14]/70">
+          <div className="mx-auto max-w-7xl px-6">
+            <Reveal>
+              <div className="text-center max-w-3xl mx-auto mb-14">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3.5 py-1 text-[13px] uppercase tracking-[0.25em] text-primary font-semibold mb-3">
+                  <Sparkles className="h-4 w-4" />
+                  <span>Real Client Deliverables</span>
+                </div>
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+                  Website Architecture &amp; <span className="gradient-text">Brand Identity</span>
+                </h2>
+                <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  Authentic production outputs delivered by AMZCOZ. Click any deliverable to inspect high-resolution UI architecture, payment stacks, and luxury packaging details.
+                </p>
+
+                {/* Filter Tabs */}
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+                  {[
+                    { id: "all", label: "All Deliverables", count: SHOWCASE_DELIVERABLES.length },
+                    { id: "web", label: "D2C Web Architecture", count: SHOWCASE_DELIVERABLES.filter((d) => d.category === "web").length },
+                    { id: "branding", label: "Brand Identity & Packaging", count: SHOWCASE_DELIVERABLES.filter((d) => d.category === "branding").length },
+                  ].map((tab) => {
+                    const isActive = showcaseFilter === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setShowcaseFilter(tab.id as "all" | "web" | "branding")}
+                        className={`rounded-full px-5 py-2 text-xs sm:text-[13px] font-semibold transition-all duration-300 cursor-pointer ${
+                          isActive
+                            ? "bg-primary text-white shadow-[0_0_24px_var(--color-primary)] scale-105 border border-primary"
+                            : "surface-glass text-muted-foreground hover:text-foreground hover:bg-white/10 border border-white/5"
+                        }`}
+                      >
+                        {tab.label} ({tab.count})
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Grid of Showcase Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {filteredShowcase.map((item, idx) => (
+                <Reveal key={item.id} delay={(idx % 3) * 0.1}>
+                  <div className="group rounded-3xl surface-glass border border-white/10 overflow-hidden flex flex-col h-full hover:border-primary/40 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+                    {/* Image Preview with Lightbox trigger */}
+                    <div
+                      onClick={() =>
+                        setLightbox({
+                          src: item.image,
+                          title: item.title,
+                          caption: `${item.client} — ${item.subtitle}`,
+                        })
+                      }
+                      className="relative aspect-[16/10] bg-black/50 overflow-hidden border-b border-white/10 cursor-pointer group/img"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover/img:opacity-40 transition-opacity" />
+
+                      {/* Zoom Indicator */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-[2px]">
+                        <div className="rounded-full surface-glass border border-white/30 px-4 py-2 text-xs text-white font-medium flex items-center gap-2 shadow-xl">
+                          <ZoomIn className="h-4 w-4 text-primary" />
+                          <span>Click to Inspect High-Res</span>
+                        </div>
+                      </div>
+
+                      {/* Top Badge */}
+                      <div className="absolute top-3 left-3">
+                        <span
+                          className={`rounded-full px-3 py-1 text-[11px] font-semibold border backdrop-blur-md ${item.badgeColor}`}
+                        >
+                          {item.badge}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Content Details */}
+                    <div className="p-6 sm:p-7 flex flex-col flex-1">
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
+                        {item.client}
+                      </div>
+
+                      <h3 className="font-display text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+
+                      <div className="text-xs text-primary/90 font-medium mb-3">
+                        {item.subtitle}
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 flex-1">
+                        {item.desc}
+                      </p>
+
+                      {/* Key Capability Chips */}
+                      <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/5">
+                        {item.features.map((feat, fI) => (
+                          <span
+                            key={fI}
+                            className="rounded-lg bg-white/[0.04] border border-white/5 px-2.5 py-1 text-[11px] text-foreground/80 font-medium"
+                          >
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Action Button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setLightbox({
+                            src: item.image,
+                            title: item.title,
+                            caption: `${item.client} — ${item.subtitle}`,
+                          })
+                        }
+                        className="mt-5 w-full rounded-xl surface-glass border border-white/10 hover:border-primary/50 py-2.5 px-4 text-xs font-semibold text-foreground hover:text-primary transition-all flex items-center justify-center gap-2 cursor-pointer group/btn"
+                      >
+                        <ZoomIn className="h-3.5 w-3.5 text-primary transition-transform group-hover/btn:scale-110" />
+                        <span>Inspect Full Deliverable</span>
+                      </button>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </section>
 

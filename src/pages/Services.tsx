@@ -10,6 +10,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
+import { HeroGlassFold } from "@/components/HeroGlassFold";
 import {
   ShoppingBag,
   TrendingUp,
@@ -362,6 +363,24 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
+    id: 20,
+    slug: "logo-branding-theme-package-design",
+    title: "Logo, Branding, Theme, Catalogue & Package Designing",
+    category: "Creative & Design",
+    icon: Sparkles,
+    desc: "Complete visual identity design for digital and physical commerce. We craft custom brand logos, e-commerce themes, product catalogues, and high-impact retail packaging tailored for Indian and global marketplaces.",
+    highlight: "Logo, Branding, Theme, Catalogue & Package Designing",
+    whatWeDo: [
+      "Custom brand logo design, iconography, and typography systems",
+      "Comprehensive brand identity guidelines & style guides",
+      "E-commerce theme customization & storefront visual styling",
+      "Digital & print product catalogues with SKU lookbooks",
+      "Retail box, pouch, label, and unboxing package designing",
+      "Blinkit, Zepto & Amazon compliant barcode/regulatory label layouts",
+      "Print-ready packaging production files and 3D mockups",
+    ],
+  },
+  {
     id: 19,
     slug: "fmcg-marketing",
     title: "FMCG Marketing & Rapid Turnaround",
@@ -430,9 +449,9 @@ const SERVICE_SECTIONS: ServiceSectionMeta[] = [
     index: "03",
     badge: "Visual Merchandising & Conversion",
     title: "Creative & Brand Design",
-    highlightText: "Mobile-First A+ Content, Brand Stores & 3D Packshots",
+    highlightText: "Logo, Branding, Theme, Catalogue & Package Designing",
     description:
-      "Elevating digital shelf presence with cinematic Amazon A+ Content, multi-page Brand Stores, and high-converting product infographics.",
+      "Elevating digital shelf presence with custom brand logos, themes, product catalogues, export-grade packaging, cinematic Amazon A+ Content, and multi-page Brand Stores.",
     icon: Palette,
   },
   {
@@ -586,7 +605,8 @@ export default function ServicesPage() {
           ref={heroRef}
           className="relative pt-36 pb-20 md:pt-44 md:pb-28 border-b border-white/5 overflow-hidden"
         >
-          {/* Ambient Lighting */}
+          {/* Animated WebGL Glass Fold Effect & Ambient Lighting */}
+          <HeroGlassFold />
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
           <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-accent/8 blur-[100px] rounded-full pointer-events-none" />
 
@@ -602,7 +622,7 @@ export default function ServicesPage() {
             </motion.div>
 
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight max-w-4xl mx-auto leading-tight">
-              Complete E-Commerce & <span className="gradient-text">Growth Solutions</span>
+              Complete E-com &amp; Q-com <span className="gradient-text">Growth Solutions</span>
             </h1>
 
             <motion.p

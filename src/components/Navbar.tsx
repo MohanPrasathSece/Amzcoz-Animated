@@ -182,9 +182,6 @@ export function Navbar() {
                   <a href="tel:+918007208742" className="hover:text-primary transition font-medium">
                     +91 80072 08742
                   </a>
-                  <a href="mailto:adnan@amzcoz.com" className="hover:text-primary transition font-medium">
-                    adnan@amzcoz.com
-                  </a>
                   <span>Pune, India</span>
                 </div>
               </div>

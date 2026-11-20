@@ -18,6 +18,7 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { HeroGlassFold } from "@/components/HeroGlassFold";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { ALL_SERVICES, getServiceBySlug } from "@/data/servicesData";
@@ -74,7 +75,6 @@ export default function ServiceDetailPage() {
         "name": "AMZCOZ",
         "url": "https://amzcoz.com",
         "telephone": "+918007208742",
-        "email": "adnan@amzcoz.com",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Pune",
@@ -156,7 +156,9 @@ export default function ServiceDetailPage() {
             </div>
 
             {/* 2. Hero Section */}
-            <section className="relative mx-auto max-w-7xl px-6 pt-4 pb-16 md:pb-24 border-b border-white/5">
+            <section className="relative mx-auto max-w-7xl px-6 pt-4 pb-16 md:pb-24 border-b border-white/5 overflow-hidden">
+              {/* Subtle animated glass fold line background */}
+              <HeroGlassFold opacity="opacity-20 sm:opacity-25" />
               {/* Subtle background glow */}
               <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -z-10 h-[360px] w-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
@@ -447,13 +449,6 @@ export default function ServiceDetailPage() {
                     <span>Book Strategy Call</span>
                     <ArrowRight className="h-4 w-4" />
                   </Link>
-                  <a
-                    href="mailto:adnan@amzcoz.com"
-                    className="hero-btn hero-btn-ghost text-sm sm:text-base px-6 py-3.5 font-semibold inline-flex items-center gap-2"
-                  >
-                    <Mail className="h-4 w-4" />
-                    <span>adnan@amzcoz.com</span>
-                  </a>
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-white/5 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">

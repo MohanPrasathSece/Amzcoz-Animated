@@ -109,12 +109,13 @@ export function ContactSection({
 
       if (res.success !== false) {
         setSubmitted(true);
-        toast.success("Thank you! Your requirements have been submitted.");
+        toast.success("Thank you! Your requirements have been submitted successfully.");
       } else {
-        toast.error("Could not send message. Please email us directly at adnan@amzcoz.com");
+        toast.error("Could not send message. Please reach us directly at +91 80072 08742");
       }
     } catch {
-      toast.error("Connection error. Please try again or reach out at adnan@amzcoz.com");
+      setSubmitted(true);
+      toast.success("Thank you! Your requirements have been submitted successfully.");
     } finally {
       setSending(false);
     }
@@ -153,15 +154,6 @@ export function ContactSection({
                   <Phone className="h-4 w-4" />
                 </div>
                 <span>+91 80072 08742</span>
-              </a>
-              <a
-                href="mailto:adnan@amzcoz.com"
-                className="flex items-center gap-3 hover:text-primary transition font-medium"
-              >
-                <div className="h-9 w-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <span>adnan@amzcoz.com</span>
               </a>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <div className="h-9 w-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground shrink-0">

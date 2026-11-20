@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { SEO } from "@/components/SEO";
 import { Reveal } from "@/components/Reveal";
 import { ContactSection } from "@/components/ContactSection";
+import { HeroBeaconField } from "@/components/hero-effects/HeroBeaconField";
 
 export default function ContactPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,6 @@ export default function ContactPage() {
           "mainEntity": {
             "@type": "ContactPoint",
             "telephone": "+918007208742",
-            "email": "adnan@amzcoz.com",
             "contactType": "customer service",
             "areaServed": ["IN", "US", "AE"],
             "availableLanguage": ["English", "Hindi"],
@@ -64,7 +64,8 @@ export default function ContactPage() {
           ref={heroRef}
           className="relative pt-36 pb-12 md:pt-44 md:pb-16 overflow-hidden border-b border-white/5"
         >
-          {/* Ambient Lighting */}
+          {/* Orbital Pulse Beacon Hero Effect & Ambient Lighting */}
+          <HeroBeaconField />
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
 
           <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">
