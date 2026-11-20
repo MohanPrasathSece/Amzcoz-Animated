@@ -120,7 +120,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
     ],
     platformsSupported: ["Amazon", "Flipkart", "Myntra", "Nykaa", "Ajio", "JioMart", "Meesho"],
-    relatedServiceSlugs: ["amazon-account-management", "flipkart-account-management", "meesho-marketplace-management", "marketplace-dsp-advertising"],
+    relatedServiceSlugs: ["amazon-account-management", "flipkart-account-management", "meesho-marketplace-management", "marketplace-advertising"],
   },
 
   // 2. Amazon Account Management
@@ -276,7 +276,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
     ],
     platformsSupported: ["Flipkart Seller Hub", "Flipkart Fulfillment", "Flipkart Ads"],
-    relatedServiceSlugs: ["marketplace-account-management", "marketplace-dsp-advertising", "meesho-marketplace-management", "review-sentiment-defense"],
+    relatedServiceSlugs: ["marketplace-account-management", "marketplace-advertising", "meesho-marketplace-management", "review-sentiment-defense"],
   },
 
   // 4. Meesho Marketplace Management
@@ -669,81 +669,81 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     relatedServiceSlugs: ["quick-commerce-growth", "blinkit-growth-services", "zepto-growth-services", "fmcg-marketing"],
   },
 
-  // 9. Marketplace & DSP Advertising
+  // 9. Marketplace Advertising Services
   {
-    slug: "marketplace-dsp-advertising",
-    title: "Marketplace & DSP Advertising Services",
-    shortTitle: "DSP & Marketplace Ads",
+    slug: "marketplace-advertising",
+    title: "Marketplace Advertising Services",
+    shortTitle: "Marketplace Advertising",
     category: "Paid Media",
-    badge: "Enterprise Programmatic Media",
-    metaTitle: "Marketplace Advertising Agency & Amazon DSP Management | AMZCOZ",
-    metaDescription: "Scale e-commerce revenue with programmatic media. We manage Amazon DSP, Flipkart Ads, and multi-marketplace advertising for maximum blended ROAS.",
-    primaryH1: "Marketplace & Programmatic DSP Advertising Agency",
+    badge: "High-ROAS Media Buying",
+    metaTitle: "Marketplace Advertising Agency & Multi-Channel PPC | AMZCOZ",
+    metaDescription: "Scale e-commerce sales with data-driven marketplace advertising. We manage Amazon PPC, Flipkart Ads, and quick commerce campaigns for maximum blended ROAS.",
+    primaryH1: "Marketplace Advertising & Multi-Channel PPC Agency",
     targetKeywords: {
-      primary: ["marketplace advertising agency", "amazon dsp management", "marketplace ppc agency"],
-      secondary: ["flipkart advertising management", "programmatic ecommerce advertising", "roas optimization agency"],
-      longTail: ["amazon dsp audience retargeting agency", "cross marketplace paid ads strategy", "how to scale roas on marketplace ads"],
+      primary: ["marketplace advertising agency", "marketplace ppc agency", "ecommerce performance marketing"],
+      secondary: ["flipkart advertising management", "amazon sponsored products agency", "roas optimization agency"],
+      longTail: ["cross marketplace paid ads strategy", "how to scale roas on marketplace ads", "marketplace sponsored products management"],
     },
     executiveSummary:
-      "Marketplace advertising has evolved far beyond basic keyword bidding. AMZCOZ orchestrates multi-marketplace advertising campaigns combining search PPC, category conquesting, and enterprise programmatic media through Amazon DSP (Demand-Side Platform) to reach shoppers both on and off platform.",
+      "Marketplace advertising is the engine of e-commerce sales velocity. AMZCOZ orchestrates multi-marketplace advertising campaigns combining search PPC, category conquesting, and retail media across Amazon, Flipkart, Blinkit, and Zepto to reach shoppers at the precise moment of purchase intent.",
     heroHighlights: [
-      "Full-funnel programmatic media execution via Amazon DSP across web, apps, and video",
-      "Audience-first retargeting of lapsed customers, brand searchers, and competitor audiences",
-      "Unified PPC and DSP attribution modeling protecting Total ACoS (TACoS)",
-      "Cross-marketplace ad orchestration across Amazon, Flipkart, Blinkit, and Myntra",
+      "Targeted campaign execution across Amazon Sponsored Products, Brands, and Video",
+      "Flipkart Product Listing Ads (PLA) and Product Contextual Ads (PCA) optimization",
+      "Unified PPC attribution modeling protecting Total ACoS (TACoS)",
+      "Cross-marketplace ad coordination across Amazon, Flipkart, Blinkit, and Zepto",
     ],
     deliverables: [
       {
-        title: "Amazon DSP Audience Retargeting",
-        desc: "Targeting high-intent shoppers who viewed your ASINs or competitor products across the web using Amazon's first-party purchase data.",
+        title: "Multi-Platform Search & Listing Ads",
+        desc: "Targeting high-intent shoppers on Amazon Sponsored Products, Sponsored Brands, and Flipkart PLA ads.",
       },
       {
-        title: "In-Market & Lifestyle Conquesting",
-        desc: "Serving display and video ads to pre-qualified shoppers actively browsing relevant product categories across the internet.",
+        title: "In-Market & Category Conquesting",
+        desc: "Serving targeted product and category ads to capture shoppers actively browsing competitor listings.",
       },
       {
         title: "Blended TACoS & ROAS Governance",
         desc: "Balancing paid ad spend against total brand revenue to ensure advertising fuels organic ranking without cannibalizing profit.",
       },
       {
-        title: "Dynamic Creative Optimization (DCO)",
-        desc: "Deploying automated responsive ad creatives with live pricing, Prime badges, customer review stars, and Add-to-Cart buttons.",
+        title: "Dynamic Ad Creative Optimization",
+        desc: "Crafting high-converting ad copy, lifestyle image badges, and Sponsored Brand Video clips that stop mobile scrollers.",
       },
       {
         title: "Cross-Marketplace Media Coordination",
         desc: "Synchronizing promotional budgets across Amazon Sponsored Ads, Flipkart PLA/PCA, and Quick Commerce Brand Booster engines.",
       },
       {
-        title: "Amazon Marketing Cloud (AMC) Insights",
-        desc: "Running custom SQL queries inside AMC to evaluate path-to-purchase, multi-touch attribution, and customer lifetime value (LTV).",
+        title: "Cross-Channel Search Query Insights",
+        desc: "Analyzing high-converting search term reports across platforms to feed organic SEO and product catalog expansion.",
       },
     ],
     benefits: [
       { metric: "5.1x", label: "Blended Return on Ad Spend", desc: "Engineered across multi-channel retail media portfolios." },
       { metric: "-32%", label: "Wasted Ad Spend Cut", desc: "Through aggressive negative keyword isolation and dayparting bid schedules." },
-      { metric: "+44%", label: "New-to-Brand (NTB) Share", desc: "Captured via upper-funnel programmatic DSP display and streaming video campaigns." },
+      { metric: "+48%", label: "Organic Rank Multiplier", desc: "Achieved as ad sales velocity directly lifts organic BSR rankings on Amazon and Flipkart." },
     ],
     processSteps: [
       { step: 1, title: "Historical Ad Audit & Attribution Review", desc: "Examine campaign structure, match type efficiency, ACoS variance, and search term wastage." },
-      { step: 2, title: "Audience Segmentation & Funnel Mapping", desc: "Segment audiences into high-intent retargeting, category consideration, and competitor conquesting." },
+      { step: 2, title: "Audience Segmentation & Keyword Mapping", desc: "Segment keywords into high-intent exact, category consideration, and competitor conquesting." },
       { step: 3, title: "Campaign Launch & Bidding Automation", desc: "Deploy structured ad campaigns with automated rule-based and algorithmic bid adjustments." },
       { step: 4, title: "Total ACoS Optimization & Flywheel Scaling", desc: "Scale budget on campaigns that lift organic sales rank and drive true incremental revenue." },
     ],
     faqs: [
       {
-        question: "What is Amazon DSP advertising?",
-        answer: "Amazon DSP (Demand-Side Platform) is a programmatic advertising platform that allows advertisers to buy display, video, and audio ads both on Amazon and across thousands of leading websites and mobile apps using Amazon's proprietary shopper data.",
+        question: "What types of marketplace advertising does AMZCOZ manage?",
+        answer: "AMZCOZ manages all core marketplace search and display advertising across platforms: Amazon Sponsored Products, Sponsored Brands, Sponsored Brand Video, Sponsored Display, Flipkart Product Listing Ads (PLA), Product Contextual Ads (PCA), and Quick Commerce Brand Booster campaigns.",
       },
       {
-        question: "How is Amazon DSP different from Amazon Sponsored Ads (PPC)?",
-        answer: "While Sponsored Ads (PPC) only appear on Amazon search result and product detail pages, Amazon DSP reaches potential buyers across the entire internet, retargeting ASIN viewers and conquesting competitor shoppers off-Amazon.",
+        question: "How does AMZCOZ lower ACoS while scaling sales?",
+        answer: "We lower ACoS by isolating non-converting search queries with aggressive negative keywords, harvesting high-converting customer search terms into exact match campaigns, and utilizing hourly dayparting to bid during peak conversion windows.",
       },
       {
         question: "What is TACoS and why does it matter?",
         answer: "TACoS (Total Advertising Cost of Sales) measures ad spend relative to total revenue (organic + paid). A healthy, declining TACoS proves your advertising is driving organic keyword ranking and sustainable business growth.",
       },
     ],
-    platformsSupported: ["Amazon DSP", "Amazon Sponsored Ads", "Flipkart Ads", "Amazon Marketing Cloud"],
+    platformsSupported: ["Amazon Sponsored Ads", "Flipkart Ads", "Blinkit Ads", "Zepto Ads"],
     relatedServiceSlugs: ["amazon-ppc-management", "marketplace-account-management", "google-ads-shopping", "social-media-meta-ads"],
   },
 
@@ -818,11 +818,11 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
       {
         question: "What types of Amazon ads does AMZCOZ manage?",
-        answer: "We manage Sponsored Products, Sponsored Brands, Sponsored Brand Video, Sponsored Display, and Amazon DSP programmatic ads.",
+        answer: "We manage Sponsored Products, Sponsored Brands, Sponsored Brand Video, and Sponsored Display.",
       },
     ],
     platformsSupported: ["Amazon Advertising Console", "Amazon Sponsored Ads"],
-    relatedServiceSlugs: ["amazon-account-management", "marketplace-dsp-advertising", "aplus-content-brand-store", "review-sentiment-defense"],
+    relatedServiceSlugs: ["amazon-account-management", "marketplace-advertising", "aplus-content-brand-store", "review-sentiment-defense"],
   },
 
   // 11. Google Ads & Shopping
@@ -900,7 +900,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
     ],
     platformsSupported: ["Google Ads", "Google Merchant Center", "Google Analytics 4", "Google Tag Manager"],
-    relatedServiceSlugs: ["social-media-meta-ads", "shopify-woocommerce-development", "website-development", "marketplace-dsp-advertising"],
+    relatedServiceSlugs: ["social-media-meta-ads", "shopify-woocommerce-development", "website-development", "marketplace-advertising"],
   },
 
   // 12. Social Media & Meta Ads
@@ -1052,7 +1052,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
       {
         question: "Can an Amazon Brand Store have its own URL?",
-        answer: "Yes, once approved, your store receives a dedicated custom URL (amazon.com/yourbrand) that you can use as a destination for off-platform advertising, social media links, and Amazon DSP campaigns.",
+        answer: "Yes, once approved, your store receives a dedicated custom URL (amazon.com/yourbrand) that you can use as a destination for off-platform advertising, social media links, and marketplace ad campaigns.",
       },
     ],
     platformsSupported: ["Amazon Seller Central", "Amazon Brand Registry", "Amazon Vendor Central"],
@@ -1529,5 +1529,8 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
 ];
 
 export function getServiceBySlug(slug: string): ServiceDetailItem | undefined {
+  if (slug === "marketplace-dsp-advertising") {
+    return ALL_SERVICES.find((s) => s.slug === "marketplace-advertising");
+  }
   return ALL_SERVICES.find((s) => s.slug === slug);
 }

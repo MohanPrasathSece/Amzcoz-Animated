@@ -135,7 +135,7 @@ const PROOF_CASE_STUDIES = [
     badge: "₹1.94 Crores Generated · 6.55x ROAS",
     badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
     headline: "Scaled to ₹1.94 Crores Revenue at 6.55x Blended ROAS",
-    subheadline: "High-volume Amazon Sponsored Ads & DSP, dark-store synchronization, and 100% account health across 34,500+ orders.",
+    subheadline: "High-volume Amazon Sponsored Ads & PPC, dark-store synchronization, and 100% account health across 34,500+ orders.",
     stats: [
       { label: "Total Documented Revenue", value: "₹1,94,02,529" },
       { label: "Peak Month Run Rate", value: "₹31,63,807/mo" },
@@ -295,8 +295,8 @@ function StackedProofCard({
       id={`proof-case-${index}`}
       ref={cardRef}
       style={{
-        position: "sticky",
-        top: isMobile ? `${72 + index * 14}px` : `${92 + index * 24}px`,
+        position: isMobile ? "relative" : "sticky",
+        top: isMobile ? undefined : `${92 + index * 24}px`,
         zIndex: index + 10,
       }}
       className="pb-8 md:pb-14"
@@ -425,7 +425,7 @@ function StackedProofCard({
                 className="group/img relative rounded-2xl overflow-hidden border border-white/20 bg-[#07090f] cursor-pointer hover:border-primary transition-all duration-200 shadow-xl"
               >
                 {/* Big Image covering half the card with crisp white background framing */}
-                <div className="aspect-[16/11] sm:aspect-[16/10] w-full overflow-hidden flex items-center justify-center p-3 sm:p-4 bg-white/95 rounded-t-xl">
+                <div className="aspect-[16/11] sm:aspect-[16/10] max-h-[260px] sm:max-h-[340px] lg:max-h-none w-full overflow-hidden flex items-center justify-center p-3 sm:p-4 bg-white/95 rounded-t-xl">
                   <img
                     src={currentProof.src}
                     alt={currentProof.title}
@@ -521,21 +521,7 @@ export default function PortfolioPage() {
           ease: "power3.out",
         });
       }
-
-      // Marquee continuous animation for brand partners
-      if (marqueeRef.current) {
-        const rows = marqueeRef.current.querySelectorAll<HTMLElement>(".portfolio-marquee-row");
-        rows.forEach((row, i) => {
-          const dir = i % 2 === 0 ? -1 : 1;
-          gsap.to(row, {
-            x: `${dir * 45}%`,
-            duration: 38 + i * 8,
-            ease: "none",
-            repeat: -1,
-          });
-        });
-      }
-    }, [heroRef, marqueeRef]);
+    }, [heroRef]);
 
     return () => ctx.revert();
   }, []);
@@ -686,19 +672,24 @@ export default function PortfolioPage() {
           </div>
 
           {/* Two independent continuous marquee rows with brand logos */}
-          <div className="flex flex-col gap-5 overflow-hidden">
+          <div className="flex flex-col gap-4 sm:gap-5 overflow-hidden">
             {[ROW1_LOGOS, ROW2_LOGOS].map((rowLogos, rowIndex) => (
-              <div key={rowIndex} className="portfolio-marquee-row flex gap-5 whitespace-nowrap">
+              <div
+                key={rowIndex}
+                className={`${
+                  rowIndex === 0 ? "animate-gpu-marquee-left" : "animate-gpu-marquee-right"
+                } animate-gpu-marquee-track flex gap-4 sm:gap-5 whitespace-nowrap`}
+              >
                 {[...rowLogos, ...rowLogos, ...rowLogos, ...rowLogos].map((brand, i) => (
                   <div
                     key={`${rowIndex}-${i}`}
                     title={`${brand.name} • ${brand.category}`}
-                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-6 py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-44 h-24 bg-surface/30 backdrop-blur-md group"
+                    className="inline-flex shrink-0 items-center justify-center rounded-2xl surface-glass px-4 sm:px-6 py-3 sm:py-4 border border-white/10 hover:border-primary/40 transition-all duration-300 w-36 sm:w-44 h-20 sm:h-24 bg-surface/30 backdrop-blur-md group"
                   >
                     <img
                       src={brand.src}
                       alt={brand.name}
-                      className="max-h-12 max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded group-hover:scale-105"
+                      className="max-h-10 sm:max-h-12 max-w-[100px] sm:max-w-[120px] w-auto h-auto object-contain transition-all duration-300 rounded group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>
@@ -787,7 +778,7 @@ export default function PortfolioPage() {
                   <div className="space-y-2.5 pt-4 border-t border-white/5 text-xs text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Sponsored Display & DSP responsive banner variations</span>
+                      <span>Sponsored Display & category responsive banner variations</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-primary" />

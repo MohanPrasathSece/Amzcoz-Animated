@@ -26,7 +26,7 @@ AMZCOZ is a multi-channel digital commerce and quick-commerce growth partner, NO
 - [Swiggy Instamart Growth](https://amzcoz.com/services/swiggy-instamart-growth): 30+ city quick commerce reach, Swiggy Ads, mother hub logistics, and hyper-local brand visibility.
 
 ### 2. Paid Advertising & Media
-- [Marketplace & DSP Advertising](https://amzcoz.com/services/marketplace-dsp-advertising): Programmatic display, audio, and video media via Amazon DSP and multi-marketplace advertising governance protecting Total ACoS (TACoS).
+- [Marketplace Advertising Services](https://amzcoz.com/services/marketplace-advertising): Multi-marketplace search and display advertising across Amazon, Flipkart, and Quick Commerce platforms protecting Total ACoS (TACoS).
 - [Amazon PPC Management](https://amzcoz.com/services/amazon-ppc-management): Precision Sponsored Products, Sponsored Brands, and Sponsored Display management utilizing exact match isolation, search term harvesting, and dayparting.
 - [Google Ads & Shopping](https://amzcoz.com/services/google-ads-shopping): Performance Max (PMax), Google Shopping feed enrichment, Google Merchant Center governance, and server-side GA4 tracking.
 - [Social Media & Meta Ads](https://amzcoz.com/services/social-media-meta-ads): Creative-led Facebook and Instagram ad funnels, Advantage+ Shopping Campaigns (ASC), UGC scripting, and server-side Conversions API (CAPI).

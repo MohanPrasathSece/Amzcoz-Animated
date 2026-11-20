@@ -79,7 +79,7 @@ export default function TermsPage() {
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                      <span><strong className="text-foreground">Performance Advertising:</strong> Amazon Sponsored Ads, Blinkit Brand Booster, Meta D2C ads, and DSP programmatic campaign execution.</span>
+                      <span><strong className="text-foreground">Performance Advertising:</strong> Amazon Sponsored Ads, Blinkit Brand Booster, Meta D2C ads, and multi-marketplace advertising campaign execution.</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />

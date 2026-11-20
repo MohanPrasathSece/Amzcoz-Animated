@@ -137,9 +137,14 @@ export function GlobeAnalytics({
       const cosTheta = Math.cos(theta)
       const sinTheta = Math.sin(theta)
 
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768
+      // Increase globe rotation speed on mobile as requested
+      const effectiveSpeed = isMobile ? speed * 2.5 : speed
+      let frameCount = 0
+
       function animate() {
         if (!pointerInteracting.current) {
-          phiBaseRef.current += speed
+          phiBaseRef.current += effectiveSpeed
         }
         const currentPhi = phiBaseRef.current + pointerInteractionMovement.current
 
@@ -151,28 +156,32 @@ export function GlobeAnalytics({
         const cosPhi = Math.cos(currentPhi)
         const sinPhi = Math.sin(currentPhi)
 
-        const newPins: ProjectedPin[] = pinCoords.map((pin) => {
-          // Project 3D vector rotated by current phi and theta
-          const c = cosPhi * pin.x0 + sinPhi * pin.z0
-          const s = sinPhi * sinTheta * pin.x0 + cosTheta * pin.y0 - cosPhi * sinTheta * pin.z0
-          const z = -sinPhi * cosTheta * pin.x0 + sinTheta * pin.y0 + cosPhi * cosTheta * pin.z0
+        frameCount++
+        // Throttle React state dispatch to avoid 60 state updates/sec on mobile main thread
+        if (frameCount % (isMobile ? 3 : 2) === 0) {
+          const newPins: ProjectedPin[] = pinCoords.map((pin) => {
+            // Project 3D vector rotated by current phi and theta
+            const c = cosPhi * pin.x0 + sinPhi * pin.z0
+            const s = sinPhi * sinTheta * pin.x0 + cosTheta * pin.y0 - cosPhi * sinTheta * pin.z0
+            const z = -sinPhi * cosTheta * pin.x0 + sinTheta * pin.y0 + cosPhi * cosTheta * pin.z0
 
-          const isVisible = z > 0.05
-          const opacity = isVisible ? Math.min(1, Math.max(0, (z - 0.05) * 4)) : 0
+            const isVisible = z > 0.05
+            const opacity = isVisible ? Math.min(1, Math.max(0, (z - 0.05) * 4)) : 0
 
-          return {
-            id: pin.id,
-            name: pin.name,
-            flag: pin.flag,
-            location: pin.location,
-            role: pin.role,
-            x: (c * 0.4 + 0.5) * 100,
-            y: (-s * 0.4 + 0.5) * 100,
-            visible: isVisible,
-            opacity,
-          }
-        })
-        setProjectedPins(newPins)
+            return {
+              id: pin.id,
+              name: pin.name,
+              flag: pin.flag,
+              location: pin.location,
+              role: pin.role,
+              x: (c * 0.4 + 0.5) * 100,
+              y: (-s * 0.4 + 0.5) * 100,
+              visible: isVisible,
+              opacity,
+            }
+          })
+          setProjectedPins(newPins)
+        }
 
         animationId = requestAnimationFrame(animate)
       }

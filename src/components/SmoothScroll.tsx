@@ -9,6 +9,20 @@ if (typeof window !== "undefined") {
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
+    // Detect mobile / touch devices. Native mobile momentum scroll is 120Hz/60Hz hardware accelerated.
+    // Intercepting touch scroll with Lenis causes friction, lag, and marquee jitter on mobile.
+    const isTouch =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.innerWidth < 768);
+
+    if (isTouch) {
+      // Keep ScrollTrigger synced with native scroll
+      ScrollTrigger.refresh();
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

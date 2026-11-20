@@ -15,7 +15,7 @@ AMZCOZ is an enterprise multi-channel e-commerce growth partner. Unlike traditio
 1. **Traditional Marketplaces**: Amazon, Flipkart, Myntra, Nykaa, Ajio, JioMart, Meesho.
 2. **Instant 10-Minute Quick Commerce**: Blinkit, Zepto, Swiggy Instamart.
 3. **Direct-to-Consumer (D2C)**: High-speed Shopify, WooCommerce, and headless Next.js web applications.
-4. **Paid Media Engines**: Amazon Sponsored Ads & DSP, Google Ads & Shopping, Meta Ads, and In-App Retail Media.
+4. **Paid Media Engines**: Amazon Sponsored Ads, Google Ads & Shopping, Meta Ads, and In-App Retail Media.
 
 ---
 
@@ -96,14 +96,14 @@ AMZCOZ is an enterprise multi-channel e-commerce growth partner. Unlike traditio
   - Inbound pallet logistics to Swiggy mother distribution centers.
   - Swiggy One member loyalty promotional inclusion.
 
-### 9. Marketplace & Programmatic DSP Advertising
-- **URL**: https://amzcoz.com/services/marketplace-dsp-advertising
-- **Overview**: Enterprise retail media advertising across Amazon DSP, Flipkart Ads, and multi-channel networks.
+### 9. Marketplace Advertising Services
+- **URL**: https://amzcoz.com/services/marketplace-advertising
+- **Overview**: Multi-marketplace search and display advertising management across Amazon, Flipkart, Blinkit, and Zepto.
 - **Key Methodologies**:
-  - Amazon DSP programmatic display, video, and audio campaigns targeting off-Amazon shoppers using Amazon's first-party shopper data.
+  - Sponsored Products, Sponsored Brands, Sponsored Video, and Sponsored Display campaign management.
   - Total ACoS (TACoS) governance ensuring advertising drives true incremental organic sales velocity.
-  - Amazon Marketing Cloud (AMC) SQL analytics measuring multi-touch attribution and path-to-purchase.
-  - Dynamic Creative Optimization (DCO) displaying live prices, Prime badges, and star ratings.
+  - Flipkart PLA/PCA ad optimization and Quick Commerce Brand Booster campaigns.
+  - Search query harvesting and negative keyword sculpting protecting contribution margins.
 
 ### 10. Amazon PPC Management Agency
 - **URL**: https://amzcoz.com/services/amazon-ppc-management

@@ -184,15 +184,15 @@ const SERVICES_DATA: ServiceItem[] = [
   },
   {
     id: 9,
-    slug: "marketplace-dsp-advertising",
-    title: "Marketplace & DSP Advertising",
+    slug: "marketplace-advertising",
+    title: "Marketplace Advertising Services",
     category: "Paid Media",
     icon: TrendingUp,
-    desc: "Data-driven advertising campaigns engineered to maximize sales velocity while ruthlessly cutting wasted ad spend. We manage Sponsored Products, Sponsored Brands, Display, and Amazon DSP programmatic media.",
+    desc: "Data-driven advertising campaigns engineered to maximize sales velocity while ruthlessly cutting wasted ad spend. We manage Sponsored Products, Sponsored Brands, Sponsored Display, and Flipkart PLA/PCA ads.",
     highlight: "Lower ACoS, Higher Organic Rank Multipliers & Blended ROAS Precision",
     whatWeDo: [
       "Sponsored Products, Sponsored Brands & Sponsored Video campaigns",
-      "Amazon DSP programmatic display & video retargeting",
+      "Sponsored Display product targeting & category placement optimization",
       "Flipkart PLA (Product Listing Ads) & PCA advertising management",
       "High-intent keyword harvesting and negative keyword pruning",
       "Algorithmic daily bid tuning and target placement multipliers",
@@ -390,6 +390,75 @@ const CATEGORIES = [
   "Specialized Growth",
 ] as const;
 
+interface ServiceSectionMeta {
+  id: string;
+  category: "Marketplaces & Q-Commerce" | "Paid Media" | "Creative & Design" | "Web & Tech" | "Specialized Growth";
+  index: string;
+  badge: string;
+  title: string;
+  highlightText: string;
+  description: string;
+  icon: typeof ShoppingBag;
+}
+
+const SERVICE_SECTIONS: ServiceSectionMeta[] = [
+  {
+    id: "marketplaces-qcommerce",
+    category: "Marketplaces & Q-Commerce",
+    index: "01",
+    badge: "Multi-Channel Retail Operations",
+    title: "Marketplaces & Quick Commerce",
+    highlightText: "End-to-End Account Ownership & 10-Minute Dark Store Velocity",
+    description:
+      "Complete operational governance across Amazon, Flipkart, Meesho, Myntra, Nykaa, and rapid dark-store distribution on Blinkit, Zepto, and Swiggy Instamart.",
+    icon: ShoppingBag,
+  },
+  {
+    id: "paid-media",
+    category: "Paid Media",
+    index: "02",
+    badge: "Performance Advertising",
+    title: "Paid Media & PPC Advertising",
+    highlightText: "High-ROAS Bid Precision & Total ACoS (TACoS) Governance",
+    description:
+      "Data-driven ad campaigns engineered to maximize sales velocity while cutting wasted spend across Amazon Sponsored Ads, Flipkart PLA, and Quick Commerce Brand Boosters.",
+    icon: TrendingUp,
+  },
+  {
+    id: "creative-design",
+    category: "Creative & Design",
+    index: "03",
+    badge: "Visual Merchandising & Conversion",
+    title: "Creative & Brand Design",
+    highlightText: "Mobile-First A+ Content, Brand Stores & 3D Packshots",
+    description:
+      "Elevating digital shelf presence with cinematic Amazon A+ Content, multi-page Brand Stores, and high-converting product infographics.",
+    icon: Palette,
+  },
+  {
+    id: "web-tech",
+    category: "Web & Tech",
+    index: "04",
+    badge: "D2C Engineering & Architecture",
+    title: "Web & D2C Development",
+    highlightText: "Sub-Second Speed, Clean Code & Frictionless Checkout Funnels",
+    description:
+      "Modern full-stack React/Next.js websites and scalable Shopify/WooCommerce storefronts with optimized payment gateways and logistics pipelines.",
+    icon: Code2,
+  },
+  {
+    id: "specialized-growth",
+    category: "Specialized Growth",
+    index: "05",
+    badge: "Retention & Defensibility",
+    title: "Specialized Growth & Brand Defense",
+    highlightText: "24/7 Review Sentiment Defense, Creator Commerce & FMCG Scaling",
+    description:
+      "Protecting brand equity with automated review monitoring, verified Amazon Vine strategies, influencer partnerships in India & GCC, and FMCG unit economics.",
+    icon: Sparkles,
+  },
+];
+
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState<string>("All Capabilities");
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
@@ -439,10 +508,23 @@ export default function ServicesPage() {
     return () => ctx.revert();
   }, []);
 
-  const filteredServices =
+  const activeSections =
     activeTab === "All Capabilities"
-      ? SERVICES_DATA
-      : SERVICES_DATA.filter((s) => s.category === activeTab);
+      ? SERVICE_SECTIONS
+      : SERVICE_SECTIONS.filter((s) => s.category === activeTab);
+
+  const handleCategoryClick = (cat: string) => {
+    setActiveTab(cat);
+    if (cat !== "All Capabilities") {
+      const targetSection = SERVICE_SECTIONS.find((s) => s.category === cat);
+      if (targetSection) {
+        const el = document.getElementById(targetSection.id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+  };
 
   function handleTalkAction() {
     setSelectedService(null);
@@ -485,7 +567,7 @@ export default function ServicesPage() {
               {
                 "@type": "ListItem",
                 "position": 3,
-                "name": "Amazon Sponsored Ads & DSP Media",
+                "name": "Marketplace Sponsored Ads & Paid Media",
               },
               {
                 "@type": "ListItem",
@@ -533,16 +615,16 @@ export default function ServicesPage() {
             </motion.p>
 
             {/* Category Filter Pills */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-2.5">
               {CATEGORIES.map((cat) => {
                 const isActive = activeTab === cat;
                 return (
                   <button
                     key={cat}
-                    onClick={() => setActiveTab(cat)}
-                    className={`rounded-full px-4.5 py-2 text-[13px] font-semibold transition-all ${isActive
-                      ? "bg-primary text-white shadow-[0_0_20px_var(--color-primary)] scale-105"
-                      : "surface-glass text-muted-foreground hover:text-foreground hover:bg-white/10"
+                    onClick={() => handleCategoryClick(cat)}
+                    className={`rounded-full px-5 py-2.5 text-xs sm:text-[13px] font-semibold transition-all duration-300 ${isActive
+                      ? "bg-primary text-white shadow-[0_0_24px_var(--color-primary)] scale-105 border border-primary"
+                      : "surface-glass text-muted-foreground hover:text-foreground hover:bg-white/10 border border-white/5"
                       }`}
                   >
                     {cat}
@@ -553,83 +635,130 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* ------------------- CLEAN ATTRACTIVE SERVICES GRID ------------------- */}
-        <section className="py-20 md:py-28 relative z-10">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              <AnimatePresence mode="popLayout">
-                {filteredServices.map((service) => {
-                  const Icon = service.icon;
-                  return (
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.97 }}
-                      transition={{ duration: 0.3 }}
-                      key={service.id}
-                      onClick={() => setSelectedService(service)}
-                      className="group cursor-pointer rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300 shadow-lg hover:-translate-y-1"
-                    >
-                      <div>
-                        {/* Top Metadata */}
-                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-                          <span className="font-mono text-sm md:text-base font-semibold text-primary/70">
-                            0{service.id}
-                          </span>
-                          <span className="rounded-full bg-primary/10 border border-primary/20 px-3 py-0.5 text-[13px] text-primary font-medium">
-                            {service.category}
-                          </span>
+        {/* ------------------- VISUALLY DIVIDED SERVICE SECTIONS ------------------- */}
+        <div className="relative z-10 space-y-20 md:space-y-32 py-16 md:py-24">
+          {activeSections.map((section) => {
+            const SectionIcon = section.icon;
+            const sectionServices = SERVICES_DATA.filter((s) => s.category === section.category);
+
+            return (
+              <section
+                key={section.id}
+                id={section.id}
+                className="scroll-mt-28 relative"
+              >
+                <div className="mx-auto max-w-7xl px-6">
+                  {/* Category Header Banner */}
+                  <div className="relative rounded-3xl surface-glass border border-white/10 p-7 sm:p-9 md:p-11 mb-8 md:mb-10 overflow-hidden bg-gradient-to-r from-white/[0.04] via-white/[0.015] to-transparent shadow-xl">
+                    {/* Ambient Glow */}
+                    <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-80 h-80 rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
+
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                      <div className="max-w-3xl">
+                        {/* Section Tag */}
+                        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary mb-3.5">
+                          <span className="font-mono font-bold">Section {section.index}</span>
+                          <span className="text-white/30">•</span>
+                          <span>{section.badge}</span>
                         </div>
 
-                        {/* Icon & Title */}
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className="h-12 w-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:bg-primary/25 transition-all">
-                            <Icon className="h-6 w-6" />
+                        {/* Title & Icon */}
+                        <div className="flex items-center gap-3.5 sm:gap-4 mb-3">
+                          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                            <SectionIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                           </div>
-                          <h3 className="font-display text-xl md:text-2xl font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
-                            {service.title}
-                          </h3>
+                          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+                            {section.title}
+                          </h2>
                         </div>
 
-                        {/* Short Preview Description */}
-                        <p className="text-sm md:text-[15px] text-muted-foreground leading-relaxed line-clamp-3 mb-6">
-                          {service.desc}
+                        {/* Description */}
+                        <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed font-normal">
+                          {section.description}
                         </p>
                       </div>
 
-                      {/* Card Action Trigger */}
-                      <div className="pt-5 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground/80 font-medium">
-                          {service.whatWeDo.length} Deliverables
+                      {/* Right Meta Pill */}
+                      <div className="flex lg:flex-col items-center lg:items-end justify-between gap-2.5 shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5">
+                        <span className="rounded-full bg-primary/10 border border-primary/25 px-4 py-1.5 text-xs font-mono font-semibold text-primary">
+                          {sectionServices.length} Specialized Capabilities
                         </span>
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedService(service);
-                            }}
-                            className="text-xs text-muted-foreground hover:text-foreground font-medium underline underline-offset-4"
-                          >
-                            Quick Scope
-                          </button>
-                          <Link
-                            to={`/services/${service.slug}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-xs md:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
-                          >
-                            Deep Dive <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
+                        <span className="text-[11px] text-muted-foreground/80 font-medium hidden lg:block">
+                          {section.highlightText}
+                        </span>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </div>
-          </div>
-        </section>
+                    </div>
+                  </div>
+
+                  {/* Services Grid for This Category */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    <AnimatePresence mode="popLayout">
+                      {sectionServices.map((service) => {
+                        const Icon = service.icon;
+                        return (
+                          <motion.div
+                            layout
+                            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            transition={{ duration: 0.25 }}
+                            key={service.id}
+                            onClick={() => setSelectedService(service)}
+                            className="group cursor-pointer rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/50 hover:bg-white/[0.04] transition-all duration-300 shadow-lg hover:-translate-y-1"
+                          >
+                            <div>
+                              {/* Top Metadata */}
+                              <div className="flex items-center justify-between mb-5 pb-3.5 border-b border-white/5">
+                                <span className="font-mono text-xs md:text-sm font-semibold text-primary/70">
+                                  0{service.id}
+                                </span>
+                                <span className="rounded-full bg-primary/10 border border-primary/20 px-3 py-0.5 text-xs text-primary font-medium">
+                                  {service.category}
+                                </span>
+                              </div>
+
+                              {/* Icon & Title */}
+                              <div className="flex items-start gap-4 mb-3.5">
+                                <div className="h-12 w-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0 group-hover:scale-105 group-hover:bg-primary/25 transition-all">
+                                  <Icon className="h-6 w-6" />
+                                </div>
+                                <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
+                                  {service.title}
+                                </h3>
+                              </div>
+
+                              {/* Short Preview Description */}
+                              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-6">
+                                {service.desc}
+                              </p>
+                            </div>
+
+                            {/* Card Action Trigger */}
+                            <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                              <span className="text-xs text-muted-foreground/80 font-medium">
+                                {service.whatWeDo.length} Deliverables
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedService(service);
+                                }}
+                                className="text-xs sm:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                              >
+                                View Scope <ArrowRight className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </section>
+            );
+          })}
+        </div>
 
         {/* ------------------- INTERACTIVE DETAIL MODAL ------------------- */}
         <AnimatePresence>
@@ -658,23 +787,24 @@ export default function ServicesPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="modal-scroll relative z-10 w-full max-w-2xl max-h-[85vh] sm:max-h-[88vh] overflow-y-auto overscroll-contain rounded-3xl surface-glass border border-white/20 p-6 sm:p-8 md:p-10 shadow-2xl bg-[oklch(0.12_0.015_270)] text-left"
+                className="modal-scroll relative z-10 w-full max-w-2xl max-h-[85vh] sm:max-h-[88vh] overflow-y-auto overscroll-contain rounded-3xl surface-glass border border-white/20 p-5 sm:p-8 md:p-10 shadow-2xl bg-[oklch(0.12_0.015_270)] text-left"
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedService(null)}
                   aria-label="Close modal"
-                  className="absolute top-6 right-6 h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/10 transition"
+                  className="absolute top-4 right-4 sm:top-6 sm:right-6 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/10 transition z-20"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
 
                 {/* Top Badge & Number */}
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="font-mono text-sm uppercase tracking-wider text-primary font-bold">
+                <div className="flex items-center gap-3 mb-6 pr-12">
+                  <span className="font-mono text-xs sm:text-sm uppercase tracking-wider text-primary font-bold">
                     Capability // 0{selectedService.id}
                   </span>
-                  <span className="rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[13px] text-primary font-semibold">
+                  {/* Category badge hidden on mobile to prevent any clutter or overlap */}
+                  <span className="hidden sm:inline-flex rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[13px] text-primary font-semibold">
                     {selectedService.category}
                   </span>
                 </div>

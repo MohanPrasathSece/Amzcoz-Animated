@@ -88,7 +88,7 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleContactClick}
-              className="hero-btn hero-btn-primary text-sm px-4.5 py-2 font-medium hidden sm:inline-flex"
+              className="hero-btn hero-btn-primary text-sm px-4.5 py-2 font-medium hidden md:inline-flex"
             >
               Free Audit
               <ArrowRight className="h-3.5 w-3.5 ml-0.5" />
@@ -98,7 +98,7 @@ export function Navbar() {
             <button
               onClick={() => setMobileOpen((prev) => !prev)}
               aria-label="Toggle navigation menu"
-              className="p-1.5 text-muted-foreground hover:text-foreground md:hidden transition"
+              className="p-1.5 text-muted-foreground hover:text-foreground md:hidden transition active:scale-95"
             >
               {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -106,14 +106,15 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Full-Page Opening Menu */}
+      {/* Mobile Full-Page Opening Menu - Hardware Accelerated */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            style={{ willChange: "transform, opacity" }}
             className="fixed inset-0 z-[100] bg-[oklch(0.09_0.012_270)] flex flex-col justify-between p-6 sm:p-10 md:hidden overflow-y-auto"
           >
             {/* Top Bar inside Fullscreen Menu: Logo + Close Button */}
@@ -131,7 +132,7 @@ export function Navbar() {
               <button
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
-                className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-foreground transition"
+                className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-foreground transition active:scale-95"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -139,23 +140,18 @@ export function Navbar() {
 
             {/* Navigation Links - Large Fullscreen Menu */}
             <nav className="flex flex-col justify-center gap-3 py-6 my-auto">
-              {navItems.map((item, idx) => {
+              {navItems.map((item) => {
                 const isActive =
                   item.href === "/"
                     ? location.pathname === "/"
                     : location.pathname.startsWith(item.href);
 
                 return (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.04 * idx, duration: 0.25 }}
-                  >
+                  <div key={item.label}>
                     <Link
                       to={item.href}
                       onClick={() => setMobileOpen(false)}
-                      className={`flex items-center justify-between py-3 border-b border-white/5 text-2xl sm:text-3xl font-display font-bold transition-all ${
+                      className={`flex items-center justify-between py-3 border-b border-white/5 text-2xl sm:text-3xl font-display font-bold transition-colors ${
                         isActive
                           ? "text-primary pl-2 border-primary/40"
                           : "text-foreground/85 hover:text-foreground hover:pl-2"
@@ -164,7 +160,7 @@ export function Navbar() {
                       <span>{item.label}</span>
                       <ArrowRight className={`h-5 w-5 ${isActive ? "text-primary" : "opacity-40"}`} />
                     </Link>
-                  </motion.div>
+                  </div>
                 );
               })}
             </nav>

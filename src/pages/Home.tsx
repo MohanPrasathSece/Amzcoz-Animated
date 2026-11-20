@@ -148,7 +148,7 @@ export default function LandingPage() {
               "Blinkit Vendor Management",
               "Zepto Brand Booster Ads",
               "Swiggy Instamart Acceleration",
-              "Amazon PPC and DSP Advertising",
+              "Amazon PPC & Marketplace Advertising",
               "E-Commerce Website Development",
               "Shopify Store Development",
               "D2C Performance Marketing",
@@ -366,20 +366,22 @@ function StatsStrip() {
   ];
 
   return (
-    <section ref={ref} className="relative z-10 py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <section ref={ref} className="relative z-10 py-14 sm:py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="stat-item group relative">
-              <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur" />
-              <div className="relative rounded-2xl surface-glass p-8 border border-blue-500/20 overflow-hidden">
-                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-primary/10 blur-2xl" />
-                <div className="mb-4">
-                  <div className="stat-value text-5xl font-bold gradient-text font-display" data-value={s.value}>{s.value}</div>
+              <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur" />
+              <div className="relative rounded-2xl surface-glass p-4 sm:p-6 md:p-8 border border-blue-500/20 overflow-hidden flex flex-col justify-between h-full">
+                <div className="absolute -right-4 -top-4 h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-primary/10 blur-2xl" />
+                <div>
+                  <div className="mb-2 sm:mb-4">
+                    <div className="stat-value text-3xl sm:text-4xl md:text-5xl font-bold gradient-text font-display" data-value={s.value}>{s.value}</div>
+                  </div>
+                  <h3 className="text-xs sm:text-base md:text-lg font-semibold text-foreground mb-1 sm:mb-2">{s.label}</h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground line-clamp-2">{s.sublabel}</p>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{s.label}</h3>
-                <p className="text-sm text-muted-foreground">{s.sublabel}</p>
-                <div className="mt-4 h-0.5 w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
+                <div className="mt-3 sm:mt-4 h-0.5 w-6 sm:w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
               </div>
             </div>
           ))}
@@ -569,19 +571,18 @@ function ServicesSection() {
         },
       });
 
-      // Service Cards staggered slow scrub
+      // Service Cards staggered smooth reveal on scroll
       gsap.from(cards, {
-        y: 60,
+        y: 45,
         opacity: 0,
-        scale: 0.94,
-        filter: "blur(10px)",
-        stagger: 0.1,
-        ease: "power1.out",
+        scale: 0.96,
+        stagger: 0.08,
+        duration: 0.85,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: ref.current!.querySelector(".services-grid"),
           start: "top 88%",
-          end: "top 25%",
-          scrub: 1.2,
+          toggleActions: "play none none none",
         },
       });
     }, ref);
@@ -601,7 +602,7 @@ function ServicesSection() {
       tags: ["Blinkit & Zepto", "10-Min Commerce", "Dark Store Inventory"],
     },
     {
-      title: "Performance & DSP Advertising",
+      title: "Marketplace & Performance Advertising",
       desc: "High-yield campaigns on Amazon Sponsored Ads, Blinkit Brand Booster, and Meta/Google conversion funnels.",
       tags: ["Amazon PPC", "Blinkit Ads", "ROAS Optimization"],
     },
@@ -674,41 +675,26 @@ const MARKETPLACE_PLATFORMS = [
 ];
 
 function MarketplacePlatformsMarquee() {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const track = marqueeRef.current?.querySelector<HTMLElement>(".marketplace-marquee-track");
-    if (track) {
-      const anim = gsap.to(track, {
-        xPercent: -50,
-        duration: 34,
-        ease: "none",
-        repeat: -1,
-      });
-      return () => anim.kill();
-    }
-  }, []);
-
   const marqueeItems = [...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS];
 
   return (
-    <div ref={marqueeRef} className="relative z-10 my-10 md:my-14 py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
+    <div className="relative z-10 my-8 sm:my-10 md:my-14 py-3 sm:py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
       <div className="relative w-full overflow-hidden">
         {/* Soft edge gradient fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        <div className="marketplace-marquee-track flex gap-3 sm:gap-3.5 w-max">
+        <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-3 sm:gap-3.5 w-max">
           {marqueeItems.map((p, idx) => (
             <div
               key={idx}
-              className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 min-w-[110px] sm:min-w-[124px] h-[42px] sm:h-[48px]"
+              className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[95px] sm:min-w-[124px] h-[36px] sm:h-[48px]"
               title={p.name}
             >
               <img
                 src={p.logo}
                 alt={p.name}
-                className="max-h-4 sm:max-h-5 max-w-[80px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform duration-300 hover:scale-105"
+                className="max-h-3 sm:max-h-5 max-w-[65px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
                 loading="lazy"
               />
             </div>
@@ -774,11 +760,11 @@ const PROCESS_STEPS = [
   {
     n: "03",
     title: "Campaign Activation",
-    text: "We execute precision performance campaigns across Amazon Sponsored Ads & DSP, Blinkit Brand Booster, Zepto Ads, and Google/Meta with daily bid optimization.",
+    text: "We execute precision performance campaigns across Amazon Sponsored Ads, Blinkit Brand Booster, Zepto Ads, and Google/Meta with daily bid optimization.",
     tags: ["Amazon Ads", "Blinkit Brand Booster", "Zepto Ads", "Daily Bid Tuning"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
     statusBadge: "Active Bid Engines",
-    caption: "Amazon DSP & Q-Commerce Ads",
+    caption: "Marketplace & Q-Commerce Ads",
     metric: "15.2% Target ACoS",
   },
   {
@@ -1012,17 +998,6 @@ function Testimonials() {
           scrub: 1.5,
         },
       });
-
-      // Leftward scrolling infinite marquee
-      const marquee = ref.current!.querySelector<HTMLElement>(".reviews-marquee-track");
-      if (marquee) {
-        gsap.to(marquee, {
-          xPercent: -50,
-          duration: 38,
-          ease: "none",
-          repeat: -1,
-        });
-      }
     }, ref);
 
     return () => ctx.revert();
@@ -1037,7 +1012,7 @@ function Testimonials() {
       date: "Reviewed 2 weeks ago",
     },
     {
-      quote: "Their performance advertising on Amazon DSP and Zepto Brand Boosters cut our blended ACoS from 34% to 19% while doubling monthly unit volume.",
+      quote: "Their performance advertising on Amazon PPC and Zepto Brand Boosters cut our blended ACoS from 34% to 19% while doubling monthly unit volume.",
       name: "Priya Sharma",
       role: "VP Marketing, D2C Personal Care",
       platform: "Multi-Marketplace",
@@ -1069,8 +1044,8 @@ function Testimonials() {
   const marqueeReviews = [...reviews, ...reviews];
 
   return (
-    <section ref={ref} className="relative z-10 py-28 md:py-36 overflow-hidden border-t border-white/5">
-      <div className="mx-auto max-w-7xl px-6 mb-16 text-center">
+    <section ref={ref} className="relative z-10 py-20 sm:py-28 md:py-36 overflow-hidden border-t border-white/5">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 mb-12 sm:mb-16 text-center">
         <div className="testimonials-eyebrow mb-3 text-[13px] uppercase tracking-[0.3em] text-primary font-semibold">
           ◆ Verified Client Track Record
         </div>
@@ -1079,44 +1054,44 @@ function Testimonials() {
         </h2>
 
         {/* Google Reviews Trust Badge */}
-        <div className="mt-4 inline-flex items-center gap-3 rounded-full surface-glass px-5 py-2 border border-blue-500/20 shadow-md">
-          <svg className="h-5 w-5" viewBox="0 0 24 24">
+        <div className="mt-4 inline-flex items-center gap-2.5 sm:gap-3 rounded-full surface-glass px-4 sm:px-5 py-2 border border-blue-500/20 shadow-md">
+          <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
             <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
             <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
             <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
           </svg>
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-semibold text-foreground">Google</span>
-            <span className="text-xs text-muted-foreground">Rating:</span>
-            <span className="text-sm font-bold text-amber-400">4.9/5.0</span>
+            <span className="text-xs sm:text-sm font-semibold text-foreground">Google</span>
+            <span className="text-[11px] sm:text-xs text-muted-foreground">Rating:</span>
+            <span className="text-xs sm:text-sm font-bold text-amber-400">4.9/5.0</span>
           </div>
           <span className="h-3.5 w-px bg-white/20" />
-          <span className="text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
+          <span className="text-xs sm:text-[13px] text-emerald-400 flex items-center gap-1 font-medium">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             100% Verified Founders
           </span>
         </div>
       </div>
 
-      {/* Infinite continuous left-scrolling marquee track */}
+      {/* Infinite continuous left-scrolling marquee track - Pure GPU CSS */}
       <div className="relative w-full overflow-hidden">
-        <div className="reviews-marquee-track flex gap-6 w-max">
+        <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-4 sm:gap-6 w-max">
           {marqueeReviews.map((t, idx) => (
             <div
               key={idx}
-              className="w-[380px] md:w-[440px] shrink-0 rounded-3xl surface-glass border border-white/10 p-7 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
+              className="w-[275px] sm:w-[340px] md:w-[420px] shrink-0 rounded-2xl sm:rounded-3xl surface-glass border border-white/10 p-4 sm:p-6 md:p-8 flex flex-col justify-between hover:border-primary/40 transition-colors shadow-xl"
             >
               <div>
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
-                  <div className="flex items-center gap-2">
-                    <svg className="h-4 w-4" viewBox="0 0 24 24">
+                <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/5">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
                       <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
                       <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
                       <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
                     </svg>
-                    <span className="text-[13px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-[11px] sm:text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       Google Verified
                     </span>
@@ -1126,21 +1101,21 @@ function Testimonials() {
                   </div>
                 </div>
 
-                <p className="text-sm md:text-base leading-relaxed text-foreground/90 font-normal">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed text-foreground/90 font-normal line-clamp-4 sm:line-clamp-none">
                   "{t.quote}"
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
+                  <div className="text-xs sm:text-sm font-semibold text-foreground">{t.name}</div>
+                  <div className="text-[11px] sm:text-xs text-muted-foreground">{t.role}</div>
                 </div>
                 <div className="text-right">
-                  <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[13px] text-primary font-medium">
+                  <span className="rounded-full bg-white/5 border border-white/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[12px] text-primary font-medium">
                     {t.platform}
                   </span>
-                  <div className="text-[10px] text-muted-foreground/60 mt-1">{t.date}</div>
+                  <div className="text-[9px] sm:text-[10px] text-muted-foreground/60 mt-0.5">{t.date}</div>
                 </div>
               </div>
             </div>

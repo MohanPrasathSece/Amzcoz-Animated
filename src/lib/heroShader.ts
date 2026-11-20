@@ -164,7 +164,9 @@ export function initHeroShader(canvasId = 'hero-shader') {
     const parent = canvas.parentElement;
     const width = parent ? parent.clientWidth : window.innerWidth;
     const height = parent ? parent.clientHeight : window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const isMobile = window.innerWidth < 768;
+    // On mobile screens, clamp DPR to 0.55 so GPU fragment evaluations drop by ~80%
+    const dpr = isMobile ? 0.55 : Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -174,6 +176,8 @@ export function initHeroShader(canvasId = 'hero-shader') {
   resize();
 
   const startTime = performance.now();
+  let lastRenderTime = 0;
+  const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
 
   function render() {
     if (!isVisible) {
@@ -181,7 +185,15 @@ export function initHeroShader(canvasId = 'hero-shader') {
       return;
     }
 
-    const time = (performance.now() - startTime) * 0.001;
+    const now = performance.now();
+    // On mobile, throttle shader computation to ~30-35fps to completely prevent CPU/GPU throttling
+    if (isMobileDevice && now - lastRenderTime < 28) {
+      animId = requestAnimationFrame(render);
+      return;
+    }
+    lastRenderTime = now;
+
+    const time = (now - startTime) * 0.001;
     mouseX += (targetMouseX - mouseX) * 0.06;
     mouseY += (targetMouseY - mouseY) * 0.06;
 
