@@ -134,12 +134,26 @@ export default function LandingPage() {
               "addressRegion": "Maharashtra",
               "addressCountry": "IN",
             },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.9",
-              "reviewCount": "47",
-              "bestRating": "5",
-            },
+            "areaServed": [
+              { "@type": "Country", "name": "India" },
+              { "@type": "Country", "name": "United Arab Emirates" },
+              { "@type": "Country", "name": "Kuwait" },
+              { "@type": "Country", "name": "Saudi Arabia" },
+              { "@type": "Country", "name": "United States" },
+            ],
+            "knowsAbout": [
+              "Marketplace Account Management",
+              "Quick Commerce Growth",
+              "Amazon Seller Operations",
+              "Blinkit Vendor Management",
+              "Zepto Brand Booster Ads",
+              "Swiggy Instamart Acceleration",
+              "Amazon PPC and DSP Advertising",
+              "E-Commerce Website Development",
+              "Shopify Store Development",
+              "D2C Performance Marketing",
+              "Influencer Marketing",
+            ],
           },
         ]}
       />

@@ -4,6 +4,7 @@ import { ScrollReset } from "./components/ScrollReset";
 import LandingPage from "./pages/Home";
 import AboutPage from "./pages/About";
 import ServicesPage from "./pages/Services";
+import ServiceDetailPage from "./pages/ServiceDetail";
 import PortfolioPage from "./pages/Portfolio";
 import ContactPage from "./pages/Contact";
 import PrivacyPage from "./pages/Privacy";
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services/:slug" element={<ServiceDetailPage />} />
         <Route path="/portfolio" element={<PortfolioPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />

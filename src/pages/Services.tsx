@@ -34,6 +34,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface ServiceItem {
   id: number;
+  slug: string;
   title: string;
   category: "Marketplaces & Q-Commerce" | "Paid Media" | "Creative & Design" | "Web & Tech" | "Specialized Growth";
   icon: typeof ShoppingBag;
@@ -45,6 +46,7 @@ interface ServiceItem {
 const SERVICES_DATA: ServiceItem[] = [
   {
     id: 1,
+    slug: "marketplace-account-management",
     title: "Marketplace Account Management",
     category: "Marketplaces & Q-Commerce",
     icon: ShoppingBag,
@@ -62,23 +64,58 @@ const SERVICES_DATA: ServiceItem[] = [
   },
   {
     id: 2,
-    title: "Marketplace & DSP Advertising",
-    category: "Paid Media",
-    icon: TrendingUp,
-    desc: "Data-driven advertising campaigns engineered to maximize sales velocity while ruthlessly cutting wasted ad spend. We manage Sponsored Products, Sponsored Brands, Display, and Amazon DSP programmatic media.",
-    highlight: "Lower ACoS, Higher Organic Rank Multipliers & Blended ROAS Precision",
+    slug: "amazon-account-management",
+    title: "Amazon Account Management",
+    category: "Marketplaces & Q-Commerce",
+    icon: ShoppingBag,
+    desc: "Specialized Amazon Seller Central and 1P Vendor Central operations. Master Amazon A9/Cosmo search indexing, Buy Box preservation, Brand Registry defense, and multi-region FBA fulfillment.",
+    highlight: "Top 1% Category BSR Organic Rank & Unlimited FBA Capacity",
     whatWeDo: [
-      "Sponsored Products, Sponsored Brands & Sponsored Video campaigns",
-      "Amazon DSP programmatic display & video retargeting",
-      "Flipkart PLA (Product Listing Ads) & PCA advertising management",
-      "High-intent keyword harvesting and negative keyword pruning",
-      "Algorithmic daily bid tuning and target placement multipliers",
-      "Target ACoS, TACoS and ROAS performance modeling",
-      "Granular weekly advertising intelligence reports",
+      "Deep Amazon A9 and Cosmo algorithm keyword indexing",
+      "FBA shipment creation, box labels & IPI score management",
+      "Buy Box suppression defense and hijacker eviction",
+      "Brand Registry, Project Zero & transparency code setup",
+      "Seller support case escalation and lost inventory reimbursements",
+      "Amazon US, UK, and Middle East (UAE/KSA) global selling launch",
     ],
   },
   {
     id: 3,
+    slug: "flipkart-account-management",
+    title: "Flipkart Account Management",
+    category: "Marketplaces & Q-Commerce",
+    icon: ShoppingCart,
+    desc: "Scale on India's homegrown e-commerce titan. We secure the Flipkart Assured (f-Assured) badge, prepare mega sales like Big Billion Days, manage FBF fulfillment, and optimize PLA campaigns.",
+    highlight: "Flipkart Assured Badge Governance & Big Billion Days War-Room Scale",
+    whatWeDo: [
+      "Catalog quality score enrichment to 90%+ across all listings",
+      "Flipkart Fulfillment (FBF) and Smart warehouse onboarding",
+      "Big Billion Days deal application and hourly discount monitoring",
+      "Flipkart Product Listing Ads (PLA) bid optimization",
+      "Weight discrepancy disputes and courier overcharge recovery",
+      "Return to Origin (RTO) reduction through size and specification charts",
+    ],
+  },
+  {
+    id: 4,
+    slug: "meesho-marketplace-management",
+    title: "Meesho Marketplace Management",
+    category: "Marketplaces & Q-Commerce",
+    icon: Package,
+    desc: "Conquer Bharat's largest value-commerce platform with zero commission. We optimize high-volume catalog batches, formulate multi-pack bundles, and rigorously mitigate RTO rates.",
+    highlight: "0% Commission Margin Retention & RTO Containment Protocols",
+    whatWeDo: [
+      "Visual-first listing optimization tailored to mobile Bharat consumers",
+      "Automated RTO mitigation and non-delivery order scrubbing",
+      "Multi-pack bundle architecture to defend contribution margins",
+      "Meesho Ads deployment for low cost-per-acquisition (CPA)",
+      "High-SKU batch uploads with precise fabric and size tags",
+      "M-Trust score maintenance for priority feed visibility",
+    ],
+  },
+  {
+    id: 5,
+    slug: "quick-commerce-growth",
     title: "Quick Commerce Growth (Blinkit, Zepto, Instamart)",
     category: "Marketplaces & Q-Commerce",
     icon: Zap,
@@ -95,41 +132,94 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 4,
-    title: "A+ Content & Brand Store Design",
-    category: "Creative & Design",
-    icon: Palette,
-    desc: "Transform ordinary listings into high-converting visual destinations. We craft cinematic Premium A+ Content, informative comparison modules, and multi-page Amazon Brand Stores that elevate your brand prestige.",
-    highlight: "Up to +28% Average Conversion Rate Lift via Visual Narrative",
-    whatWeDo: [
-      "Enhanced A+ Content (EBC) creation and module strategy",
-      "Premium product descriptions with benefits-first copywriting",
-      "Multi-page Amazon Brand Store architecture & seasonal refreshes",
-      "High-converting product infographics and feature callouts",
-      "3D lifestyle renders and real-use photography direction",
-      "Brand storytelling designed for mobile app shoppers",
-      "Continuous A/B experimentation via Manage Your Experiments",
-    ],
-  },
-  {
-    id: 5,
-    title: "Review & Sentiment Defense",
-    category: "Marketplaces & Q-Commerce",
-    icon: Star,
-    desc: "Protect your Buy Box and marketplace reputation. We track customer sentiment in real time, handle negative review triage, and implement feedback loops to preserve top product rankings.",
-    highlight: "Systematic Rating Defense & Positive Customer Sentiment Flywheel",
-    whatWeDo: [
-      "24/7 customer review and seller feedback monitoring",
-      "Automated policy-compliant review request funnel setup",
-      "Customer complaint triage and satisfaction workflows",
-      "Review sentiment trends and recurring defect root-cause analysis",
-      "Direct brand response coordination for public reviews",
-      "Listing defense against malicious competitor attacks",
-      "Comprehensive monthly customer sentiment reports",
-    ],
-  },
-  {
     id: 6,
+    slug: "blinkit-growth-services",
+    title: "Blinkit Growth & Vendor Operations",
+    category: "Marketplaces & Q-Commerce",
+    icon: Zap,
+    desc: "Accelerate your brand on India's quick commerce leader. Manage Blinkit Vendor Central, regional mother warehouse inwarding, Brand Booster advertising, and 10-minute micro dark-store availability.",
+    highlight: "Blinkit Brand Booster Advertising & Regional Mother Hub Replenishment",
+    whatWeDo: [
+      "Fast-track Blinkit vendor registration and ASN processing",
+      "Blinkit Brand Booster search keyword and banner campaign bids",
+      "Inventory distribution across Delhi NCR, Mumbai, Bengaluru, and Pune hubs",
+      "Catalog 1:1 image card optimization with high-contrast benefit callouts",
+      "Impulse buy and cart checkout cross-sell slot negotiation",
+      "Payment shortage claims and proof-of-delivery (POD) reconciliations",
+    ],
+  },
+  {
+    id: 7,
+    slug: "zepto-growth-services",
+    title: "Zepto Brand Growth & Seller Services",
+    category: "Marketplaces & Q-Commerce",
+    icon: Zap,
+    desc: "Scale rapidly on Zepto across premium urban households. Master Zepto vendor portal operations, sponsored product search ads, Zepto Pass promotions, and continuous dark-store inventory flow.",
+    highlight: "Dayparted Zepto Search Ads & 99%+ Dark-Store Inbound Fulfillment",
+    whatWeDo: [
+      "Zepto vendor hub administration, SKU uploads, and barcode compliance",
+      "High-intent search keyword bidding and category conquesting",
+      "Regional hub appointment scheduling and pallet tagging",
+      "Promotional planning for Zepto Pass subscribers and weekend sales",
+      "Hyper-local pin code share-of-voice and competitor tracking",
+      "Trade discount, credit note, and payment settlement auditing",
+    ],
+  },
+  {
+    id: 8,
+    slug: "swiggy-instamart-growth",
+    title: "Swiggy Instamart Growth Services",
+    category: "Marketplaces & Q-Commerce",
+    icon: Zap,
+    desc: "Leverage Swiggy's massive on-demand consumer network across 30+ Indian cities. We manage category onboarding, Swiggy Ads, mother hub logistics, and hyper-local brand activation.",
+    highlight: "30+ Metro City Reach & Swiggy One Loyalty Integration",
+    whatWeDo: [
+      "Partner portal onboarding, documentation, and nutritional compliance",
+      "Swiggy Ads search bidding and restaurant category cross-merchandising",
+      "Palletized delivery and ASN coordination into Swiggy mother hubs",
+      "Swiggy One subscriber promotional feature placements",
+      "Micro-dark-store stock level tracking and automated re-ordering",
+      "Remittance advice audits and trade term reconciliations",
+    ],
+  },
+  {
+    id: 9,
+    slug: "marketplace-dsp-advertising",
+    title: "Marketplace & DSP Advertising",
+    category: "Paid Media",
+    icon: TrendingUp,
+    desc: "Data-driven advertising campaigns engineered to maximize sales velocity while ruthlessly cutting wasted ad spend. We manage Sponsored Products, Sponsored Brands, Display, and Amazon DSP programmatic media.",
+    highlight: "Lower ACoS, Higher Organic Rank Multipliers & Blended ROAS Precision",
+    whatWeDo: [
+      "Sponsored Products, Sponsored Brands & Sponsored Video campaigns",
+      "Amazon DSP programmatic display & video retargeting",
+      "Flipkart PLA (Product Listing Ads) & PCA advertising management",
+      "High-intent keyword harvesting and negative keyword pruning",
+      "Algorithmic daily bid tuning and target placement multipliers",
+      "Target ACoS, TACoS and ROAS performance modeling",
+      "Granular weekly advertising intelligence reports",
+    ],
+  },
+  {
+    id: 10,
+    slug: "amazon-ppc-management",
+    title: "Amazon PPC Management Agency",
+    category: "Paid Media",
+    icon: TrendingUp,
+    desc: "Dominant Amazon advertising management. We deploy segmented exact match campaigns, search term harvesting, dayparting bids, and Sponsored Brand Video testing to crush ACoS and drive rank.",
+    highlight: "Sub-18% Target ACoS & Algorithmic Search Term Harvesting",
+    whatWeDo: [
+      "Segmented campaign architecture: Exact, Phrase, Broad & Product Targeting",
+      "Sponsored Brand Video and Store spotlight ad creation",
+      "Sponsored Display product page defense against competitor conquesting",
+      "Automated negative keyword sculpting to eliminate ad budget waste",
+      "Dayparting schedules bidding higher during peak conversion hours",
+      "Weekly ACoS, TACoS, CTR, and organic rank correlation analytics",
+    ],
+  },
+  {
+    id: 11,
+    slug: "google-ads-shopping",
     title: "Google Ads & Shopping Feeds",
     category: "Paid Media",
     icon: Search,
@@ -146,7 +236,8 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 7,
+    id: 12,
+    slug: "social-media-meta-ads",
     title: "Social Media & Meta Ads (FB & IG)",
     category: "Paid Media",
     icon: Share2,
@@ -158,12 +249,49 @@ const SERVICES_DATA: ServiceItem[] = [
       "Lookalike & interest audience segmentation for scaling",
       "Collaborative Ads (CPAS) driving traffic directly to Amazon/Flipkart",
       "Retargeting funnels tailored by shopper browse behavior",
-      "Lead generation and VIP pre-launch customer lists",
+      "Server-side Meta Conversions API (CAPI) configuration",
       "Continuous creative testing and weekly ROAS reports",
     ],
   },
   {
-    id: 8,
+    id: 13,
+    slug: "aplus-content-brand-store",
+    title: "A+ Content & Brand Store Design",
+    category: "Creative & Design",
+    icon: Palette,
+    desc: "Transform ordinary listings into high-converting visual destinations. We craft cinematic Premium A+ Content, informative comparison modules, and multi-page Amazon Brand Stores that elevate your brand prestige.",
+    highlight: "Up to +28% Average Conversion Rate Lift via Visual Narrative",
+    whatWeDo: [
+      "Enhanced A+ Content (EBC) creation and module strategy",
+      "Premium product descriptions with benefits-first copywriting",
+      "Multi-page Amazon Brand Store architecture & seasonal refreshes",
+      "High-converting product infographics and feature callouts",
+      "3D lifestyle renders and real-use photography direction",
+      "Brand storytelling designed for mobile app shoppers",
+      "Continuous A/B experimentation via Manage Your Experiments",
+    ],
+  },
+  {
+    id: 14,
+    slug: "review-sentiment-defense",
+    title: "Review & Sentiment Defense",
+    category: "Specialized Growth",
+    icon: Star,
+    desc: "Protect your Buy Box and marketplace reputation. We track customer sentiment in real time, handle negative review triage, and implement feedback loops to preserve top product rankings.",
+    highlight: "Systematic Rating Defense & Positive Customer Sentiment Flywheel",
+    whatWeDo: [
+      "24/7 customer review and seller feedback monitoring",
+      "Automated policy-compliant review request funnel setup",
+      "Customer complaint triage and satisfaction workflows",
+      "Review sentiment trends and recurring defect root-cause analysis",
+      "Direct brand response coordination for public reviews",
+      "Listing defense against malicious competitor attacks",
+      "Comprehensive monthly customer sentiment reports",
+    ],
+  },
+  {
+    id: 15,
+    slug: "website-development",
     title: "Modern Website Development",
     category: "Web & Tech",
     icon: Code2,
@@ -180,7 +308,8 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 9,
+    id: 16,
+    slug: "shopify-woocommerce-development",
     title: "E-commerce Development (Shopify & Woo)",
     category: "Web & Tech",
     icon: ShoppingCart,
@@ -197,7 +326,8 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 10,
+    id: 17,
+    slug: "influencer-marketing",
     title: "Influencer Marketing (India & Middle East)",
     category: "Specialized Growth",
     icon: Users2,
@@ -214,7 +344,8 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 11,
+    id: 18,
+    slug: "graphic-design-merchandising",
     title: "Graphic Design & Creative Merchandising",
     category: "Creative & Design",
     icon: PenTool,
@@ -231,7 +362,8 @@ const SERVICES_DATA: ServiceItem[] = [
     ],
   },
   {
-    id: 12,
+    id: 19,
+    slug: "fmcg-marketing",
     title: "FMCG Marketing & Rapid Turnaround",
     category: "Specialized Growth",
     icon: Package,
@@ -469,14 +601,27 @@ export default function ServicesPage() {
                       {/* Card Action Trigger */}
                       <div className="pt-5 border-t border-white/5 flex items-center justify-between">
                         <span className="text-xs text-muted-foreground/80 font-medium">
-                          {service.whatWeDo.length} Key Deliverables
+                          {service.whatWeDo.length} Deliverables
                         </span>
-                        <button
-                          type="button"
-                          className="text-xs md:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
-                        >
-                          Read More <ArrowRight className="h-3.5 w-3.5" />
-                        </button>
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedService(service);
+                            }}
+                            className="text-xs text-muted-foreground hover:text-foreground font-medium underline underline-offset-4"
+                          >
+                            Quick Scope
+                          </button>
+                          <Link
+                            to={`/services/${service.slug}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-xs md:text-sm font-semibold text-primary inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                          >
+                            Deep Dive <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   );
@@ -579,9 +724,12 @@ export default function ServicesPage() {
 
                 {/* Modal Footer */}
                 <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <span className="text-xs md:text-sm text-muted-foreground font-medium">
-                    Tailored KPI targets for your catalog
-                  </span>
+                  <Link
+                    to={`/services/${selectedService.slug}`}
+                    className="text-xs sm:text-sm font-semibold text-primary hover:underline underline-offset-4 inline-flex items-center gap-1.5"
+                  >
+                    View Dedicated Landing Page &amp; FAQs &rarr;
+                  </Link>
                   <button
                     onClick={handleTalkAction}
                     className="hero-btn hero-btn-primary w-full sm:w-auto text-sm px-6 py-2.5 font-semibold inline-flex items-center justify-center gap-2"

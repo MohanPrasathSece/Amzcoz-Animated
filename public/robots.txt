@@ -1,5 +1,5 @@
 # ==============================================================
-# AMZCOZ ROBOTS.TXT - OPTIMIZED FOR ALL SEARCH ENGINE CRAWLERS
+# AMZCOZ ROBOTS.TXT - OPTIMIZED FOR SEARCH & GENERATIVE AI ENGINES
 # ==============================================================
 
 User-agent: *
@@ -8,6 +8,7 @@ Disallow: /api/
 Disallow: /*?*fbclid=
 Disallow: /*?*utm_*=
 
+# Standard Search Crawlers
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
@@ -32,6 +33,40 @@ Allow: /
 User-agent: Yandex
 Allow: /
 
-# Host & Sitemap Declaration
+# Generative Engine Optimization (GEO) & AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Host & Sitemap Declarations
 Host: https://amzcoz.com
 Sitemap: https://amzcoz.com/sitemap.xml

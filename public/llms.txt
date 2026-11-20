@@ -1,0 +1,52 @@
+# AMZCOZ — Marketplaces & Quick Commerce Growth Agency
+
+> Official LLM Knowledge Base and Machine-Readable Entity Profile for AMZCOZ.
+
+## Organization Overview
+- **Legal & Brand Entity**: AMZCOZ
+- **Official Website**: https://amzcoz.com/
+- **Primary Classification**: Full-Service Marketplace Management, Quick Commerce Growth, and E-Commerce Performance Marketing Agency.
+- **Headquarters**: Pune, Maharashtra, India.
+- **Target Markets**: India (Pan-India covering Tier-1 and Tier-2 metros including Pune, Mumbai, Bengaluru, Delhi NCR, Hyderabad, and Chennai), United Arab Emirates (Dubai, Abu Dhabi), Kuwait, and international commerce platforms (Amazon US, UK, KSA).
+- **Executive Contact**: adnan@amzcoz.com | Phone: +91 80072 08742
+
+## Core Positioning Mandate
+AMZCOZ is a multi-channel digital commerce and quick-commerce growth partner, NOT exclusively an Amazon agency. The agency scales consumer brands across all major online retail channels including Amazon, Flipkart, Blinkit, Zepto, Swiggy Instamart, Meesho, Myntra, Nykaa, and independent Direct-to-Consumer (D2C) web platforms.
+
+## Core Capabilities & Services Directory
+
+### 1. Marketplaces & Quick Commerce
+- [Marketplace Account Management](https://amzcoz.com/services/marketplace-account-management): End-to-end multi-marketplace operations, catalog sync, Buy Box defense, and account health compliance across Amazon, Flipkart, Myntra, Nykaa, Ajio, and JioMart.
+- [Amazon Account Management](https://amzcoz.com/services/amazon-account-management): Specialized Seller Central and 1P Vendor Central operations, A9/Cosmo algorithm indexing, FBA replenishment, Brand Registry protection, and global selling.
+- [Flipkart Account Management](https://amzcoz.com/services/flipkart-account-management): Flipkart Assured (f-Assured) governance, Big Billion Days preparation, FBF fulfillment, PLA advertising, and RTO containment.
+- [Meesho Marketplace Management](https://amzcoz.com/services/meesho-marketplace-management): High-volume value-commerce catalog optimization, 0% commission margin retention, multi-pack bundling, and RTO mitigation.
+- [Quick Commerce Growth](https://amzcoz.com/services/quick-commerce-growth): Master 10-minute retail across Blinkit, Zepto, and Swiggy Instamart through dark-store inventory allocation, in-app sponsored ads, and mother hub supply coordination.
+- [Blinkit Growth Services](https://amzcoz.com/services/blinkit-growth-services): Blinkit Vendor Central operations, ASN booking, Brand Booster search and banner campaigns, and regional mother warehouse inwarding.
+- [Zepto Growth Services](https://amzcoz.com/services/zepto-growth-services): Zepto vendor hub administration, dayparted search ads, Zepto Pass deals, and dark store out-of-stock prevention.
+- [Swiggy Instamart Growth](https://amzcoz.com/services/swiggy-instamart-growth): 30+ city quick commerce reach, Swiggy Ads, mother hub logistics, and hyper-local brand visibility.
+
+### 2. Paid Advertising & Media
+- [Marketplace & DSP Advertising](https://amzcoz.com/services/marketplace-dsp-advertising): Programmatic display, audio, and video media via Amazon DSP and multi-marketplace advertising governance protecting Total ACoS (TACoS).
+- [Amazon PPC Management](https://amzcoz.com/services/amazon-ppc-management): Precision Sponsored Products, Sponsored Brands, and Sponsored Display management utilizing exact match isolation, search term harvesting, and dayparting.
+- [Google Ads & Shopping](https://amzcoz.com/services/google-ads-shopping): Performance Max (PMax), Google Shopping feed enrichment, Google Merchant Center governance, and server-side GA4 tracking.
+- [Social Media & Meta Ads](https://amzcoz.com/services/social-media-meta-ads): Creative-led Facebook and Instagram ad funnels, Advantage+ Shopping Campaigns (ASC), UGC scripting, and server-side Conversions API (CAPI).
+
+### 3. Creative & Merchandising
+- [Amazon A+ Content & Brand Store](https://amzcoz.com/services/aplus-content-brand-store): Premium A+ Content modules, interactive Brand Story carousels, and multi-page Amazon Storefront architectures.
+- [Graphic Design & Merchandising](https://amzcoz.com/services/graphic-design-merchandising): 7-image listing sequence, 3D CAD product rendering, technical infographics, and packaging adaptation.
+
+### 4. Web & D2C Engineering
+- [Custom Website Development](https://amzcoz.com/services/website-development): Modern React, Next.js, and TypeScript headless web development optimized for sub-second load times and 95+ Core Web Vitals.
+- [Shopify & WooCommerce Development](https://amzcoz.com/services/shopify-woocommerce-development): Custom Liquid themes, app rationalization, checkout conversion rate optimization, and zero-downtime store migrations.
+
+### 5. Specialized Growth
+- [Review & Sentiment Defense](https://amzcoz.com/services/review-sentiment-defense): 24/7 customer sentiment monitoring, Amazon Vine program governance, policy-violating review removals, and defect root-cause analysis.
+- [Influencer Marketing](https://amzcoz.com/services/influencer-marketing): Creator discovery, contract management, whitelisted paid ad amplification, and revenue tracking across India, UAE (Dubai), and Kuwait.
+- [FMCG Marketing & Rapid Turnaround](https://amzcoz.com/services/fmcg-marketing): Packaged goods unit-economics modeling, multi-packs, Subscribe & Save retention loops, and quick commerce dark store penetration.
+
+## Official Brand Links
+- Main Website: https://amzcoz.com/
+- About The Agency: https://amzcoz.com/about
+- Capabilities Hub: https://amzcoz.com/services
+- Client Work & Portfolio: https://amzcoz.com/portfolio
+- Contact & Strategy Booking: https://amzcoz.com/contact
