@@ -383,7 +383,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     deliverables: [
       {
         title: "Multi-Platform Quick Commerce Onboarding",
-        desc: "End-to-end listing approvals, vendor code setups, and catalogue indexing across Blinkit, Zepto, and Swiggy Instamart.",
+        desc: "End-to-end listing approvals, catalog setups, and catalogue indexing across Blinkit, Zepto, and Swiggy Instamart.",
       },
       {
         title: "Hyper-Local Dark Store Inventory Allocation",
@@ -412,7 +412,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       { metric: "<12%", label: "Blended Advertising Cost", desc: "Targeted in-app promotional ROAS delivering high bottom-line contribution." },
     ],
     processSteps: [
-      { step: 1, title: "Category Feasibility & Vendor Code Setup", desc: "Evaluate product unit economics, shelf life, and fast-moving package formats." },
+      { step: 1, title: "Category Feasibility & Catalog Setup", desc: "Evaluate product unit economics, shelf life, and fast-moving package formats." },
       { step: 2, title: "Mother Hub Inwarding & Pincode Mapping", desc: "Route bulk shipments into Blinkit, Zepto, and Instamart regional distribution centers." },
       { step: 3, title: "In-App Visibility & Boost Campaigns", desc: "Ignite search keywords, category tile sponsorships, and cart upsell placements." },
       { step: 4, title: "Dark Store Replenishment Modeling", desc: "Automate dynamic PO generation based on localized SKU consumption velocity." },
@@ -443,24 +443,24 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     category: "Marketplaces & Q-Commerce",
     badge: "Blinkit Ecosystem Specialists",
     metaTitle: "Blinkit Account Management & Brand Advertising Agency India",
-    metaDescription: "Accelerate your brand on Blinkit. Expert account management, vendor onboarding, Brand Booster advertising, dark store replenishment, and category expansion.",
+    metaDescription: "Accelerate your brand on Blinkit. Expert account management, catalog optimization, Brand Booster advertising, dark store replenishment, and category expansion.",
     primaryH1: "Blinkit Account Management & Brand Growth Agency",
     targetKeywords: {
       primary: ["blinkit account management", "blinkit seller services", "blinkit brand advertising"],
       secondary: ["blinkit growth agency", "blinkit advertising agency", "how to sell on blinkit"],
-      longTail: ["blinkit brand booster campaign management", "scale brand on blinkit india", "blinkit vendor central onboarding agency"],
+      longTail: ["blinkit brand booster campaign management", "scale brand on blinkit india", "blinkit brand booster agency"],
     },
     executiveSummary:
-      "As India's quick commerce leader owned by Eternal (Zomato), Blinkit commands massive customer frequency and basket sizes. AMZCOZ manages full brand operations on Blinkit: vendor onboarding, mother warehouse inwarding, in-app Brand Booster advertising, and shelf-space share of voice.",
+      "As India's quick commerce leader owned by Eternal (Zomato), Blinkit commands massive customer frequency and basket sizes. AMZCOZ manages full brand operations on Blinkit: catalog onboarding, mother warehouse inwarding, in-app Brand Booster advertising, and shelf-space share of voice.",
     heroHighlights: [
-      "Fast-track Blinkit vendor registration and catalog approval",
+      "Fast-track Blinkit catalog approval and listing creation",
       "Blinkit Brand Booster ad campaign optimization for superior ROAS",
       "Dynamic replenishment alerts across regional Blinkit Mother Hubs",
       "Continuous digital shelf presence auditing across Tier-1 urban clusters",
     ],
     deliverables: [
       {
-        title: "Blinkit Vendor Central Operations",
+        title: "Blinkit Catalog & Inventory Operations",
         desc: "Complete operational management including PO processing, ASN generation, appointment scheduling, and warehouse dispatch coordination.",
       },
       {
@@ -481,7 +481,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
       {
         title: "Payout Audit & Shortage Claims",
-        desc: "Auditing POD (Proof of Delivery) receipts against vendor invoices to reconcile payment shortages and return disputes.",
+        desc: "Auditing POD (Proof of Delivery) receipts against merchant invoices to reconcile payment shortages and return disputes.",
       },
     ],
     benefits: [
@@ -498,7 +498,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     faqs: [
       {
         question: "How do brands get listed on Blinkit?",
-        answer: "Brands must secure an approved vendor agreement with Blinkit category managers, complete FSSAI/trademark verification, set up Vendor Central, and deliver inventory to regional mother warehouses.",
+        answer: "Brands must secure category approval with Blinkit category managers, complete FSSAI/trademark verification, set up brand catalog access, and deliver inventory to regional mother warehouses.",
       },
       {
         question: "What is Blinkit Brand Booster?",
@@ -509,7 +509,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
         answer: "We track sell-through rates across regional mother hubs and coordinate timely replenishment purchase orders to ensure dark stores never run out of stock.",
       },
     ],
-    platformsSupported: ["Blinkit Vendor Central", "Blinkit Brand Booster"],
+    platformsSupported: ["Blinkit Partner Portal", "Blinkit Brand Booster"],
     relatedServiceSlugs: ["quick-commerce-growth", "zepto-growth-services", "swiggy-instamart-growth", "fmcg-marketing"],
   },
 
@@ -531,15 +531,15 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     executiveSummary:
       "Zepto is a high-growth powerhouse in India's quick commerce landscape, catering to millions of premium urban households. AMZCOZ guides brands through Zepto's onboarding ecosystem, inventory distribution to Zepto Hubs, and high-impact Zepto Ads to drive hyper-fast sales velocity.",
     heroHighlights: [
-      "Strategic Zepto vendor onboarding and catalog verification",
+      "Strategic Zepto catalog onboarding and listing verification",
       "Zepto Ads campaign management maximizing ROAS and brand visibility",
       "Continuous micro dark-store stock level tracking and OOS prevention",
       "Promotional planning for Zepto Pass subscribers and weekend shopping peaks",
     ],
     deliverables: [
       {
-        title: "Zepto Vendor Portal Management",
-        desc: "Complete vendor administration, SKU creation, asset uploads, and barcode/GRN compliance.",
+        title: "Zepto Partner & Ads Management",
+        desc: "Complete catalog administration, SKU creation, asset uploads, and barcode/GRN compliance.",
       },
       {
         title: "Zepto Sponsored Product Ads",
@@ -576,7 +576,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     faqs: [
       {
         question: "How do brands partner with Zepto?",
-        answer: "Brands submit company documents, trade licenses, GST, and FSSAI credentials to Zepto category merchandising teams, followed by vendor agreement sign-off and warehouse delivery scheduling.",
+        answer: "Brands submit company documents, trade licenses, GST, and FSSAI credentials to Zepto category merchandising teams, followed by brand onboarding and warehouse delivery scheduling.",
       },
       {
         question: "What advertising options exist on Zepto?",
@@ -587,7 +587,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
         answer: "We analyze hourly purchase velocity, implement dayparting bids during morning and evening rush hours, and focus spend on SKUs with strong dark-store stock depth.",
       },
     ],
-    platformsSupported: ["Zepto Vendor Hub", "Zepto Ads"],
+    platformsSupported: ["Zepto Partner Hub", "Zepto Ads"],
     relatedServiceSlugs: ["quick-commerce-growth", "blinkit-growth-services", "swiggy-instamart-growth", "fmcg-marketing"],
   },
 
@@ -599,11 +599,11 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     category: "Marketplaces & Q-Commerce",
     badge: "Swiggy Commerce Partners",
     metaTitle: "Swiggy Instamart Growth Services & Account Management | Amzcoz",
-    metaDescription: "Grow your brand on Swiggy Instamart. Professional vendor management, Instamart in-app ads, dark store allocation, and hyper-local retail optimization.",
+    metaDescription: "Grow your brand on Swiggy Instamart. Professional brand growth management, Instamart in-app ads, dark store allocation, and hyper-local retail optimization.",
     primaryH1: "Swiggy Instamart Brand Growth & Advertising Agency",
     targetKeywords: {
       primary: ["swiggy instamart seller services", "swiggy instamart growth", "quick commerce brand growth"],
-      secondary: ["instamart vendor management", "swiggy instamart advertising", "how to sell on instamart"],
+      secondary: ["instamart brand management", "swiggy instamart advertising", "how to sell on instamart"],
       longTail: ["scale consumer brand on swiggy instamart", "swiggy instamart listing optimization", "instamart dark store replenishment agency"],
     },
     executiveSummary:
@@ -616,7 +616,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     ],
     deliverables: [
       {
-        title: "Instamart Vendor Onboarding & Cataloging",
+        title: "Instamart Brand Onboarding & Cataloging",
         desc: "Complete documentation handling, product taxonomy mapping, high-res visual assets, and ingredient/nutrition compliance.",
       },
       {
@@ -646,14 +646,14 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       { metric: "95%+", label: "Order Fill Rate", desc: "Maintained through synchronized warehouse dispatch workflows." },
     ],
     processSteps: [
-      { step: 1, title: "Category Feasibility & Vendor Code Setup", desc: "Align SKU margins with Swiggy commercial terms and finalize vendor agreements." },
+      { step: 1, title: "Category Feasibility & Commercial Setup", desc: "Align SKU margins with Swiggy commercial terms and finalize brand onboarding." },
       { step: 2, title: "Inbound Logistics & ASN Generation", desc: "Ship stock to regional Swiggy hubs with compliance-grade packaging and barcodes." },
       { step: 3, title: "In-App Search Ad Activation", desc: "Deploy bids across top search queries and target relevant food & beverage affinities." },
       { step: 4, title: "Pincode Performance Tuning", desc: "Identify top-performing pin codes and reallocate marketing budgets to match demand." },
     ],
     faqs: [
       {
-        question: "How does Swiggy Instamart vendor distribution work?",
+        question: "How does Swiggy Instamart distribution work?",
         answer: "Brands ship bulk inventory to Swiggy mother distribution centers (hubs). Swiggy's internal logistics then distributes stock to local micro-dark stores for 10-to-15 minute consumer delivery.",
       },
       {
@@ -662,7 +662,7 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
       },
       {
         question: "What is the difference between Blinkit, Zepto, and Instamart?",
-        answer: "While all three offer rapid 10-to-15 minute delivery, their dark store geographies, user demographics, ad platforms, and vendor terms differ. AMZCOZ crafts unified strategies optimized for each platform's unique dynamics.",
+        answer: "While all three offer rapid 10-to-15 minute delivery, their dark store geographies, user demographics, ad platforms, and commercial terms differ. AMZCOZ crafts unified strategies optimized for each platform's unique dynamics.",
       },
     ],
     platformsSupported: ["Swiggy Instamart Partner Portal", "Swiggy Ads"],

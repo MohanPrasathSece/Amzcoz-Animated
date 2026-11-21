@@ -213,7 +213,7 @@ export default function LandingPage() {
               "Marketplace Account Management",
               "Quick Commerce Growth",
               "Amazon Seller Operations",
-              "Blinkit Vendor Management",
+              "Blinkit Growth & Advertising",
               "Zepto Brand Booster Ads",
               "Swiggy Instamart Acceleration",
               "Amazon PPC & Marketplace Advertising",
