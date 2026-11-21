@@ -60,6 +60,7 @@ import shaykha3dLifestyle from "@/assets/showcase_works/shaykha_3d_lifestyle.png
 import shaykhaPalette from "@/assets/showcase_works/shaykha_palette.png";
 import shaykhaHangtag from "@/assets/showcase_works/shaykha_hangtag.png";
 import shaykhaApparel from "@/assets/showcase_works/shaykha_apparel.png";
+import shaykhaTagsSuite from "@/assets/showcase_works/shaykha_tags_suite.jpg";
 
 /* ------------------- SHOWCASE DELIVERABLES (SEPARATE WEB & BRANDING) ------------------- */
 export interface ShowcaseItem {
@@ -162,6 +163,14 @@ export const BRANDING_WORKS: ShowcaseItem[] = [
     badge: "Garment Branding",
     badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/25",
     image: shaykhaApparel,
+  },
+  {
+    id: "brand-tags-suite",
+    title: "Woven Label, Care Tag & Kraft Packaging Suite",
+    categoryTag: "Embroidered Woven Patch · Satin Care Label · Kraft Tag",
+    badge: "Garment Packaging Suite",
+    badgeColor: "text-rose-400 bg-rose-500/10 border-rose-500/25",
+    image: shaykhaTagsSuite,
   },
 ];
 
