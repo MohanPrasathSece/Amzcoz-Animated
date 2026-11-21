@@ -67,6 +67,7 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
   const [visible, setVisible] = useState(true);
   const [videoSrc, setVideoSrc] = useState(getActiveVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const finishTriggered = useRef(false);
 
   // Dynamically adapt if screen orientation or width changes
   useEffect(() => {
@@ -78,14 +79,15 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
   }, []);
 
   const handleFinish = useCallback(() => {
-    if (fading) return;
+    if (finishTriggered.current) return;
+    finishTriggered.current = true;
     markIntroSeen();
     setFading(true);
     setTimeout(() => {
       setVisible(false);
       onComplete();
-    }, 600);
-  }, [fading, onComplete]);
+    }, 500);
+  }, [onComplete]);
 
   useEffect(() => {
     if (hasSeenIntro()) {
@@ -101,15 +103,18 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay policy fallback
+          // Autoplay policy fallback: dismiss cleanly so user is never stuck
+          handleFinish();
         });
       }
     }
 
-    // Safety timeout so user is never stuck
+    // Responsive safety timeout: mobile video is 4.05s, desktop is ~6s
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const safetyMs = isMobile ? 4400 : 7000;
     const safetyTimer = setTimeout(() => {
       handleFinish();
-    }, 10000);
+    }, safetyMs);
 
     return () => clearTimeout(safetyTimer);
   }, [handleFinish, onComplete]);
@@ -118,8 +123,10 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-700 pointer-events-auto ${fading ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
+      onClick={handleFinish}
+      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-500 cursor-pointer ${
+        fading ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+      }`}
     >
       <video
         ref={videoRef}
@@ -130,15 +137,30 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
         playsInline
         preload="auto"
         onEnded={handleFinish}
-        className="w-full h-full object-cover"
+        onTimeUpdate={(e) => {
+          const v = e.currentTarget;
+          if (v.duration && v.currentTime >= v.duration - 0.25) {
+            handleFinish();
+          }
+        }}
+        onPause={(e) => {
+          const v = e.currentTarget;
+          if (v.duration && v.currentTime > 1.8) {
+            handleFinish();
+          }
+        }}
+        className="w-full h-full object-cover pointer-events-none"
       />
 
       {/* Skip button for instant user control */}
       <button
-        onClick={handleFinish}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleFinish();
+        }}
         type="button"
         aria-label="Skip landing animation"
-        className="absolute bottom-6 right-6 z-20 px-4 py-2 rounded-full bg-black/60 hover:bg-black/85 text-xs text-white/80 hover:text-white border border-white/20 transition cursor-pointer backdrop-blur-md flex items-center gap-1.5 shadow-2xl active:scale-95"
+        className="absolute top-5 right-5 sm:bottom-6 sm:right-6 sm:top-auto z-30 px-4 py-2 rounded-full bg-black/70 hover:bg-black/90 text-xs text-white/90 hover:text-white border border-white/20 transition cursor-pointer backdrop-blur-md flex items-center gap-1.5 shadow-2xl active:scale-95"
       >
         <span>Skip Intro</span>
         <span>→</span>
@@ -273,16 +295,16 @@ function Hero({ ready = true }: { ready?: boolean }) {
 
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
-      {/* Layer 1: WebGL Canvas Shader (Desktop) */}
-      <canvas id="hero-shader" className="hero-shader-canvas" />
+      {/* Layer 1: WebGL Canvas Shader (Desktop Only) */}
+      <canvas id="hero-shader" className="hero-shader-canvas hidden md:block" />
 
-      {/* Layer 2: Glow Orbs */}
-      <div className="hero-glow-orb-left" />
-      <div className="hero-glow-orb-right" />
-      <div className="hero-glow-orb-bottom" />
+      {/* Layer 2: Glow Orbs (Desktop Only) */}
+      <div className="hero-glow-orb-left hidden md:block" />
+      <div className="hero-glow-orb-right hidden md:block" />
+      <div className="hero-glow-orb-bottom hidden md:block" />
 
-      {/* Layer 3: Vignette */}
-      <div className="hero-vignette" />
+      {/* Layer 3: Vignette (Desktop Only) */}
+      <div className="hero-vignette hidden md:block" />
 
       {/* Hero Content */}
       <div className="relative z-20 mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 md:gap-7 px-4 sm:px-6 min-h-[85vh] md:min-h-screen pt-24 pb-14 md:pt-32 md:pb-16">

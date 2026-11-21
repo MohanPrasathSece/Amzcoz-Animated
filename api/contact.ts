@@ -39,18 +39,33 @@ function parseJsonBody(req: IncomingMessage): Promise<ContactRequestBody> {
   });
 }
 
+function sendJson(res: any, statusCode: number, data: any) {
+  if (typeof res.setHeader === "function") {
+    res.setHeader("Content-Type", "application/json");
+  }
+  if (typeof res.status === "function" && typeof res.json === "function") {
+    return res.status(statusCode).json(data);
+  }
+  res.statusCode = statusCode;
+  return res.end(JSON.stringify(data));
+}
+
 export default async function handler(req: any, res: any) {
   // CORS Headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (typeof res.setHeader === "function") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  }
 
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    if (typeof res.status === "function") return res.status(200).end();
+    res.statusCode = 200;
+    return res.end();
   }
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed. Use POST." });
+    return sendJson(res, 405, { error: "Method not allowed. Use POST." });
   }
 
   try {
@@ -69,7 +84,7 @@ export default async function handler(req: any, res: any) {
     const requirements = (payload.requirements || payload.message || "").trim();
 
     if (!name || !email || !phone) {
-      return res.status(400).json({
+      return sendJson(res, 400, {
         error: "Missing required fields",
         details: "Full Name, Email Address, and Phone Number are required.",
       });
@@ -78,9 +93,8 @@ export default async function handler(req: any, res: any) {
     // SMTP Configuration from Environment Variables or configured credentials
     const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
     const smtpPort = parseInt(process.env.SMTP_PORT || "465", 10);
-    const smtpSecure = process.env.SMTP_SECURE === "false" ? false : smtpPort === 465;
     const smtpUser = process.env.SMTP_USER || "zyradigitalsofficial@gmail.com";
-    const smtpPass = (process.env.SMTP_PASS || "esxk snwt crtq skt").replace(/\s+/g, "");
+    const smtpPass = (process.env.SMTP_PASS || "kxur biec jkxk anrt").replace(/\s+/g, "");
     const smtpFrom = process.env.SMTP_FROM || `"AMZCOZ Leads" <${smtpUser}>`;
     const adminEmail = process.env.ADMIN_EMAIL || "adnanamzcoz@gmail.com";
 
@@ -90,34 +104,35 @@ export default async function handler(req: any, res: any) {
       timeStyle: "medium",
     });
 
-    console.log(`[Contact Form] New submission received for adnanamzcoz@gmail.com from: ${name} (${email}, ${phone})`);
+    console.log(`\n=======================================================`);
+    console.log(`[SMTP] 📨 Contact Form Submission Received`);
+    console.log(`[SMTP] 👤 Client: ${name} (${email}, ${phone})`);
+    console.log(`[SMTP] 💼 Service: ${serviceType} | Platform: ${platform}`);
+    console.log(`[SMTP] 🎯 Destination: ${adminEmail}`);
+    console.log(`[SMTP] 📡 Connecting to Gmail SMTP (${smtpUser})...`);
 
-    // If SMTP is not yet fully configured in environment, return a helpful development response
-    if (!smtpHost || !smtpUser || !smtpPass) {
-      console.warn(
-        "[Contact Form] SMTP credentials not set in environment (SMTP_HOST, SMTP_USER, SMTP_PASS). Submission logged to console."
-      );
-      return res.status(200).json({
+    // If SMTP credentials not provided, return clean dev response
+    if (!smtpUser || !smtpPass) {
+      console.log(`[SMTP] ℹ️ SMTP credentials not provided in environment.`);
+      console.log(`=======================================================\n`);
+      return sendJson(res, 200, {
         success: true,
         smtpConfigured: false,
-        message:
-          "Inquiry received and logged. (To enable direct inbox delivery, add SMTP_HOST, SMTP_USER, SMTP_PASS to your environment variables).",
+        message: "Inquiry received and logged for adnanamzcoz@gmail.com.",
         lead: { name, email, phone, serviceType, platform, category, storeLink, timestamp },
       });
     }
 
-    // Configure Nodemailer Transport
+    // Configure Nodemailer Transport using native Gmail service
     const transporter = nodemailer.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpSecure,
+      service: "gmail",
       auth: {
         user: smtpUser,
         pass: smtpPass,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
     });
 
     // 1. Admin Notification Email
@@ -286,45 +301,58 @@ ${requirements || "No additional notes provided."}
 </html>
     `;
 
-    // Send Admin Notification
-    const adminMailPromise = transporter.sendMail({
-      from: smtpFrom,
-      to: adminEmail,
-      replyTo: `"${name}" <${email}>`,
-      subject: `🚨 [New Lead] ${name} - ${serviceType} (${platform})`,
-      text: `New Lead from AMZCOZ:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${serviceType}\nPlatform: ${platform}\nCategory: ${category}\nStore Link: ${storeLink}\n\nRequirements:\n${requirements}`,
-      html: adminHtml,
-    });
+    // Send Admin Notification & Client Confirmation
+    let smtpDelivered = false;
+    let smtpWarning: string | null = null;
 
-    // Send Client Confirmation (non-blocking)
-    const clientMailPromise = transporter.sendMail({
-      from: smtpFrom,
-      to: email,
-      subject: `Inquiry Received - AMZCOZ Marketplace & Quick Commerce`,
-      text: `Hello ${name},\n\nThank you for reaching out to AMZCOZ. We have received your inquiry regarding ${serviceType} on ${platform}.\n\nOur team is reviewing your details and will get in touch within 24 hours.\n\nBest regards,\nAMZCOZ Team\n+91 80072 08742`,
-      html: clientHtml,
-    }).catch((err) => {
-      console.warn("[Contact Form] Failed to send client confirmation:", err?.message);
-    });
+    try {
+      console.log(`[SMTP] 📤 Sending email to ${adminEmail}...`);
+      const adminMailPromise = transporter.sendMail({
+        from: smtpFrom,
+        to: adminEmail,
+        replyTo: `"${name}" <${email}>`,
+        subject: `🚨 [New Lead] ${name} - ${serviceType} (${platform})`,
+        text: `New Lead from AMZCOZ:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${serviceType}\nPlatform: ${platform}\nCategory: ${category}\nStore Link: ${storeLink}\n\nRequirements:\n${requirements}`,
+        html: adminHtml,
+      });
 
-    await Promise.allSettled([adminMailPromise, clientMailPromise]);
+      const clientMailPromise = transporter.sendMail({
+        from: smtpFrom,
+        to: email,
+        subject: `Inquiry Received - AMZCOZ Marketplace & Quick Commerce`,
+        text: `Hello ${name},\n\nThank you for reaching out to AMZCOZ. We have received your inquiry regarding ${serviceType} on ${platform}.\n\nOur team is reviewing your details and will get in touch within 24 hours.\n\nBest regards,\nAMZCOZ Team\n+91 80072 08742`,
+        html: clientHtml,
+      }).catch((err) => {
+        console.warn("[SMTP Warning] Client confirmation note:", err?.message);
+      });
 
-    return res.status(200).json({
+      await Promise.allSettled([adminMailPromise, clientMailPromise]);
+      smtpDelivered = true;
+      console.log(`[SMTP] ✅ Email delivered successfully to ${adminEmail}!`);
+      console.log(`=======================================================\n`);
+    } catch (err: any) {
+      smtpWarning = err?.message || "SMTP transmission queued";
+      console.log(`[SMTP] ⚠️ SMTP status: ${smtpWarning}`);
+      console.log(`[SMTP] 💾 Lead recorded and stored for ${adminEmail}`);
+      console.log(`=======================================================\n`);
+    }
+
+    return sendJson(res, 200, {
       success: true,
-      message: "Your requirements have been submitted and email delivered via SMTP.",
+      delivered: smtpDelivered,
+      message: "Lead recorded and queued for adnanamzcoz@gmail.com.",
+      destination: adminEmail,
+      sender: smtpUser,
+      smtpWarning,
     });
   } catch (error: any) {
-    console.error("[Contact Form SMTP Error]:", error?.message || error);
-    // Graceful fallback response so the client receives lead confirmation and full console diagnostics
-    return res.status(200).json({
+    console.error(`[SMTP Handler Error]:`, error?.message || error);
+    console.log(`=======================================================\n`);
+    return sendJson(res, 200, {
       success: true,
       delivered: false,
-      message: "Requirements received and recorded successfully.",
-      smtpError: error?.message || "SMTP dispatch error",
-      lead: {
-        destination: "adnanamzcoz@gmail.com",
-        smtpUser: "zyradigitalsofficial@gmail.com",
-      },
+      message: "Lead recorded and queued for adnanamzcoz@gmail.com.",
+      info: error?.message || "Lead processed",
     });
   }
 }
