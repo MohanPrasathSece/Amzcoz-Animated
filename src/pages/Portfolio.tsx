@@ -58,9 +58,12 @@ import dripReports from "@/assets/showcase_works/drip_reports.jpg";
 import shaykhaShowcase from "@/assets/showcase_works/shaykha_showcase.png";
 import shaykha3dLifestyle from "@/assets/showcase_works/shaykha_3d_lifestyle.png";
 import shaykhaPalette from "@/assets/showcase_works/shaykha_palette.png";
-import shaykhaHangtag from "@/assets/showcase_works/shaykha_hangtag.png";
+import shaykhaSoapSleeve from "@/assets/showcase_works/shaykha_soap_sleeve.jpg";
 import shaykhaApparel from "@/assets/showcase_works/shaykha_apparel.png";
 import shaykhaTagsSuite from "@/assets/showcase_works/shaykha_tags_suite.jpg";
+import shaykhaBodyscrubJar from "@/assets/showcase_works/shaykha_bodyscrub_jar.jpg";
+import shaykhaSoapLabel from "@/assets/showcase_works/shaykha_soap_label.jpg";
+import shaykhaBodywashLabel from "@/assets/showcase_works/shaykha_bodywash_label.jpg";
 
 /* ------------------- SHOWCASE DELIVERABLES (SEPARATE WEB & BRANDING) ------------------- */
 export interface ShowcaseItem {
@@ -70,6 +73,9 @@ export interface ShowcaseItem {
   badge: string;
   badgeColor: string;
   image: string;
+  objectFit?: "cover" | "contain";
+  containerBg?: string;
+  imageScale?: string;
 }
 
 export const WEBSITE_WORKS: ShowcaseItem[] = [
@@ -149,12 +155,12 @@ export const BRANDING_WORKS: ShowcaseItem[] = [
     image: shaykhaPalette,
   },
   {
-    id: "brand-hangtag",
-    title: "350 GSM Kraft Hang Tag & Packaging",
-    categoryTag: "Debossed Gold Foil & Sadu Border Print",
-    badge: "Print & Packaging",
+    id: "brand-soap-sleeve",
+    title: "Luxury Soap Box Sleeve & Belly Band",
+    categoryTag: "Embroidered Gold & Sadu Weave Packaging Band",
+    badge: "Box Sleeve Packaging",
     badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
-    image: shaykhaHangtag,
+    image: shaykhaSoapSleeve,
   },
   {
     id: "brand-apparel",
@@ -171,6 +177,36 @@ export const BRANDING_WORKS: ShowcaseItem[] = [
     badge: "Garment Packaging Suite",
     badgeColor: "text-rose-400 bg-rose-500/10 border-rose-500/25",
     image: shaykhaTagsSuite,
+  },
+  {
+    id: "brand-bodyscrub-jar",
+    title: "Body Scrub Luxury Jar & 3D Packshot",
+    categoryTag: "Custom Jar Packaging · Embroidered Heritage Label",
+    badge: "Cosmetic Packshot",
+    badgeColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/25",
+    image: shaykhaBodyscrubJar,
+    objectFit: "contain",
+    containerBg: "bg-[#cfc8c2]",
+    imageScale: "scale-[1.28] group-hover:scale-[1.34]",
+  },
+  {
+    id: "brand-soap-label",
+    title: "Oud & Rose Soap Packaging Label",
+    categoryTag: "100g Handmade Soap · Textured Kraft & Sadu Weave",
+    badge: "Product Label Design",
+    badgeColor: "text-amber-400 bg-amber-500/10 border-amber-500/25",
+    image: shaykhaSoapLabel,
+  },
+  {
+    id: "brand-bodywash-label",
+    title: "Arabian Oud Body Wash Label Design",
+    categoryTag: "300ml Bottle Decal · Argan & Rose Water Typography",
+    badge: "Skincare Packaging",
+    badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
+    image: shaykhaBodywashLabel,
+    objectFit: "contain",
+    containerBg: "bg-black",
+    imageScale: "scale-[1.18] group-hover:scale-[1.24]",
   },
 ];
 
@@ -860,11 +896,15 @@ export default function PortfolioPage() {
                     }
                     className="group rounded-2xl surface-glass border border-white/10 overflow-hidden cursor-pointer hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 flex flex-col"
                   >
-                    <div className="relative aspect-[16/10] bg-black/60 overflow-hidden">
+                    <div className={`relative aspect-[16/10] overflow-hidden ${item.containerBg || "bg-black/60"}`}>
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className={`w-full h-full transition-transform duration-500 ${item.imageScale
+                          ? item.imageScale
+                          : "group-hover:scale-105"
+                          } ${item.objectFit === "contain" ? "object-contain" : "object-cover"
+                          }`}
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -927,11 +967,15 @@ export default function PortfolioPage() {
                     }
                     className="group rounded-2xl surface-glass border border-white/10 overflow-hidden cursor-pointer hover:border-amber-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col"
                   >
-                    <div className="relative aspect-[16/10] bg-black/60 overflow-hidden">
+                    <div className={`relative aspect-[16/10] overflow-hidden ${item.containerBg || "bg-black/60"}`}>
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className={`w-full h-full transition-transform duration-500 ${item.imageScale
+                          ? item.imageScale
+                          : "group-hover:scale-105"
+                          } ${item.objectFit === "contain" ? "object-contain" : "object-cover"
+                          }`}
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
