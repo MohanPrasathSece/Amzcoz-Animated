@@ -247,6 +247,9 @@
   }
 
   @media (max-width: 767px) {
+    .hero-shader-canvas {
+      opacity: 0.92;
+    }
     /* Hide heavy glow orbs on mobile (WebGL shader handles the background) */
     .hero-glow-orb-left,
     .hero-glow-orb-right,

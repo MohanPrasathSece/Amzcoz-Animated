@@ -77,7 +77,7 @@ export function initHeroShader(canvasId = 'hero-shader') {
       mouse.x *= aspect;
 
       float d = distance(st, mouse);
-      float mousePush = smoothstep(0.7, 0.0, d) * 0.45;
+      float mousePush = smoothstep(0.7, 0.0, d) * 0.75;
       float t = uTime * 0.12;
 
       vec2 p = st * 1.3 - vec2(0.5 * aspect, 0.4);
@@ -167,14 +167,21 @@ export function initHeroShader(canvasId = 'hero-shader') {
     { passive: true },
   );
 
-  // Touch support so the shader reacts to finger drag on mobile
+  // Touch support so the shader reacts to finger tap/drag on mobile
   const onTouchMove = (e: TouchEvent) => {
     if (e.touches.length > 0) {
       targetMouseX = e.touches[0].clientX;
       targetMouseY = window.innerHeight - e.touches[0].clientY;
     }
   };
+  const onTouchStart = (e: TouchEvent) => {
+    if (e.touches.length > 0) {
+      targetMouseX = e.touches[0].clientX;
+      targetMouseY = window.innerHeight - e.touches[0].clientY;
+    }
+  };
   window.addEventListener('touchmove', onTouchMove, { passive: true });
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
 
   function resize() {
     const parent = canvas.parentElement;

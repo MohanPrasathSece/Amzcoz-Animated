@@ -303,7 +303,7 @@ function Hero({ ready = true }: { ready?: boolean }) {
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
       {/* Layer 1: WebGL Canvas Shader (Desktop Only) */}
-      <canvas id="hero-shader" className="hero-shader-canvas hidden md:block" />
+      <canvas id="hero-shader" className="hero-shader-canvas block" />
 
       {/* Layer 2: Glow Orbs (Desktop Only) */}
       <div className="hero-glow-orb-left hidden md:block" />
