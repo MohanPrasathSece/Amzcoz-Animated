@@ -247,18 +247,13 @@
   }
 
   @media (max-width: 767px) {
-    /* Hide heavy WebGL canvas, glow orbs, and all hero effects on mobile */
-    .hero-shader-canvas,
+    /* Hide heavy glow orbs on mobile (WebGL shader handles the background) */
     .hero-glow-orb-left,
     .hero-glow-orb-right,
     .hero-glow-orb-bottom,
     .hero-vignette {
       display: none !important;
       animation: none !important;
-    }
-
-    .hero-section {
-      background: oklch(0.09 0.012 270) !important;
     }
   }
 
@@ -325,6 +320,105 @@
       linear-gradient(to bottom, oklch(0.1 0.012 270 / 0.05) 0%, oklch(0.1 0.012 270 / 0.3) 60%, oklch(0.1 0.012 270 / 0.9) 100%);
     z-index: 1;
     pointer-events: none;
+  }
+
+  /* ========== MOBILE HERO AURORA (GPU-composited, lag-free, touch-interactive) ========== */
+  .hero-mobile-aurora {
+    position: absolute;
+    inset: -8%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    display: none;
+    transform: translate3d(calc(var(--mx, 0) * 50px), calc(var(--my, 0) * 50px), 0);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  @media (max-width: 767px) {
+    .hero-mobile-aurora {
+      display: block;
+    }
+  }
+
+  .hero-mobile-blob {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
+  .hero-mobile-blob-1 {
+    width: 80vw;
+    height: 80vw;
+    max-width: 420px;
+    max-height: 420px;
+    top: -18%;
+    left: -18%;
+    background: radial-gradient(circle, oklch(0.7 0.28 258 / 0.85) 0%, oklch(0.65 0.26 262 / 0.5) 35%, oklch(0.6 0.24 265 / 0.18) 65%, transparent 80%);
+    filter: blur(38px);
+    animation: mobileAurora1 11s ease-in-out infinite;
+  }
+
+  .hero-mobile-blob-2 {
+    width: 72vw;
+    height: 72vw;
+    max-width: 380px;
+    max-height: 380px;
+    top: 8%;
+    right: -20%;
+    background: radial-gradient(circle, oklch(0.72 0.22 235 / 0.8) 0%, oklch(0.68 0.24 240 / 0.45) 35%, oklch(0.64 0.22 245 / 0.16) 65%, transparent 80%);
+    filter: blur(42px);
+    animation: mobileAurora2 13s ease-in-out infinite;
+  }
+
+  .hero-mobile-blob-3 {
+    width: 85vw;
+    height: 50vw;
+    max-width: 400px;
+    max-height: 260px;
+    bottom: -10%;
+    left: 50%;
+    background: radial-gradient(ellipse, oklch(0.68 0.26 268 / 0.7) 0%, oklch(0.64 0.22 272 / 0.38) 40%, oklch(0.62 0.2 275 / 0.14) 70%, transparent 85%);
+    filter: blur(46px);
+    animation: mobileAurora3 15s ease-in-out infinite;
+  }
+
+  /* Finger-following interactive glow orb — the visible "interactive" element */
+  .hero-mobile-finger {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.78 0.26 250 / 0.9) 0%, oklch(0.7 0.24 255 / 0.45) 35%, transparent 70%);
+    filter: blur(28px);
+    opacity: 0;
+    transform: translate3d(calc(var(--fx, -110px)), calc(var(--fy, -110px)), 0);
+    transition: opacity 0.35s ease, transform 0.18s ease-out;
+    will-change: transform, opacity;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-mobile-aurora.is-touching .hero-mobile-finger {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-mobile-aurora {
+      transform: none;
+      transition: none;
+    }
+    .hero-mobile-blob {
+      animation: none !important;
+    }
+    .hero-mobile-finger {
+      display: none;
+    }
   }
 
   /* ========== HERO BUTTON STYLES ========== */

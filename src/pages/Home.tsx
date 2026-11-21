@@ -20,12 +20,19 @@ import mobileLandingVideo from "@/assets/landing-page-animation-mobile.mp4";
 // Marketplace logos from src/assets/we_work_on_logos
 import ajioLogo from "@/assets/we_work_on_logos/ajio.png";
 import amazonLogo from "@/assets/we_work_on_logos/amazon.png";
+import amazonNowLogo from "@/assets/we_work_on_logos/amzaon now.png";
+import bigBasketLogo from "@/assets/we_work_on_logos/big basket.png";
 import blinkitLogo from "@/assets/we_work_on_logos/blinkit.png";
+import ebayLogo from "@/assets/we_work_on_logos/ebay.png";
+import etsyLogo from "@/assets/we_work_on_logos/etsy.png";
+import flipkartMinutesLogo from "@/assets/we_work_on_logos/flipkart minutes.png";
 import flipkartLogo from "@/assets/we_work_on_logos/flipkart.png";
 import instamartLogo from "@/assets/we_work_on_logos/instamart.png";
 import jiomartLogo from "@/assets/we_work_on_logos/jiomart.png";
 import meeshoLogo from "@/assets/we_work_on_logos/meesho.png";
 import myntraLogo from "@/assets/we_work_on_logos/mytra.png";
+import nykaaLogo from "@/assets/we_work_on_logos/nykaa.png";
+import walmartLogo from "@/assets/we_work_on_logos/walmart.png";
 import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -295,8 +302,8 @@ function Hero({ ready = true }: { ready?: boolean }) {
 
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
-      {/* Layer 1: WebGL Canvas Shader (Desktop Only) */}
-      <canvas id="hero-shader" className="hero-shader-canvas hidden md:block" />
+      {/* Layer 1: WebGL Canvas Shader (All screens) */}
+      <canvas id="hero-shader" className="hero-shader-canvas block" />
 
       {/* Layer 2: Glow Orbs (Desktop Only) */}
       <div className="hero-glow-orb-left hidden md:block" />
@@ -770,14 +777,21 @@ const MARKETPLACE_PLATFORMS = [
   { name: "Blinkit", logo: blinkitLogo },
   { name: "Zepto", logo: zeptoLogo },
   { name: "Swiggy Instamart", logo: instamartLogo },
+  { name: "BigBasket", logo: bigBasketLogo },
+  { name: "Flipkart Minutes", logo: flipkartMinutesLogo },
+  { name: "Amazon Now", logo: amazonNowLogo },
+  { name: "Nykaa", logo: nykaaLogo },
   { name: "Myntra", logo: myntraLogo },
   { name: "AJIO", logo: ajioLogo },
   { name: "JioMart", logo: jiomartLogo },
   { name: "Meesho", logo: meeshoLogo },
+  { name: "Walmart", logo: walmartLogo },
+  { name: "eBay", logo: ebayLogo },
+  { name: "Etsy", logo: etsyLogo },
 ];
 
 function MarketplacePlatformsMarquee() {
-  const marqueeItems = [...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS];
+  const marqueeItems = [...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS, ...MARKETPLACE_PLATFORMS];
 
   return (
     <Reveal>

@@ -1,8 +1,7 @@
 export function initHeroShader(canvasId = 'hero-shader') {
-  // Mobile devices use GPU-composited CSS aurora mesh to maintain locked 60-120fps with zero lag
-  if (typeof window !== 'undefined' && window.innerWidth < 768) {
-    return;
-  }
+  // Note: mobile is now supported. The shader applies mobile optimizations
+  // internally: DPR clamped to 0.55 (~80% fewer fragment evaluations) and
+  // render throttled to ~30-35fps to prevent CPU/GPU throttling on phones.
 
   const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
   if (!canvas) return;
@@ -22,8 +21,11 @@ export function initHeroShader(canvasId = 'hero-shader') {
     }
   `;
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const precision = isMobile ? 'mediump' : 'highp';
+
   const fsSource = `
-    precision highp float;
+    precision ${precision} float;
     varying vec2 vUv;
     uniform float uTime;
     uniform vec2 uResolution;
@@ -164,6 +166,15 @@ export function initHeroShader(canvasId = 'hero-shader') {
     },
     { passive: true },
   );
+
+  // Touch support so the shader reacts to finger drag on mobile
+  const onTouchMove = (e: TouchEvent) => {
+    if (e.touches.length > 0) {
+      targetMouseX = e.touches[0].clientX;
+      targetMouseY = window.innerHeight - e.touches[0].clientY;
+    }
+  };
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
 
   function resize() {
     const parent = canvas.parentElement;

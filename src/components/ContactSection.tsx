@@ -28,10 +28,17 @@ const PLATFORM_OPTIONS = [
   "Blinkit",
   "Zepto",
   "Swiggy Instamart",
+  "BigBasket",
+  "Flipkart Minutes",
+  "Amazon Now",
+  "Nykaa",
   "Myntra",
   "Ajio",
   "Jio Mart",
   "Meesho",
+  "Walmart",
+  "eBay",
+  "Etsy",
   "Other",
 ];
 
