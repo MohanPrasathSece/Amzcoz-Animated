@@ -339,9 +339,9 @@ function Hero({ ready = true }: { ready?: boolean }) {
           <Link to="/contact" className="hero-btn hero-btn-primary text-sm md:text-base px-6 py-3 font-semibold shadow-lg">
             Book Free Strategy Session
           </Link>
-          <a href="#services" className="hero-btn hero-btn-ghost text-sm md:text-base px-6 py-3 font-semibold">
+          <Link to="/services" className="hero-btn hero-btn-ghost text-sm md:text-base px-6 py-3 font-semibold">
             Explore Services
-          </a>
+          </Link>
         </div>
       </div>
     </section>
@@ -805,13 +805,13 @@ function MarketplacePlatformsMarquee() {
             {marqueeItems.map((p, idx) => (
               <div
                 key={idx}
-                className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[95px] sm:min-w-[124px] h-[36px] sm:h-[48px]"
+                className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[110px] sm:min-w-[124px] h-[44px] sm:h-[48px]"
                 title={p.name}
               >
                 <img
                   src={p.logo}
                   alt={p.name}
-                  className="max-h-3 sm:max-h-5 max-w-[65px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
+                  className="max-h-4 sm:max-h-5 max-w-[80px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
                   loading="lazy"
                 />
               </div>
