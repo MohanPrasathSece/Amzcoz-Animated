@@ -36,6 +36,7 @@ const PLATFORM_OPTIONS = [
   "Ajio",
   "Jio Mart",
   "Meesho",
+  "Noon",
   "Walmart",
   "eBay",
   "Etsy",

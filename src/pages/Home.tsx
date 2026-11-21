@@ -20,7 +20,7 @@ import mobileLandingVideo from "@/assets/landing-page-animation-mobile.mp4";
 // Marketplace logos from src/assets/we_work_on_logos
 import ajioLogo from "@/assets/we_work_on_logos/ajio.png";
 import amazonLogo from "@/assets/we_work_on_logos/amazon.png";
-import amazonNowLogo from "@/assets/we_work_on_logos/amzaon now.png";
+import amazonNowLogo from "@/assets/we_work_on_logos/amazon now.png";
 import bigBasketLogo from "@/assets/we_work_on_logos/big basket.png";
 import blinkitLogo from "@/assets/we_work_on_logos/blinkit.png";
 import ebayLogo from "@/assets/we_work_on_logos/ebay.png";
@@ -31,6 +31,7 @@ import instamartLogo from "@/assets/we_work_on_logos/instamart.png";
 import jiomartLogo from "@/assets/we_work_on_logos/jiomart.png";
 import meeshoLogo from "@/assets/we_work_on_logos/meesho.png";
 import myntraLogo from "@/assets/we_work_on_logos/mytra.png";
+import noonLogo from "@/assets/we_work_on_logos/noon.png";
 import nykaaLogo from "@/assets/we_work_on_logos/nykaa.png";
 import walmartLogo from "@/assets/we_work_on_logos/walmart.png";
 import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
@@ -131,9 +132,8 @@ function LandingVideoIntro({ onComplete }: { onComplete: () => void }) {
   return (
     <div
       onClick={handleFinish}
-      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-500 cursor-pointer ${
-        fading ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
-      }`}
+      className={`fixed inset-0 z-[10000] bg-black flex items-center justify-center transition-opacity duration-500 cursor-pointer ${fading ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+        }`}
     >
       <video
         ref={videoRef}
@@ -302,8 +302,8 @@ function Hero({ ready = true }: { ready?: boolean }) {
 
   return (
     <section ref={rootRef} className="hero-section relative overflow-hidden">
-      {/* Layer 1: WebGL Canvas Shader (All screens) */}
-      <canvas id="hero-shader" className="hero-shader-canvas block" />
+      {/* Layer 1: WebGL Canvas Shader (Desktop Only) */}
+      <canvas id="hero-shader" className="hero-shader-canvas hidden md:block" />
 
       {/* Layer 2: Glow Orbs (Desktop Only) */}
       <div className="hero-glow-orb-left hidden md:block" />
@@ -339,9 +339,9 @@ function Hero({ ready = true }: { ready?: boolean }) {
           <Link to="/contact" className="hero-btn hero-btn-primary text-sm md:text-base px-6 py-3 font-semibold shadow-lg">
             Book Free Strategy Session
           </Link>
-          <Link to="/services" className="hero-btn hero-btn-ghost text-sm md:text-base px-6 py-3 font-semibold">
+          <a href="#services" className="hero-btn hero-btn-ghost text-sm md:text-base px-6 py-3 font-semibold">
             Explore Services
-          </Link>
+          </a>
         </div>
       </div>
     </section>
@@ -785,6 +785,7 @@ const MARKETPLACE_PLATFORMS = [
   { name: "AJIO", logo: ajioLogo },
   { name: "JioMart", logo: jiomartLogo },
   { name: "Meesho", logo: meeshoLogo },
+  { name: "Noon", logo: noonLogo },
   { name: "Walmart", logo: walmartLogo },
   { name: "eBay", logo: ebayLogo },
   { name: "Etsy", logo: etsyLogo },
@@ -795,23 +796,23 @@ function MarketplacePlatformsMarquee() {
 
   return (
     <Reveal>
-      <div className="relative z-10 my-8 sm:my-10 md:my-14 py-3 sm:py-4 md:py-5 overflow-hidden border-y border-white/10 bg-white/[0.02]">
+      <div className="relative z-10 my-8 sm:my-10 md:my-14 py-3 sm:py-4 md:py-6 overflow-hidden border-y border-white/10 bg-white/[0.02]">
         <div className="relative w-full overflow-hidden">
           {/* Soft edge gradient fade */}
           <div className="absolute left-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-14 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-          <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-3 sm:gap-3.5 w-max">
+          <div className="animate-gpu-marquee-left animate-gpu-marquee-track flex gap-3 sm:gap-3.5 md:gap-4 w-max">
             {marqueeItems.map((p, idx) => (
               <div
                 key={idx}
-                className="inline-flex shrink-0 items-center justify-center px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[110px] sm:min-w-[124px] h-[44px] sm:h-[48px]"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-white shadow-sm hover:shadow-md transition-transform min-w-[112px] sm:min-w-[128px] md:min-w-[145px] h-[42px] sm:h-[48px] md:h-[56px] overflow-hidden px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5"
                 title={p.name}
               >
                 <img
                   src={p.logo}
                   alt={p.name}
-                  className="max-h-4 sm:max-h-5 max-w-[80px] sm:max-w-[92px] w-auto h-auto object-contain transition-transform hover:scale-105"
+                  className="w-full h-full object-contain transition-transform hover:scale-105"
                   loading="lazy"
                 />
               </div>
