@@ -33,6 +33,8 @@ import meeshoLogo from "@/assets/we_work_on_logos/meesho.png";
 import myntraLogo from "@/assets/we_work_on_logos/mytra.png";
 import noonLogo from "@/assets/we_work_on_logos/noon.png";
 import nykaaLogo from "@/assets/we_work_on_logos/nykaa.png";
+import snapchatLogo from "@/assets/we_work_on_logos/snapchat.png";
+import tiktokLogo from "@/assets/we_work_on_logos/tiktok.png";
 import walmartLogo from "@/assets/we_work_on_logos/walmart.png";
 import zeptoLogo from "@/assets/we_work_on_logos/zepto.png";
 
@@ -708,8 +710,8 @@ function ServicesSection() {
     },
     {
       title: "Marketplace & Performance Advertising",
-      desc: "High-yield campaigns on Amazon Sponsored Ads, Blinkit Brand Booster, and Meta/Google conversion funnels.",
-      tags: ["Amazon PPC", "Blinkit Ads", "ROAS Optimization"],
+      desc: "High-yield campaigns on Amazon Sponsored Ads, Blinkit Brand Booster, TikTok & Snapchat Ads, and Meta/Google conversion funnels.",
+      tags: ["Amazon PPC", "TikTok & Snap Ads", "ROAS Scaling"],
     },
     {
       title: "A+ Content & Brand Store Design",
@@ -786,6 +788,8 @@ const MARKETPLACE_PLATFORMS = [
   { name: "JioMart", logo: jiomartLogo },
   { name: "Meesho", logo: meeshoLogo },
   { name: "Noon", logo: noonLogo },
+  { name: "TikTok", logo: tiktokLogo },
+  { name: "Snapchat", logo: snapchatLogo },
   { name: "Walmart", logo: walmartLogo },
   { name: "eBay", logo: ebayLogo },
   { name: "Etsy", logo: etsyLogo },

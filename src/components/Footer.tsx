@@ -15,6 +15,8 @@ export function Footer() {
   const advertisingLinks = [
     { label: "Amazon PPC Management", href: "/services/amazon-ppc-management" },
     { label: "Marketplace Advertising", href: "/services/marketplace-advertising" },
+    { label: "TikTok Ads & TikTok Shop", href: "/services/tiktok-ads-marketing" },
+    { label: "Snapchat Ads Agency", href: "/services/snapchat-ads-marketing" },
     { label: "Google Ads & Shopping", href: "/services/google-ads-shopping" },
     { label: "Meta & Social Ads", href: "/services/social-media-meta-ads" },
     { label: "Review & Sentiment Defense", href: "/services/review-sentiment-defense" },

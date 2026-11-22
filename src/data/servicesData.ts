@@ -981,6 +981,162 @@ export const ALL_SERVICES: ServiceDetailItem[] = [
     relatedServiceSlugs: ["influencer-marketing", "google-ads-shopping", "shopify-woocommerce-development", "graphic-design-merchandising"],
   },
 
+  // TikTok Ads & TikTok Shop Marketing
+  {
+    slug: "tiktok-ads-marketing",
+    title: "TikTok Ads & TikTok Shop Marketing Services",
+    shortTitle: "TikTok Ads & Shop",
+    category: "Paid Media",
+    badge: "Viral Commerce & Creator Ads",
+    metaTitle: "TikTok Ads Agency India | TikTok Shop & Spark Ads Performance Marketing | Amzcoz",
+    metaDescription: "Scale viral customer acquisition with high-converting TikTok Spark Ads, in-feed video funnels, TikTok Shop storefronts, and creator affiliate networks. Maximize GMV and ROAS.",
+    primaryH1: "Enterprise TikTok Advertising & TikTok Shop Growth Agency",
+    targetKeywords: {
+      primary: ["tiktok ads agency", "tiktok shop marketing agency", "tiktok advertising management"],
+      secondary: ["tiktok spark ads agency", "tiktok ecommerce ads", "tiktok ugc video marketing"],
+      longTail: ["how to scale tiktok shop gmv", "tiktok pixel events api setup agency", "tiktok ads for d2c brands"],
+    },
+    executiveSummary:
+      "TikTok has revolutionized modern digital commerce into entertainment-driven shopping. AMZCOZ engineers end-to-end performance advertising and TikTok Shop growth ecosystems. We combine thumb-stopping UGC video production, organic post amplification via Spark Ads, automated TikTok Shop product syncs, and server-side Events API tracking to turn viral curiosity into high-volume e-commerce checkouts.",
+    heroHighlights: [
+      "High-velocity TikTok Spark Ads boosting organic creator testimonials and trending hooks",
+      "End-to-end TikTok Shop setup, affiliate commission architecture, and live shopping integration",
+      "Full server-side TikTok Events API and Web Pixel tracking for real-time attribution",
+      "Granular demographic and hashtag-cluster targeting driving profitable customer acquisition",
+    ],
+    deliverables: [
+      {
+        title: "TikTok Spark Ads & In-Feed Funnels",
+        desc: "Deploying high-converting in-feed video ads and boosting native creator posts with direct product links and shoppable stickers.",
+      },
+      {
+        title: "TikTok Shop Setup & GMV Scaling",
+        desc: "Building out your TikTok Shop storefront, catalog syncing, creator commission structures, and promotional deal operations.",
+      },
+      {
+        title: "High-Retention UGC Scripting & Production",
+        desc: "Developing fast-paced, native 9:16 vertical videos featuring unboxings, sensory ASMR hooks, and problem-solution demonstrations.",
+      },
+      {
+        title: "TikTok Pixel & Events API Configuration",
+        desc: "Setting up server-side conversion tracking to recover lost browser events and optimize automated algorithmic bidding.",
+      },
+      {
+        title: "Creator Affiliate & Whitelisting Network",
+        desc: "Partnering with verified TikTok creators, negotiating ad codes, and running whitelisted creator handle ad campaigns.",
+      },
+      {
+        title: "Audience Segmentation & Dayparting",
+        desc: "Precision bidding across lookalike audiences, interest cohorts, and dayparting schedules aligned with peak mobile activity.",
+      },
+    ],
+    benefits: [
+      { metric: "4.2x", label: "Average TikTok ROAS", desc: "Delivered on viral creative testing frameworks and Spark Ads." },
+      { metric: "+180%", label: "TikTok Shop GMV Lift", desc: "Generated across participating creator affiliate networks." },
+      { metric: "-32%", label: "Cost Per Acquisition (CPA)", desc: "Achieved via first-3-second hook optimization and hold rate scaling." },
+    ],
+    processSteps: [
+      { step: 1, title: "Tracking & Account Architecture", desc: "Install TikTok Pixel, implement Events API server connection, and structure campaign hierarchies." },
+      { step: 2, title: "Creative Concepting & UGC Sprint", desc: "Produce 10-15 native TikTok video variations exploring pain points, trending sounds, and micro-influencer testimonials." },
+      { step: 3, title: "Spark Ads & Sandbox Testing", desc: "Launch controlled creative test budgets to identify top-performing video hooks, CTRs, and conversion rates." },
+      { step: 4, title: "Budget Scale & Shop Integration", desc: "Scale winning ads with higher budgets while syncing TikTok Shop product showcases and creator affiliate loops." },
+    ],
+    faqs: [
+      {
+        question: "What makes TikTok Ads different from Meta or Google Ads?",
+        answer: "TikTok is an entertainment-first platform where ads must look and feel like native user-generated content. Traditional polished TV-style commercials perform poorly; authentic, fast-paced vertical storytelling with strong audio hooks consistently drives the highest conversions.",
+      },
+      {
+        question: "What are TikTok Spark Ads and why are they effective?",
+        answer: "Spark Ads allow you to sponsor and run paid advertising behind authentic organic TikTok posts published by your brand or creators. They retain all organic likes, comments, and shares while enabling direct click-through call-to-action buttons, resulting in up to 142% higher engagement.",
+      },
+      {
+        question: "How does TikTok Shop integrate with existing e-commerce stores?",
+        answer: "TikTok Shop integrates seamlessly with major platforms like Shopify and WooCommerce, synchronizing inventory, product details, orders, and fulfillment pipelines in real time.",
+      },
+    ],
+    platformsSupported: ["TikTok Ads Manager", "TikTok Shop", "TikTok Spark Ads", "TikTok Events API"],
+    relatedServiceSlugs: ["social-media-meta-ads", "snapchat-ads-marketing", "influencer-marketing", "shopify-woocommerce-development"],
+  },
+
+  // Snapchat Ads Agency & AR Lens Marketing
+  {
+    slug: "snapchat-ads-marketing",
+    title: "Snapchat Ads Agency & AR Lens Marketing Services",
+    shortTitle: "Snapchat Ads & AR",
+    category: "Paid Media",
+    badge: "Gen Z Performance & AR Commerce",
+    metaTitle: "Snapchat Ads Agency India | AR Lens & Story Ads Marketing | Amzcoz",
+    metaDescription: "Dominate Gen Z and Millennial customer acquisition with Snapchat Ads. We build immersive AR Shopping Lenses, full-screen vertical video Snap Ads, and Dynamic Product Catalogs.",
+    primaryH1: "Snapchat Advertising & Interactive AR Commerce Performance Agency",
+    targetKeywords: {
+      primary: ["snapchat ads agency", "snapchat advertising agency", "snapchat marketing agency"],
+      secondary: ["snapchat ar lens ads", "snapchat story ads", "snapchat dynamic product ads"],
+      longTail: ["how to run snapchat ads for ecommerce", "snapchat pixel conversions api setup", "ar shopping lens development"],
+    },
+    executiveSummary:
+      "Snapchat connects brands with an extraordinarily engaged, mobile-first audience of Gen Z and Millennial consumers with immense purchasing power. AMZCOZ creates high-impact Snapchat advertising campaigns, combining interactive Augmented Reality (AR) try-on lenses, full-screen sound-on Snap Ads, and automated dynamic product catalogs (DPA) to drive profitable returns on ad spend (ROAS).",
+    heroHighlights: [
+      "Interactive Augmented Reality (AR) Shopping Lenses with virtual try-on and product exploration",
+      "Immersive full-screen vertical video Snap Ads, Story Ads, and non-skippable Commercials",
+      "Dynamic Product Ads (DPA) synced with real-time e-commerce catalogs for automated retargeting",
+      "Snapchat Conversions API and Pixel implementation for accurate attribution and post-view tracking",
+    ],
+    deliverables: [
+      {
+        title: "Full-Screen Vertical Video Snap Ads",
+        desc: "Scripting and producing engaging 3-to-10 second sound-on vertical video ads with high-converting swipe-up interactive attachments.",
+      },
+      {
+        title: "Augmented Reality (AR) Shopping Lenses",
+        desc: "Designing branded 3D interactive lenses and face/world filters that allow shoppers to virtually try on or experience products in 3D.",
+      },
+      {
+        title: "Dynamic Product Ads (DPA) Catalogs",
+        desc: "Connecting your real-time e-commerce catalog to serve personalized carousel and tile ads to users based on their browsing behavior.",
+      },
+      {
+        title: "Story Ads & Commercials Funnels",
+        desc: "Placing branded multi-tile story chapters within the Snapchat Discover feed and running non-skippable 6-second Commercials for maximum brand recall.",
+      },
+      {
+        title: "Snapchat Pixel & Conversions API (CAPI)",
+        desc: "Complete implementation of the Snap Pixel and server-to-server Conversions API to eliminate signal loss and guarantee accurate ROAS reporting.",
+      },
+      {
+        title: "Demographic & Lifestyle Cohort Targeting",
+        desc: "Laser-targeting specific lifestyle categories, tech early adopters, fashion/beauty enthusiasts, gamers, and university audiences.",
+      },
+    ],
+    benefits: [
+      { metric: "3.8x", label: "Average Snapchat ROAS", desc: "Generated across lifestyle, fashion, and consumer tech verticals." },
+      { metric: "45s+", label: "Average AR Lens Playtime", desc: "Delivered through immersive interactive augmented reality experiences." },
+      { metric: "-35%", label: "Lower CPM vs Other Channels", desc: "Offering highly cost-effective reach into Gen Z and Millennial audiences." },
+    ],
+    processSteps: [
+      { step: 1, title: "Pixel & Catalog Integration", desc: "Deploy Snapchat Pixel, configure server CAPI events, and upload dynamic product feeds." },
+      { step: 2, title: "AR Lens & Creative Sprint", desc: "Model 3D assets or script fast-paced sound-on video stories tailored for mobile swipe-up conversions." },
+      { step: 3, title: "Audience & Angle Testing", desc: "Test multiple creative hooks and lifestyle audience clusters to pinpoint lowest Cost-Per-Swipe-Up and Purchase." },
+      { step: 4, title: "Catalog Retargeting & Scaling", desc: "Scale winning prospecting angles and deploy automated dynamic catalog ads to capture abandoned shoppers." },
+    ],
+    faqs: [
+      {
+        question: "Why should brands advertise on Snapchat?",
+        answer: "Snapchat has an unduplicated, fiercely loyal user base — millions of daily active users who do not regularly visit other social networks. It also offers lower Cost-Per-Mille (CPM) rates compared to other platforms, allowing brands to acquire customers cost-effectively.",
+      },
+      {
+        question: "How do Snapchat AR Shopping Lenses drive e-commerce sales?",
+        answer: "AR Shopping Lenses allow customers to interact with products directly through their camera — such as trying on cosmetics, eyewear, apparel, or placing 3D items in their room. AR experiences result in up to 2.4x higher purchase intent and significantly lower return rates.",
+      },
+      {
+        question: "What attribution models does Snapchat support?",
+        answer: "Snapchat supports 28-day post-swipe and 1-day post-view attribution windows, fully compatible with server-side Conversions API (CAPI) to track purchases across all iOS and Android devices.",
+      },
+    ],
+    platformsSupported: ["Snapchat Ads Manager", "Snapchat Lens Studio", "Snap Pixel", "Snap Conversions API"],
+    relatedServiceSlugs: ["tiktok-ads-marketing", "social-media-meta-ads", "influencer-marketing", "graphic-design-merchandising"],
+  },
+
   // 13. A+ Content & Brand Store Design
   {
     slug: "aplus-content-brand-store",
